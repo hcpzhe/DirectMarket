@@ -116,6 +116,14 @@ class MemberAction extends CommonAction {
 		}
 	}
 	
+	
+	/**
+	 * 会员图谱
+	 */
+	public function atlas(){
+	
+	}
+	
 	/**
 	 * 编辑查看页面read 使用CommonAciton/read
 	 * 必须传主键ID

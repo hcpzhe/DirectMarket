@@ -23,10 +23,11 @@ class BonusAction extends CommonAction{
 		$p = new Page($count,20);
 		//记录数据集
 		$bonus_list = $bonus_model->where($map)->order('create_time desc')->limit($p->firstRow . ',' . $p->listRows)->select();
-		$mid_list = $bonus_model->where($map)->order('create_time desc')->limit($p->firstRow . ',' . $p->listRows)->getField('member_id');
+		$mid_list = $bonus_model->where($map)->order('create_time desc')->limit($p->firstRow . ',' . $p->listRows)->getField('member_id',true);
+		$nmid_list = $bonus_model->where($map)->order('create_time desc')->limit($p->firstRow . ',' . $p->listRows)->getField('new_member_id',true);
 		
 		//用户编号列表赋给视图
-		$this->memberAcc($mid_list);
+		$this->memberAcc(array_merge($mid_list,$nmid_list));
 		
 		$page = $p->show();
 		//模板赋值

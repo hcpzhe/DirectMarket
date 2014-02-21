@@ -19,8 +19,8 @@ class TransferAction extends CommonAction{
 		
 		$transfer_list = $transfer_model->order('create_time desc')->limit($p->firstRow . ',' . $p->listRows)->select();
 		
-		$from_m = $transfer_list = $transfer_model->order('create_time desc')->limit($p->firstRow . ',' . $p->listRows)->getField('member_id_from');
-		$to_m = $transfer_list = $transfer_model->order('create_time desc')->limit($p->firstRow . ',' . $p->listRows)->getField('member_id_to');
+		$from_m = $transfer_list = $transfer_model->order('create_time desc')->limit($p->firstRow . ',' . $p->listRows)->getField('member_id_from',true);
+		$to_m = $transfer_list = $transfer_model->order('create_time desc')->limit($p->firstRow . ',' . $p->listRows)->getField('member_id_to',true);
 		
 		$mid_list = array_unique(array_merge($from_m,$to_m));
 		
