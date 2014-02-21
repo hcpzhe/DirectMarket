@@ -27,9 +27,9 @@ class CommonAction extends Action {
             }
         }
         
-		$set_M = D('Setting');
-		$list = $set_M->getField('set_name,set_value');
-		$this->assign('_PF',$list);
+		//$set_M = D('Setting');
+		//$list = $set_M->getField('set_name,set_value');
+		//$this->assign('_PF',$list);
     }
 	public function index() {
         //列表过滤器，生成查询Map对象

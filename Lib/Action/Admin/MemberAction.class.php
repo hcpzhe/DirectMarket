@@ -14,6 +14,9 @@ class MemberAction extends CommonAction {
 	 */
 	public function _filter(&$map){
 		//index过滤查询字段
+		if (!empty($_REQUEST['status'])){
+			$map = $this->_request('status');
+		}
 	}
 	
 	/**
@@ -53,6 +56,20 @@ class MemberAction extends CommonAction {
 	 */
 	public function insert() {
 		//默认提交为未审核用户
+		if (!empty($_POST)){
+			$member_model = D('Member');
+			if (false  !== $member_model->create()){
+				$info = $member_model->add();
+				if ($info !== false){
+					//给推荐人加积分吗？？？？？？
+					
+					
+					$this->success('注册成功，待审核！');				
+				}			
+			}
+		}else {
+			$this->error('非法提交');
+		}
 	}
 	
 	/**
@@ -61,6 +78,42 @@ class MemberAction extends CommonAction {
 	public function upgrade() {
 		//套餐的升级, 升1级
 		//记录到levelup表中
+		$member_model = M('Member');
+		$levelup_model = M('Levelup');
+		
+		$id = (int)$this->_post('id');
+		$level = (int)$this->_post('level');
+		$info = $member_model->where("id=$id")->find();
+		if (!empty($info)){
+			if ($info['level'] >= $level){
+				$this->error('选择的升级级别有误！');
+				exit;
+			}
+			if ($info['level'] == 4){
+				$this->error('已是加盟商，无需升级');
+				exit;
+			}			
+			//进行数据存储，开启事务
+			$member_model->startTrans();
+			$falg = $member_model->where("id=$id")->setField('level',$level);
+			if ($falg !== FALSE){
+				$data = array();
+				$data['member_id'] = $info['id']; 
+				$data['level_bef'] = $info['level']; 
+				$data['level_aft'] = $level;
+				$data['type'] = (int)$this->_post('type');
+				$data['create_time'] = time();
+				if (false !== $levelup_model->add($data)){
+					$member_model->commit();
+					$this->success('升级成功');
+				}else {
+					$member_model->rollback();
+					$this->error('升级失败');
+				}	
+			}
+		}else {
+			$this->error('用户不存在');
+		}
 	}
 	
 	/**
