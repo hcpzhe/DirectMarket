@@ -42,7 +42,7 @@ class MemberModel extends Model {
     	if ($id <= 0) $id = $_SESSION[C('USER_AUTH_KEY')];
     	return $this->getById($id);
     }
-    private function getMemberId($account){
+    public function getMemberId($account){
     	if (!empty($account)){
     		return $this->where("account='".$account."'")->getField('id');
     	}

@@ -295,4 +295,15 @@ class CommonAction extends Action {
         }
         $this->error('非法操作');
     }
+    /**
+     * 获取用户会员编号列表
+     * 并赋给视图
+     */
+    public function memberAcc($mid_list){
+    
+    	$member_model = M('Member');
+    	$member_acc = $member_model->where(array('id'=>array('in',array_unique($mid_list))))->getField('id,account,nickname',true);
+    	$this->assign('member_acc',$member_acc);
+    }
+    
 }

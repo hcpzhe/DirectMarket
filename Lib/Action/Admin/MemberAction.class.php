@@ -15,7 +15,7 @@ class MemberAction extends CommonAction {
 	public function _filter(&$map){
 		//index过滤查询字段
 		if (!empty($_REQUEST['status'])){
-			$map = $this->_request('status');
+			$map['status'] = $this->_request('status');
 		}
 	}
 	
