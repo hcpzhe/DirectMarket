@@ -14,7 +14,7 @@ class TransferAction extends CommonAction{
 		
 		$count = $transfer_model->count();
 		
-		import('@.ORG.Util.Page');
+		import('ORG.Util.Page');
 		$p = new Page($count,20);
 		
 		$transfer_list = $transfer_model->order('create_time desc')->limit($p->firstRow . ',' . $p->listRows)->select();
