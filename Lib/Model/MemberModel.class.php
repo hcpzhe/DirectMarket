@@ -2,7 +2,7 @@
 // 用户模型
 class MemberModel extends Model {
     public $_validate	=	array(
-        array('account','/^[a-zA-Z]\w{3,15}$/i','会员编号格式错误，必须字母开头 4-16位'),//字母开头 4-16位  \w等价于[A-Za-z0-9_]
+        array('account','/^\w{4,16}$/i','会员编号格式错误，字母或数字 4-16位'),//  \w等价于[A-Za-z0-9_]
         array('account','require','会员编号必须'),
         array('account','','会员编号已经存在',self::EXISTS_VALIDATE,'unique'),
         array('password','require','登录密码必须'),

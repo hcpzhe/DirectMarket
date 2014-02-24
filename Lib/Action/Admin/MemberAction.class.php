@@ -6,6 +6,18 @@ class MemberAction extends CommonAction {
 	 * 会员锁定     未知功能, 待确认
 	 */
 	
+	/**
+	 * ajax检测用户是否存在
+	 */
+	public function checkAccount() {
+		$member_M = D('Member');
+		$member_id = $member_M->getFieldByAccount($_POST['account'], 'id');
+		if ($member_id > 0) {
+			$this->success($member_id);
+		}else {
+			$this->error('用户不存在');
+		}
+	}
 	
 	/**
 	 * index使用common的通用index方法, 通过传递不同的参数, 显示不同的数据

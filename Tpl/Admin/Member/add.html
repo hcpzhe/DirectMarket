@@ -1,0 +1,338 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<title>后台管理</title>
+		<meta http-equiv="pragma" content="no-cache">
+		<meta http-equiv="cache-control" content="no-cache">
+		<meta http-equiv="expires" content="0">
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/css/global.css">
+		<script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+		<script type="text/javascript" src="__PUBLIC__/js/RSsubmit.js"></script>
+		<style type="text/css">
+<!--
+table .one {
+	border-collapse: collapse;
+	text-align: center;
+	width: 750px;
+}
+
+table .one th {
+	text-align: center;
+	background: red;
+	padding: 3px;
+	border: 0px #e5eff5 solid;
+	color: #fff;
+	font-size: 12px;
+	font-weight: bolder;
+	height: 20px;
+}
+
+table .one td {
+	padding: 3px;
+	border: none;
+	border: 0px #e5eff5 solid;
+	font-size: 12px;
+	height: 20px;
+}
+
+.one {
+	margin: 5px auto;
+	border-collapse: collapse;
+	text-align: center;
+}
+
+.one td {
+	padding: 3px;
+	border: none;
+	border: 0px #e5eff5 solid;
+	font-size: 12px;
+	height: 20px;
+}
+
+.one span {
+	color: Red;
+	padding-left: 10px;
+}
+
+.register_text {
+	width: 120px;
+}
+-->
+</style>
+	</head>
+	<body>
+		<div id="contentDiv">
+			<div class="titleDiv">
+				&nbsp; 当前位置&gt;&gt;会员注册
+			</div>
+			<form id="tj" name="tj" action="__GROUP__/Member/insert" method="post">
+				<center>
+					<table class="one" cellpadding="0px" cellspacing="0px" width="700px;">
+						<tbody><tr>
+							<td style="text-align: right;" width="50%">
+								会员编号:
+							</td>
+							<td align="left">
+								<input name="account" id="number" type="text">
+								<span id="error1.info" style="color: red">*数字或字母,长度4-16位</span>
+							</td>
+						</tr>
+						<tr>
+							<td style="text-align: right;">
+								登录密码:
+							</td>
+							<td align="left">
+								<input name="password" id="loginpwd" type="password">
+								<span id="error2.info" style="color: red">*</span>
+							</td>
+						</tr>
+						<tr>
+							<td style="text-align: right;">
+								再次输入:
+							</td>
+							<td align="left">
+								<input name="repassword" id="qrloginpwd" type="password">
+								<span id="error3.info" style="color: red">*</span>
+							</td>
+						</tr>
+						<tr>
+							<td style="text-align: right;">
+								一级密码:
+							</td>
+							<td align="left">
+								<input name="pwdone" id="onepwd" type="password">
+								<span id="error4.info" style="color: red">*</span>
+							</td>
+						</tr>
+						<tr>
+							<td style="text-align: right;">
+								再次输入:
+							</td>
+							<td align="left">
+								<input name="repwdone" id="qronepwd" type="password">
+								<span id="error5.info" style="color: red">*</span>
+							</td>
+						</tr>
+
+						<tr>
+							<td style="text-align: right;">
+								取款密码:
+							</td>
+							<td align="left">
+								<input name="pwd_money" id="twopwd" type="password">
+								<span id="error6.info" style="color: red">*</span>
+							</td>
+						</tr>
+						<tr>
+							<td style="text-align: right;">
+								再次输入:
+							</td>
+							<td align="left">
+								<input name="repwd_money" id="rtwopwd" type="password">
+								<span id="error7.info" style="color: red">*</span>
+							</td>
+
+						</tr>
+						<tr>
+							<td style="text-align: right;">
+								推荐编号:
+							</td>
+							<td align="left">
+								<input name="parent_account" id="parent_account" type="text">
+								<span id="parent_account_error" style="color: red">*</span>
+								<input name="parent_id" id="parent_id" type="hidden">
+							</td>
+						</tr>
+						<tr>
+							<td style="text-align: right;">
+								选择套餐:
+							</td>
+							<td style="font-size: 12px;" align="left">
+								<select id="lev" name="jcUser.level">
+									<option value="1">
+										个人套餐
+									</option>
+									<option value="2">
+										家庭套餐
+									</option>
+									<option value="3">
+										养殖学员
+									</option>
+									<option value="4" selected="selected">
+										加盟套餐
+									</option>
+								</select>
+								<span>*</span>
+							</td>
+						</tr>
+						<tr>
+							<td style="text-align: right;">
+								接点编号:
+							</td>
+							<td align="left">
+								<input name="jcUser.jdnumber" id="jdnumber" type="text">
+								<span id="error9.info" style="color: red">*</span>
+							</td>
+						</tr>
+						<tr>
+							<td style="text-align: right;">
+								报单编号:
+							</td>
+							<td align="left">
+								<input name="jcUser.bdnumber" id="bdnumber" type="text">
+								<span id="error10.info" style="color: red">*</span>
+							</td>
+						</tr>
+						<tr>
+							<td style="text-align: right;">
+								所在位置:
+							</td>
+							<td align="left">
+								<select id="location" name="jcUser.location">
+									<option selected="selected" value="请选择节点位置">
+										&nbsp;请选择节点位置&nbsp;
+									</option>
+									<option value="A">
+										&nbsp;A&nbsp;
+									</option>
+									<option value="B">
+										&nbsp;B&nbsp;
+									</option>
+								</select>
+								<span id="error11.info" style="color: red">*</span>
+							</td>
+						</tr>
+						<tr>
+							<td style="text-align: right;">
+								真实姓名:
+							</td>
+							<td align="left">
+								<input name="jcUser.name" id="name" type="text">
+								<span id="error12.info" style="color: red">*</span>
+							</td>
+						</tr>
+						<tr>
+							<td style="text-align: right;">
+								联系电话:
+							</td>
+							<td align="left">
+								<input name="jcUser.tel" id="tel" type="text">
+								<span id="error13.info" style="color: red">*</span>
+							</td>
+						</tr>
+						<tr>
+							<td style="text-align: right;">
+								身份证号:
+							</td>
+							<td align="left">
+								<input name="jcUser.card" id="card" type="text">
+								<span id="error16.info" style="color: red">*</span>
+							</td>
+						</tr>
+						<tr>
+							<td style="text-align: right;">
+								联系地址:
+							</td>
+							<td align="left">
+								<input name="jcUser.address" id="address" type="text">
+								<span id="error17.info" style="color: red">*</span>
+							</td>
+						</tr>
+						<tr>
+							<td style="text-align: right;">
+								银行卡号:
+							</td>
+							<td align="left">
+								<input name="jcUser.bankcard" id="bankcard" type="text">
+								<span id="error15.info" style="color: red">*</span>
+							</td>
+						</tr>
+						<tr>
+							<td style="text-align: right;">
+								开户银行:
+							</td>
+							<td align="left">
+								<select id="bankname" name="jcUser.bank">
+									<option selected="selected" value="中国银行">
+										中国银行
+									</option>
+									<option value="农业银行">
+										农业银行
+									</option>
+									<option value="邮政银行">
+										邮政银行
+									</option>
+									<option value="工商银行">
+										工商银行
+									</option>
+									<option value="建设银行">
+										建设银行
+									</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td style="text-align: right;">
+								开户地址:
+							</td>
+							<td align="left">
+								<input name="jcUser.bankaddress" id="bankaddress" type="text">
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2" style="text-align: center; padding-left: 80px;">
+								<input id="tijiao" value="注册" type="submit">
+
+							</td>
+						</tr>
+					</tbody></table>
+				</center>
+			</form>
+
+
+
+
+		</div>
+	
+<script type="text/javascript">
+var error = 0;
+var error_parent_account = new Array('');
+$(function($) {
+	$("#parent_account").focusout(function(){
+		$thisval = $(this).val();
+		if (error_parent_account.in_array($thisval)) {
+			error = 1;
+			$("#parent_account_error").html("*用户不存在");
+		}else {
+			$.ajax({
+				type: "post",
+				url: "__GROUP__/Member/checkAccount",
+				data: {account : $(this).val()},
+				dataType: 'json',
+				success: function(d){
+					if (d.status == 1) {
+						$("#parent_id").val(d.info);
+						error = 0;
+						$("#parent_account_error").html("*");
+					}else {
+						error = 1;
+						error_parent_account.push($thisval);
+						$("#parent_account_error").html("*"+d.info);
+					}
+				}
+			});
+		}
+	});
+});
+
+Array.prototype.in_array = function(e)
+{
+	for(i=0;i<this.length;i++){
+		if(this[i] == e)
+		return true;
+	}
+	return false;
+}
+</script>
+</body></html>
