@@ -131,10 +131,27 @@ class MemberAction extends CommonAction {
 	
 	/**
 	 * 会员图谱
+	 * 
 	 */
-	public function atlas(){
+	public function atlas($account=''){
+		if (!empty($account)){
+			$member_model = M('Member');
+			$mid = $member_model->getMemberId($account);
+			$member_list = $this->member($mid);
+		}
+		$this->assign('member_list',$member_list);
+		$this->display();
+	}
+	
+	/**
+	 * 会员图谱递归方法
+	 */
+	public function member($mid){
+		static $member_list = array();
+		
 	
 	}
+	
 	
 	/**
 	 * 编辑查看页面read 使用CommonAciton/read

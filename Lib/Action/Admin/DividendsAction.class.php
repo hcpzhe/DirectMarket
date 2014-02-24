@@ -15,7 +15,7 @@ class DividendsAction extends CommonAction{
 		$dividends_model = M('Dividends');
 		
 		$count = $dividends_model->where($map)->count();
-		import('@.ORG.Util.Page');
+		import('ORG.Util.Page');
 		$p = new Page($count,20);
 		
 		$d_list = $dividends_model->where($map)->order('create_time')->limit($p->firstRow.','.$p->listRows)->select();
@@ -55,7 +55,7 @@ class DividendsAction extends CommonAction{
 			$bonus = $this->_post('bonus');
 			$count = $this->_post('count');
 			$data = array();
-			$data['give_bonus'] = $bonus/$count;//发放奖金
+			$data['give_bonus'] = $bonus;//发放奖金
 			$data['tax_bonus'] = round($data['give_bonus']*0.1,2);//扣税
 			$data['real_bonus'] = $data['give_bonus']-$data['tax_bonus'];//实发奖励
 			$data['create_time'] = time();
