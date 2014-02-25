@@ -74,8 +74,6 @@ class MemberAction extends CommonAction {
 				$info = $member_model->add();
 				if ($info !== false){
 					//给推荐人加积分吗？？？？？？
-					
-					
 					$this->success('注册成功，待审核！');				
 				}			
 			}
@@ -137,7 +135,8 @@ class MemberAction extends CommonAction {
 		if (!empty($account)){
 			$member_model = M('Member');
 			$mid = $member_model->getMemberId($account);
-			$member_list = $this->member($mid);
+			$member_list = array();
+			$this->member($member_model,$mid,$member_list);
 		}
 		$this->assign('member_list',$member_list);
 		$this->display();
@@ -146,10 +145,42 @@ class MemberAction extends CommonAction {
 	/**
 	 * 会员图谱递归方法
 	 */
-	public function member($mid){
-		static $member_list = array();
-		
+	public function member($member_model,$mid,&$member_list){
+		array_push($member_list[$mid],$member_model->find($mid));
+		$member_l = $member_model->where("parent_area=$mid")->select();		
+		foreach ($member_l as $row){
+			if ($row['parent_area_type'] == 'A'){
+				array_push($member_list[$mid]['A'][$row['id']],$row);
+				$this->member($member_model, $row['id'], $member_list[$mid]['A'][$row['id']]);
+			
+			}else {
+				array_push($member_list[$mid]['B'][$row['id']],$row);
+				$this->member($member_model, $row['id'], $member_list[$mid]['B'][$row['id']]);		
+			}
+		}
+	}
 	
+	/**
+	 * 审核会员操作
+	 * 接收主键ID
+	 */
+	public function shenhe($id){
+		if (!empty($id)){
+			$member_model = M('Member');
+			$member_info = $member_model->find($id);
+			$member_model -> startTrans();
+			$data = array('status'=>1,'points'=>$this->level_bonus[$member_info['level']]);
+			$flag = $member_model->where("id=$id")->setField($data);
+			if ($flag !== false){			
+				//处理积分逻辑
+				$bonus = A('Bonus');
+				$bonus->update($id);
+			}else {
+				$this->error('激活失败');
+			}
+		}else {
+			$this->error('非法操作');		
+		}
 	}
 	
 	

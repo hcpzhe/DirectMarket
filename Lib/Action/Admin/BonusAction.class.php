@@ -4,7 +4,6 @@
  *
  */
 class BonusAction extends CommonAction{
-
 	private function _filter(&$map){
 		if(!empty($_POST['account'])){
 			$map['member_id']=D('Member')->getMemberId($this->_post('account'));	
@@ -42,10 +41,11 @@ class BonusAction extends CommonAction{
 	 */
 	public function bochu(){
 		$bonus_model = M('Bonus');
+		$income_model = M('Income');
 		$tongji = array();
 		
 		//总收入
-		$tongji['total_bonus'] = $bonus_model->sum('total_bonus');
+		$tongji['total_bonus'] = $income_model->sum('income');
 		
 		//报单奖总计
 		$tongji['fuwu_bonus'] = $bonus_model->sum('fuwu_bonus');
@@ -88,24 +88,95 @@ class BonusAction extends CommonAction{
 		
 		
 		//=============================以下要计算得到================================
-		//总支出
-		$tongji['total'] =$tongji['fuwu_bonus']+$tongji['xiaoshou_bonus']+$tongji['guanli_bonus']+$tongji['fuzhu_bonus']+$tongji['fudao_bonus']+$tongji['butie_bonus']-$tongji['fuli_bonus']-$tongji['chongfu_bonus']-$tongji['huitian_bonus']-$tongji['kaizhi_bonus'];
-		$tongji['total_b'] = round($tongji['total']/$tongji['total_bonus'],4)*100;
-		
 		//净奖金拨出
-		$tongji['jingjiangjin'] = $tongji['total']*0.9;
+		$tongji['jingjiangjin'] = $bonus_model->sum('total_bonus');
 		$tongji['jingjiangjin_b'] = round($tongji['jingjiangjin']/$tongji['total_bonus'],4)*100;
 		
 		//税收
-		$tongji['shuishou'] = $tongji['total']*0.1;
+		$tongji['shuishou'] = $tongji['fuli_bonus']+$tongji['chongfu_bonus']+$tongji['huitian_bonus']+$tongji['kaizhi_bonus'];
 		$tongji['shuishou_b'] = round($tongji['shuishou']/$tongji['total_bonus'],4)*100;
-		
-		
+
+		//总支出
+		$tongji['total'] = $tongji['jingjiangjin']+$tongji['shuishou'];
+		$tongji['total_b'] = round($tongji['total']/$tongji['total_bonus'],4)*100;
 		
 		$this->assign($tongji);
 	
 		$this->display();
 	}
-
-
+	
+	/**
+	 * 用户激活时积分更新入口方法
+	 * 由Member控制器跨模块调用
+	 * 接收用户id
+	 */
+	public function update($id){
+		$bouns_model = M('Bouns'); 
+		//销售积分
+		$this->xiaoshou($bouns_model, $id);
+	
+	
+	}
+	/**
+	 * 销售积分更新
+	 */
+	private function xiaoshou($bouns_model,$id){
+		$member_model = M('Member');
+		$member_info = $member_model->find($id);
+		$data = array();
+		$data['member_id'] = $member_info['parent_id'];
+		$data['new_member_id'] =$id;
+		$data['create_time'] = time();
+		$data['xiaoshou_bonus'] = $this->level_bonus[$member_info['level']]*0.1;
+		$this->shuishou($data, $data['xiaoshou_bonus']);
+		if (false === $bouns_model->add($data)){
+			$member_model->rollback();
+			$this->error('激活失败');
+			exit();
+		}
+	}
+	/**
+	 * 税收计算
+	 * 福利积分	重复消费		开支积分		回填积分
+	 */
+	private function shuishou(&$data,$bonus){
+		$data['fuli_bonus'] = $bonus*0.1;
+		$data['chongfu_bonus'] = $bonus*0.1;
+		$data['kaizhi_bonus'] = $bonus*0.05;
+		
+		//回填积分待计算
+//		$data['huitian_bonus'] = ;
+		$data['total_bonus'] = $bonus*0.75;
+	}
+	/**
+	 * 管理积分计算
+	 */
+	private function guanli(){
+	
+	}
+	
+	/**
+	 * 服务积分计算
+	 */
+	private function fuwu(){
+	
+	}
+	
+	/**
+	 * 辅助积分计算
+	 */
+	private function fuzhu(){
+	
+	}
+	/**
+	 * 辅导积分计算
+	 */
+	private function fudao(){
+	
+	}
+	
+	/**
+	 * 补贴积分（分红）
+	 */
+		
 }

@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : 127.0.0.1
+Source Server         : cntax
 Source Server Version : 50524
-Source Host           : 127.0.0.1:3306
+Source Host           : 192.168.1.9:3306
 Source Database       : zhixiao
 
 Target Server Type    : MYSQL
 Target Server Version : 50524
 File Encoding         : 65001
 
-Date: 2014-02-20 17:45:40
+Date: 2014-02-24 16:14:20
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -32,7 +32,7 @@ CREATE TABLE `zx_bonus` (
   `butie_bonus` decimal(10,2) DEFAULT '0.00' COMMENT '补贴积分(分红)',
   `fuli_bonus` decimal(10,2) DEFAULT '0.00' COMMENT '福利积分 (扣除的)',
   `chongfu_bonus` decimal(10,2) DEFAULT '0.00' COMMENT '重复消费 (扣除的)',
-  `kaizhi_bonus` decimal(10,2) DEFAULT '0.00' COMMENT '开支积分 (扣除的)',
+  `kaizhi_bonus` decimal(10,2) DEFAULT '0.00' COMMENT '开支积分 (扣除的税收)',
   `huitian_bonus` decimal(10,2) DEFAULT '0.00' COMMENT '回填积分 (扣除的)',
   KEY `member_id` (`member_id`),
   KEY `new_member_id` (`new_member_id`)
@@ -57,6 +57,8 @@ CREATE TABLE `zx_cash` (
   `tax_money` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '扣税金额',
   `real_money` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '实发金额',
   `status` tinyint(1) NOT NULL DEFAULT '2' COMMENT '0-删除 1-已审 2-未审 3-审核未通过',
+  `create_time` varchar(20) DEFAULT NULL COMMENT '申请提现时间',
+  `check_time` varchar(20) NOT NULL COMMENT '审核时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='提现记录表';
@@ -127,7 +129,6 @@ DROP TABLE IF EXISTS `zx_member`;
 CREATE TABLE `zx_member` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `account` varchar(255) NOT NULL COMMENT '帐号',
-  `nickname` varchar(100) NOT NULL COMMENT '真实姓名',
   `password` char(32) NOT NULL COMMENT '登录密码',
   `pwdone` char(32) NOT NULL COMMENT '一级密码',
   `pwd_money` char(32) NOT NULL COMMENT '取款密码',
@@ -138,9 +139,13 @@ CREATE TABLE `zx_member` (
   `recharge_points` decimal(10,2) DEFAULT '0.00' COMMENT '充值积分',
   `money_a` decimal(10,2) DEFAULT '0.00' COMMENT 'A区业绩',
   `money_b` decimal(10,2) DEFAULT '0.00' COMMENT 'B区业绩',
-  `parent_area` int(10) unsigned DEFAULT '0',
+  `parent_area` int(10) unsigned DEFAULT '0' COMMENT '节点ID',
   `parent_area_type` varchar(1) DEFAULT NULL COMMENT 'A 或 B',
   `fuzhu_total` decimal(10,2) DEFAULT '0.00' COMMENT '累计辅助积分, 投资额的1.5倍结束',
+  `nickname` varchar(100) NOT NULL COMMENT '真实姓名',
+  `tel` varchar(15) NOT NULL COMMENT '联系电话',
+  `q` char(18) DEFAULT NULL COMMENT '身份证号',
+  `address` varchar(100) DEFAULT NULL COMMENT '联系地址',
   `status` tinyint(1) NOT NULL DEFAULT '2' COMMENT '0-删除 1-正常 2-未激活 3-已审报单中心 4-未审报单',
   `create_time` varchar(20) DEFAULT '0' COMMENT '注册时间',
   `verify_time` varchar(20) DEFAULT '0' COMMENT '激活时间',
@@ -208,5 +213,5 @@ CREATE TABLE `zx_user` (
 -- ----------------------------
 -- Records of zx_user
 -- ----------------------------
-INSERT INTO `zx_user` VALUES ('1', 'admin', '9e90c6271eddcf23e2e251f65bda6be3', '超级管理员', '1390205344', '127.0.0.1', '83', null, '0', '1389940039', '1');
+INSERT INTO `zx_user` VALUES ('1', 'admin', '9e90c6271eddcf23e2e251f65bda6be3', '超级管理员', '1393226076', '127.0.0.1', '87', null, '0', '1389940039', '1');
 INSERT INTO `zx_user` VALUES ('2', 'administrator', 'af73a1ef8d29ffc1c50c0bff6055b363', '超级管理员', '1390205683', '127.0.0.1', '85', '', '0', '1389940039', '1');
