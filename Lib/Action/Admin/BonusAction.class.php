@@ -16,6 +16,7 @@ class BonusAction extends CommonAction{
 	/**
 	 * Enter description here ...
 	 * @param array $map 过滤参数
+	 * 会员奖金记录
 	 */	
 	public function myIndex(&$map){
 		//创建模型对象
@@ -38,6 +39,33 @@ class BonusAction extends CommonAction{
 		//显示模板
 		$this->display('index');
 		exit;
+	}
+	/**
+	 * 奖金累计记录
+	 */
+	public function leiji(){
+		$model = new Model();
+		$count_sql = "SELECT count(member_id) count FROM zx_bonus GROUP BY member_id";
+		$count = $model->query($count_sql);
+		$count = $count[0]['count'];
+		import("ORG.Util.Page");
+		$p = new Page($count,20);
+		$where = '';
+		if(!empty($_POST['account'])){
+			$member_id=D('Member')->getMemberId($this->_post('account'));	
+			$where = " WHERE b.member_id=".$member_id;
+		}
+		$sql = "SELECT b.member_id,b.create_time,m.account,sum(total_bonus) total_bonus,sum(fuwu_bonus) fuwu_bonus,sum(xiaoshou_bonus) xiaoshou_bonus,sum(guanli_bonus) guanli_bonus,sum(fuzhu_bonus) fuzhu_bonus,sum(fudao_bonus) fudao_bonus,sum(butie_bonus) butie_bonus,sum(fuli_bonus) fuli_bonus,sum(chongfu_bonus) chongfu_bonus,sum(kaizhi_bonus) kaizhi_bonus,sum(huitian_bonus) huitian_bonus FROM zx_bonus b LEFT JOIN zx_member m ON b.member_id=m.id ".$where."  GROUP BY b.member_id LIMIT $p->firstRow,$p->listRows";
+		
+		$bonus_list  = $model->query($sql);
+		
+		$page = $p->show();
+		
+		//模板赋值
+		$this->assign('bonus_list',$bonus_list);
+		$this->assign('page',$page);
+		$this->display();
+	
 	}
 	/**
 	 * 查看拨出比例
@@ -127,7 +155,7 @@ class BonusAction extends CommonAction{
 	 * 税收计算
 	 * 福利积分	重复消费		开支积分		回填积分
 	 */
-	private function shuishou(&$data,$bonus,$id){
+	public function shuishou(&$data,$bonus,$id){
 		$data['new_member_id'] =$id;
 		$data['create_time'] = time();
 		$data['fuli_bonus'] = $bonus*0.1;
@@ -301,18 +329,25 @@ class BonusAction extends CommonAction{
 		$bonus_model = M('Bonus'); 
 		foreach ($member_list as $member){
 			//判断是否可以得到辅助积分
-			$total_bonus = $bonus_model -> where("member_id=".$member['id'])->sum('total_bonus');
-			if ($total_bonus < $this->touzi[$member['level_org']]*1.5){
+			//$total_bonus = $bonus_model -> where("member_id=".$member['id'])->sum('total_bonus');
+			if ($member['fuzhu_total'] < $this->touzi[$member['level_org']]*1.5){
 				$data = array();
 				$data['member_id'] = $member['id'];
 				//辅助积分的核心计算
 				$jifen = $fuzhu_j*($this->touzi[$member['level_org']]/$this->touzi[$max_level]);
+				$jifen = (($member['fuzhu_total']+$jifen)<$this->touzi[$member['level_org']]*1.5)?$jifen:($this->touzi[$member['level_org']]*1.5-$member['fuzhu_total']);
 				$data['fuzhu_bonus'] = $jifen;
 				$this->shuishou($data, $data['fuzhu_bonus'], $parend_id);
 				if (false === $bonus_model->add($data)){
 					$member_model->rollback();
 					$this->error('激活失败');
 					exit();
+				}else {
+					if (false === $member_model->where("id=".$member['id'])->setInc('fuzhu_bonus',$data['fuzhu_bonus'])){
+						$member_model->rollback();
+						$this->error('激活失败');
+						exit();
+					}
 				}
 			}
 		}

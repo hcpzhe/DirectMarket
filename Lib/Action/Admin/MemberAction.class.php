@@ -169,7 +169,8 @@ class MemberAction extends CommonAction {
 			$member_model = M('Member');
 			$member_info = $member_model->find($id);
 			$member_model -> startTrans();
-			$data = array('status'=>1,'points'=>$this->level_bonus[$member_info['level']]);
+			$time = time();
+			$data = array('status'=>1,'points'=>$this->level_bonus[$member_info['level']],'verify_time'=>'$time');
 			$flag = $member_model->where("id=$id")->setField($data);
 			if ($flag !== false){
 				//更行收入记录表
@@ -195,6 +196,8 @@ class MemberAction extends CommonAction {
 				//处理积分逻辑，跨模块调用
 				$bonus = A('Bonus');
 				$bonus->update($id);
+				$member_model->commit();
+				$this->success('激活成功');
 			}else {
 				$this->error('激活失败');
 			}

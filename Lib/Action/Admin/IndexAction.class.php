@@ -32,4 +32,15 @@ class IndexAction extends CommonAction {
 		$this->display();
 		
 	}
+	/**
+	 * 系统设置页面
+	 */
+	public function system(){
+		$system_model = M('System');
+		$systemt = $system_model->select();
+		
+		
+		$this->assign('system',$systemt);
+		$this->display();
+	}
 }
