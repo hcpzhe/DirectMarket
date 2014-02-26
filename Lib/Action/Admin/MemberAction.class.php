@@ -171,8 +171,28 @@ class MemberAction extends CommonAction {
 			$member_model -> startTrans();
 			$data = array('status'=>1,'points'=>$this->level_bonus[$member_info['level']]);
 			$flag = $member_model->where("id=$id")->setField($data);
-			if ($flag !== false){			
-				//处理积分逻辑
+			if ($flag !== false){
+				//更行收入记录表
+				$income_model = M('Income');
+				$info = array('member_id'=>$member_info['id'],
+							  'create_time'=>time(),
+							  'level_bfe'=>0,
+							  'level_aft'=>$member_info['level'],
+							  'income'=>$this->level_bonus[$member_info['level']],
+							  'remark'=>'会员激活'
+							);
+				$flag = $income_model->add($info);
+				if ($flag === false){
+					$member_model->rollback();
+					$this->error('激活失败');
+					exit();
+				}
+				//扣除报单中心的积分来激活用户
+				//会员得到的积分放入何表何字段
+				
+							
+				
+				//处理积分逻辑，跨模块调用
 				$bonus = A('Bonus');
 				$bonus->update($id);
 			}else {

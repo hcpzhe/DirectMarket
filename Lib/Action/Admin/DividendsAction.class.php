@@ -72,6 +72,7 @@ class DividendsAction extends CommonAction{
 					exit();
 				}
 			}
+			//未更新奖金记录表
 			$dividends_model->commit();
 			$this->success('分红成功！');
 		}else {

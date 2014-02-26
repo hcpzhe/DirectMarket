@@ -4,6 +4,9 @@
  *
  */
 class BonusAction extends CommonAction{
+	private  $guanli = array(1=>1000,5000,10000,15000);
+	private  $guanli_b = array(1=>0.08,0.12,0.15,0.18);
+	
 	private function _filter(&$map){
 		if(!empty($_POST['account'])){
 			$map['member_id']=D('Member')->getMemberId($this->_post('account'));	
@@ -111,11 +114,48 @@ class BonusAction extends CommonAction{
 	 * 接收用户id
 	 */
 	public function update($id){
-		$bouns_model = M('Bouns'); 
+		$bonus_model = M('Bouns'); 
 		//销售积分
-		$this->xiaoshou($bouns_model, $id);
+		$this->xiaoshou($bonus_model, $id);
+		
+		//服务积分
+		$this->fuwu($bonus_model, $id);
 	
 	
+	}
+	/**
+	 * 税收计算
+	 * 福利积分	重复消费		开支积分		回填积分
+	 */
+	private function shuishou(&$data,$bonus,$id){
+		$data['new_member_id'] =$id;
+		$data['create_time'] = time();
+		$data['fuli_bonus'] = $bonus*0.1;
+		$data['chongfu_bonus'] = $bonus*0.1;
+		$data['kaizhi_bonus'] = $bonus*0.05;
+		
+		//回填积分待计算
+//		$data['huitian_bonus'] = ;
+		$data['total_bonus'] = $bonus*0.75;
+	}
+	
+	/**
+	 * 服务积分计算
+	 */
+	private function fuwu($bonus_model,$id){
+		$member_model = M('Member');
+		$member_info = $member_model->find($id);
+		$data = array();
+		$data['member_id'] = $_SESSION[C('USER_AUTH_KEY')];
+		$data['fuwu_bonus'] = $this->level_bonus[$member_info['level']]*0.03; //3%
+		
+		//税收及其他数据构造
+		$this->shuishou($data, $data['fuwu_bonus'],$id);
+		if (false === $bonus_model->add($data)){
+			$member_model->rollback();
+			$this->error('激活失败');
+			exit();
+		}
 	}
 	/**
 	 * 销售积分更新
@@ -125,58 +165,191 @@ class BonusAction extends CommonAction{
 		$member_info = $member_model->find($id);
 		$data = array();
 		$data['member_id'] = $member_info['parent_id'];
-		$data['new_member_id'] =$id;
-		$data['create_time'] = time();
 		$data['xiaoshou_bonus'] = $this->level_bonus[$member_info['level']]*0.1;
-		$this->shuishou($data, $data['xiaoshou_bonus']);
+		
+		//税收及其他数据构造
+		$this->shuishou($data, $data['xiaoshou_bonus'],$id);
 		if (false === $bouns_model->add($data)){
 			$member_model->rollback();
 			$this->error('激活失败');
 			exit();
 		}
 	}
-	/**
-	 * 税收计算
-	 * 福利积分	重复消费		开支积分		回填积分
-	 */
-	private function shuishou(&$data,$bonus){
-		$data['fuli_bonus'] = $bonus*0.1;
-		$data['chongfu_bonus'] = $bonus*0.1;
-		$data['kaizhi_bonus'] = $bonus*0.05;
-		
-		//回填积分待计算
-//		$data['huitian_bonus'] = ;
-		$data['total_bonus'] = $bonus*0.75;
-	}
+	
 	/**
 	 * 管理积分计算
 	 */
-	private function guanli(){
-	
-	}
-	
-	/**
-	 * 服务积分计算
-	 */
-	private function fuwu(){
-	
+	private function uguanli($bonus_model,$new_member_id,$son_id){
+		
+		$member_model = M('Member');
+		$son_m = $member_model->find($son_id);
+		$new_m = $member_model->find($new_member_id);
+		if ($son_m['parent_area'] != 0){
+			//判断积分是否封顶，生成查询条件
+			$where = array();
+			$where['member_id'] = $son_m['parent_area'];
+			$start_time = strtotime(date('Y-m-d 00:00:00',time()));
+			$end_time = strtotime(date('Y-m-d 00:00:00',time()))+86400;
+			$where['create_time']=array('egt',$start_time);
+			$where['create_time']=array('lt',$end_time);
+			
+			//当天所得积分
+			$guanli_bonus = $bonus_model->where($where)->sum('guanli_bonus');
+			
+			$parent_m = $member_model->find($son_m['parent_area']);
+			
+			//进行管理积分处理，入库
+			if ($guanli_bonus  < $this->guanli[$parent_m['level']]){
+				
+				if ($parent_m['money_a'] != $parent_m['money_b']){
+					
+					//对碰积分或管理积分标志
+					$new_guanli = false;
+					if($parent_m['money_a'] > $parent_m['money_b']){
+						if ($son_m['parent_area_type'] == 'A'){
+							//如果放A区的业绩, 那么这个人肯定不产生对碰积分
+							$data = array('money_a'=>$parent_m['money_a']+$this->level_bonus[$new_m['level']],'money_b'=>0);					
+						}else {
+							//如果放B区的业绩, 那么这个人肯定产生对碰积分
+							$new_money_b = $parent_m['money_b']+$this->level_bonus[$new_m['level']];
+							if ($parent_m['money_a'] >= $new_money_b){
+								//这个时候, 产生的对碰积分, 应为 $new_money_b
+								$new_guanli = $new_money_b;
+								$data = array('money_a'=>$parent_m['money_a']-$new_money_b,'money_b'=>0);	
+							}else {
+								//这个时候产生的对碰积分, 应为 $parent_m['money_a']
+								$new_guanli =  $parent_m['money_a'];
+								$data = array('money_a'=>0,'money_b'=>$new_money_b-$parent_m['money_a']);	
+							}
+						}
+					}else {
+						
+						if ($son_m['parent_area_type'] == 'B'){
+							//放B区的业绩, 那么这个人肯定不产生对碰积分
+							$data = array('money_a'=>0,'money_b'=>$parent_m['money_b']+$this->level_bonus[$new_m['level']]);
+						}else {
+							//放A区的业绩, 那么这个人肯定产生对碰积分
+							$new_money_a = $parent_m['money_a']+$this->level_bonus[$new_m['level']];
+							if ($parent_m['money_b'] >= $new_money_a){
+								//这个时候, 产生的对碰积分, 应为 $new_money_a
+								$new_guanli =  $new_money_a;
+								$data = array('money_a'=>0,'money_b'=>$parent_m['money_b']-$new_money_a);
+							}else {
+								//这个时候产生的对碰积分, 应为$parent_m['money_b']
+								$new_guanli =  $parent_m['money_b'];
+								$data = array('money_a'=>$new_money_a-$parent_m['money_b'],'money_b'=>0);
+							}
+						}
+					}
+					
+					//更新A和B区域的业绩
+					if (false === $member_model->where("id=".$son_m['parent_area'])->setField($data)){
+						$member_model->rollback();
+						$this->error('激活失败');
+						exit();
+					}
+					if($new_guanli){
+						//管理积分组织数据和入库
+						$data_g = array();
+						$data_g['member_id'] = $son_m['parent_area'];
+						
+						$jifen = $new_guanli * $this->guanli_b[$parent_m['level']];
+						$data_g['guanli_bonus'] = (($guanli_bonus+$jifen) < $this->guanli[$parent_m['level']])?$jifen:($this->guanli[$parent_m['level']]-$guanli_bonus);
+						
+						$this->shuishou($data_g, $data_g['guanli_bonus'],$new_member_id);
+						if (false === $bonus_model->add($data_g)){
+							$member_model->rollback();
+							$this->error('激活失败');
+							exit();
+						}else {
+							//更新辅助积分
+							$this->fuzhu($data_g['member_id'], $data_g['guanli_bonus']);
+							
+							//更新辅导积分
+							$this->fudao($data_g['member_id'],$data_g['member_id'], $data_g['guanli_bonus']);
+							
+						}
+					}
+				}else {
+					$field = ($son_m['parent_area_type'] == 'A')?'money_a':'money_b';
+					//更行区域业绩
+					$info  = $member_model->where("id=".$son_m['parent_area'])->setInc($field,$this->level_bonus[$new_m['level']]);
+					if($info === false){
+							$member_model->rollback();
+							$this->error('激活失败');
+							exit();
+					}
+				}
+			}
+
+			//递归更新积分
+			$this->uguanli($bonus_model, $new_member_id,$parent_m['id']);
+		
+		}
 	}
 	
 	/**
 	 * 辅助积分计算
 	 */
-	private function fuzhu(){
-	
+	private function fuzhu($parend_id,$guanli_bonus){
+		$member_model = M('Member');
+		$m_son_count = $member_model->where("parent_id=$parend_id AND status not in(0,2)")->count();
+		$max_level = $member_model->where("parent_id=$parend_id AND status not in(0,2)")->max('level');
+		//计算辅助积分基数
+		$fuzhu_j = $guanli_bonus/$m_son_count;
+		$member_list = $member_model->where("parent_id=$parend_id AND status not in(0,2)");
+		$bonus_model = M('Bonus'); 
+		foreach ($member_list as $member){
+			//判断是否可以得到辅助积分
+			$total_bonus = $bonus_model -> where("member_id=".$member['id'])->sum('total_bonus');
+			if ($total_bonus < $this->touzi[$member['level_org']]*1.5){
+				$data = array();
+				$data['member_id'] = $member['id'];
+				//辅助积分的核心计算
+				$jifen = $fuzhu_j*($this->touzi[$member['level_org']]/$this->touzi[$max_level]);
+				$data['fuzhu_bonus'] = $jifen;
+				$this->shuishou($data, $data['fuzhu_bonus'], $parend_id);
+				if (false === $bonus_model->add($data)){
+					$member_model->rollback();
+					$this->error('激活失败');
+					exit();
+				}
+			}
+		}
 	}
+	
 	/**
 	 * 辅导积分计算
 	 */
-	private function fudao(){
-	
+	private function fudao($from_id,$parend_id,$guanli_bonus){
+		static $flag = 1;
+		$member_model = M('Member');
+		if ($flag<=4){
+			if (!empty($parend_id)){
+				$member = $member_model->find($parend_id);
+				if (!empty($member)){
+					$data = array();
+					$data['member_id'] = $member['parent_id'];
+					$bfb = $flag == 1 ? 0.7 : 0.1;
+					$data['fudao_bonus'] = $guanli_bonus * $bfb;
+					$this->shuishou($data, $data['fudao_bonus'], $from_id);
+					$bonus_model = M('Bonus');
+					if (false === $bonus_model->add($data)){
+						$member_model->rollback();
+						$this->error('激活失败');
+						exit();
+					}else {
+						$flag++;
+						$this->fudao($from_id, $member['parent_id'], $guanli_bonus);
+					}
+				}				
+			}
+		}
 	}
-	
+
 	/**
-	 * 补贴积分（分红）
+	 * 补贴积分（分红）,在分红的记录过程中更更新
+	 * 此处不做更新
 	 */
 		
 }

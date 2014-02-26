@@ -1,7 +1,9 @@
 <?php
 
 class CommonAction extends Action {
-
+	//对应等级积分
+	protected $level_bonus =array(1=>1200,5000,12000,25000);
+	protected $touzi =array(1=>1500,6000,15000,30000);
     function _initialize() {
         import('ORG.Util.Cookie');
         // 用户权限检查
