@@ -53,6 +53,7 @@ class PublicAction extends Action {
             }
             $_SESSION[C('USER_AUTH_KEY')]	=	$authInfo['id'];
             $_SESSION['email']	=	$authInfo['email'];
+            $_SESSION['account']	=	$authInfo['account'];
             $_SESSION['nickname']		=	$authInfo['nickname'];
             $_SESSION['lastLoginTime']		=	$authInfo['last_login_time'];
             $_SESSION['login_count']	=	$authInfo['login_count'];

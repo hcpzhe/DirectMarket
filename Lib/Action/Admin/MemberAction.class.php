@@ -73,7 +73,6 @@ class MemberAction extends CommonAction {
 			if (false  !== $member_model->create()){
 				$info = $member_model->add();
 				if ($info !== false){
-					//给推荐人加积分吗？？？？？？
 					$this->success('注册成功，待审核！');				
 				}			
 			}
