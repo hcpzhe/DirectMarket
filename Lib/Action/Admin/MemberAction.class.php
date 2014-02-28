@@ -185,7 +185,7 @@ class MemberAction extends CommonAction {
 			$member_info = $member_model->find($id);
 			$member_model -> startTrans();
 			$time = time();
-			$data = array('status'=>1,'points'=>$this->level_bonus[$member_info['level']],'verify_time'=>'$time');
+			$data = array('status'=>1,'points'=>$this->level_bonus[$member_info['level']],'verify_id'=>$_SESSION[C('USER_AUTH_KEY')],'verify_time'=>'$time');
 			$flag = $member_model->where("id=$id")->setField($data);
 			if ($flag !== false){
 				//更行收入记录表
@@ -204,7 +204,9 @@ class MemberAction extends CommonAction {
 					exit();
 				}
 				//扣除报单中心的积分来激活用户
+				//更行会员积分字段
 				//会员得到的积分放入何表何字段
+				$this->points($info['income'], $info['member_id']);
 				
 							
 				

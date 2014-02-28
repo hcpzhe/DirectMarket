@@ -307,5 +307,19 @@ class CommonAction extends Action {
     	$member_acc = $member_model->where(array('id'=>array('in',array_unique($mid_list))))->getField('id,account,nickname',true);
     	$this->assign('member_acc',$member_acc);
     }
+    	/**
+	 * 更行用户表积分字段值
+	 * 
+	 */
+	public function points($points,$id){
+		$member_model = M('Member');
+		$flag = $member_model->where("id=$id")->setInc('points',$points);
+		if ($flag === false){
+			$member_model->rollback();
+			$this->error('会员积分更新失败');
+			exit();
+		
+		}
+	}
     
 }

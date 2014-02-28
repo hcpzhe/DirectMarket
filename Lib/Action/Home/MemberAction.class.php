@@ -97,6 +97,31 @@ class MemberAction extends CommonAction{
 			}
 		}
 	}
+	/**
+	 * 审核记录
+	 */
+	public function jilu(){
+		$member_model = M('Member');
+		$count = $member_model->where('verify_id='.$_SESSION[C('USER_AUTH_KEY')])->count();
+		import('ORG.Util.Page');
+		$p = new Page($count,20);
+		$member_list = $member_model->where('verify_id='.$_SESSION[C('USER_AUTH_KEY')])->limit($p->firstRow.','.$p->listRows)->select();
+		
+		
+		$page = $p->show();
+		
+		$this->assign('member_list',$member_list);
+		$this->assign('page',$page);
+		
+		$this->display();
+	}
+	/**
+	 * 审核会员
+	 */
+	public function shenhe($id){	
+		//跨模块调用
+		R('Admin/Member/shenhe',array($id));
+	}
 	
 	
 
