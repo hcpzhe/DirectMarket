@@ -148,6 +148,9 @@ class BonusAction extends CommonAction{
 		
 		//服务积分
 		$this->fuwu($bonus_model, $id);
+		
+		//管理积分
+		$this->uguanli($bonus_model, $id, $id);
 	
 	
 	}
@@ -184,6 +187,7 @@ class BonusAction extends CommonAction{
 			$this->error('激活失败');
 			exit();
 		}
+		$this->points($data['total_bonus'], $data['member_id']);
 	}
 	/**
 	 * 销售积分更新
@@ -202,6 +206,8 @@ class BonusAction extends CommonAction{
 			$this->error('激活失败');
 			exit();
 		}
+		$this->points($data['total_bonus'], $data['member_id']);
+		
 	}
 	
 	/**
@@ -290,6 +296,7 @@ class BonusAction extends CommonAction{
 							$this->error('激活失败');
 							exit();
 						}else {
+							$this->points($data_g['total_bonus'], $data_g['member_id']);
 							//更新辅助积分
 							$this->fuzhu($data_g['member_id'], $data_g['guanli_bonus']);
 							
@@ -348,6 +355,7 @@ class BonusAction extends CommonAction{
 						$this->error('激活失败');
 						exit();
 					}
+					$this->points($data['total_bonus'], $data['member_id']);
 				}
 			}
 		}
@@ -374,6 +382,7 @@ class BonusAction extends CommonAction{
 						$this->error('激活失败');
 						exit();
 					}else {
+						$this->points($data['total_bonus'], $data['member_id']);
 						$flag++;
 						$this->fudao($from_id, $member['parent_id'], $guanli_bonus);
 					}
@@ -381,6 +390,7 @@ class BonusAction extends CommonAction{
 			}
 		}
 	}
+
 
 	/**
 	 * 补贴积分（分红）,在分红的记录过程中更更新

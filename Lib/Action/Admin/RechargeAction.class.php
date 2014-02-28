@@ -41,7 +41,7 @@ class RechargeAction extends CommonAction{
 		exit();
 	}
 	/**
-	 * 充值也显示
+	 * 充值页显示
 	 */
 	public function add(){
 		if (!empty($_POST['account'])){
@@ -70,7 +70,7 @@ class RechargeAction extends CommonAction{
 					$recharge_model->commit();
 					$this->success('充值成功');
 				}else {
-					$this->success('充值失败');
+					$this->error('充值失败');
 				}
 			}else {
 				$this->error('充值失败');
