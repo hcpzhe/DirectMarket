@@ -76,6 +76,10 @@ class MemberAction extends CommonAction {
 	 * 注册会员
 	 */
 	public function add() {
+		$member_model = M('Member');
+		$member_info = $member_model->find($_SESSION[C('ADMIN_AUTH_KEY')]);
+		//推荐人编号直接从$member_info中取出
+		$this->assign('member_info',$member_info);
 		$this->display();
 	}
 	
