@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>后台管理</title>
+<script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/css/global.css">
+<script language="javascript">
+	//下面的代码段如果你页面里有，可以去掉
+	var ie = navigator.appName == "Microsoft Internet Explorer" ? true : false;
+	function $(objID) {
+		return document.getElementById(objID);
+	}
+	
+	function gotopage() {
+		var pageNum = document.getElementById("vvv").value;
+		location = "tixianDetail?pageNum=" + pageNum
+				+ "&number=&bdate=&edate=";
+	}
+	
+	function showtime() {
+		$('#zcbdate').datepicker();
+		$('#zcedate').datepicker();
+	}
+
+	$(function($) {
+	  $(".bat_a_handle").click(function(){
+		 $(this).RSsubmit({success_alert:true,reload:true});
+		 return false;
+	  });
+	});
+</script>
+	</head>
+	<body>
+		<div id="contentDiv">
+			<div class="titleDiv">
+				当前位置&gt;&gt;未审核会员
+			</div>
+			<div style="text-align: left;">
+				<div style="width: 960px; margin: 0 auto;">
+					<table class="registertable1" width="950">
+						<tbody><tr>
+							<td>
+								会员编号
+							</td>
+							<td>
+								推荐编号
+							</td>
+							<td>
+								接点编号
+							</td>
+							<td>
+								报单编号
+							</td>
+							<td>
+								真实姓名
+							</td>
+							<td>
+								联系电话
+							</td>
+							<td>
+								会员状态
+							</td>
+							<td>
+								会员套餐
+							</td>
+							<td >
+								当前余额
+							</td>
+							<td>
+								注册时间
+							</td>
+                            	<td>
+								操作
+							</td>
+						</tr>
+						<!-- <foreach name="list" item="row"> -->
+                        <tr>
+							<td>
+								{$row['account']}
+							</td>
+							<td>
+								{$row['parent_id']}
+							</td>
+							<td>
+								{$row['parent_area']}
+							</td>
+							<td>
+								{$row['verify_id']}
+							</td>
+							<td>
+								{$row['nickname']}
+							</td>
+							<td>
+								{$row['tel']}
+							</td>
+							<td>
+								{$row['status']}
+							</td>
+							<td>
+								{$row['level']}
+							</td>
+							<td>
+								{$row['points']}
+							</td>
+							<td>
+								{:date('Y-m-d H:i:s',$row['create_time'])}
+							</td>
+                            	<td>
+								<a class="bat_a_handle" href="__URL__/setField/field/status/value/1">激活</a>|
+								<a href="__URL__/foreverdelete/id/{$row['id']}" onclick="if(confirm('您确认要删除吗？')){$(this).RSsubmit()};return false;">删除临时会员</a>
+							</td>
+						</tr>
+						<!-- </foreach> -->
+					</tbody></table>
+					<!-- 分页开始 -->
+					<table class="re" >
+						<tbody><tr>
+							<td align="left" height="29" width="40%">
+								共0条纪录，当前第1页，每页20条纪录
+							</td>
+							<td align="right" height="22" valign="middle" width="25%">
+								<a href="http://www.zyyx999.com/tixianDetail?pageNum=1">首页</a>
+								
+								
+								<a href="http://www.zyyx999.com/tixianDetail?pageNum=0">末页</a> 跳转到第
+								<select id="vvv" name="pageNum" onchange="gotopage();">
+									
+								</select>
+								页
+							</td>
+						</tr>
+					</tbody></table>
+				</div>
+			</div>
+		</div>
+		
+	
+
+</body></html>

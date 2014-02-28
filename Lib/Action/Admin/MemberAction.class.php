@@ -20,6 +20,22 @@ class MemberAction extends CommonAction {
 	}
 	
 	/**
+	 * 已审核会员(所有会员)
+	 */
+	public function statusOne() {
+		$_REQUEST['status'] = '1';
+		$this->index();
+	}
+	
+	/**
+	 * 未激活会员
+	 */
+	public function statusTwo() {
+		$_REQUEST['status'] = '2';
+		$this->index();
+	}
+	
+	/**
 	 * index使用common的通用index方法, 通过传递不同的参数, 显示不同的数据
 	 * 未审核用户列表
 	 * 已审核用户列表

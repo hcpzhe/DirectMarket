@@ -66,7 +66,7 @@ table .one td {
 			<div class="titleDiv">
 				&nbsp; 当前位置&gt;&gt;会员注册
 			</div>
-			<form id="tj" name="tj" action="__GROUP__/Member/insert" method="post">
+			<form id="tj" name="tj" action="__GROUP__/Member/insert" method="post" onsubmit="$(this).RSsubmit();return false;">
 				<center>
 					<table class="one" cellpadding="0px" cellspacing="0px" width="700px;">
 						<tbody><tr>
@@ -296,6 +296,8 @@ table .one td {
 		</div>
 	
 <script type="text/javascript">
+
+/*
 var error = 0;
 var error_parent_account = new Array('');
 $(function($) {
@@ -334,5 +336,6 @@ Array.prototype.in_array = function(e)
 	}
 	return false;
 }
+*/
 </script>
 </body></html>
