@@ -55,21 +55,36 @@ class DividendsAction extends CommonAction{
 			$bonus = $this->_post('bonus');
 			$count = $this->_post('count');
 			$data = array();
-			$data['give_bonus'] = $bonus;//发放奖金
-			$data['tax_bonus'] = round($data['give_bonus']*0.1,2);//扣税
-			$data['real_bonus'] = $data['give_bonus']-$data['tax_bonus'];//实发奖励
 			$data['create_time'] = time();
 			$data['remark'] = '公司分红';
 			//获取可以得到分红的会员
 			$member_model = M('Member');
 			$member_list = $member_model->where('level=4')->getField('id',true);
 			$dividends_model = M('Dividends');
+			$bonus_model = M('Bonus');
 			$dividends_model->startTrans();
 			foreach ($member_list as $mid){
+				$total_bonus = $bonus_model->where("member_id=",$mid)->sum('total_bonus');
+				$data['give_bonus'] = $bonus*(floor($total_bonus/6000));//发放奖金
+				$data['tax_bonus'] = round($data['give_bonus']*0.1,2);//扣税
+				$data['real_bonus'] = $data['give_bonus']-$data['tax_bonus'];//实发奖励
 				$data['member_id'] = $mid;
 				if (false === $dividends_model->add($data)){
+					$dividends_model->rollback();
 					$this->error('分红操作失败！');
 					exit();
+				}else {
+					//更新奖金纪录表
+					$data_b = array();
+					$data_b['member_id'] = $mid;
+					$data_b['butie_bonus'] = $data['real_bonus'];
+					$bonus_a = A('Bonus');
+					$bonus_a->shuishou($data_b,$data_b['butie_bonus'],$_SESSION[C('USER_AUTH_KEY')]);
+					if (false === $bonus_model->add($data)){
+						$dividends_model->rollback();
+						$this->error('分红操作失败');
+						exit();
+					}
 				}
 			}
 			$dividends_model->commit();

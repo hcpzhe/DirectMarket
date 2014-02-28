@@ -41,11 +41,43 @@ class RechargeAction extends CommonAction{
 		exit();
 	}
 	/**
-	 * 充值积分
+	 * 充值也显示
 	 */
-	public function chongzhi(){
-	
-	
+	public function add(){
+		if (!empty($_POST['account'])){
+			$member_model = M('Member');
+			$member_info = $member_model->where("account='".$this->_post('account')."")->find();
+			
+			$this->assign('member_info',$member_info);
+			
+		}
+		$this->display();	
+	}
+
+	/**
+	 * 充值积分处理
+	 */
+	public function chongzhi(){		
+		if (!empty($_POST['recharge_money'])){
+			$recharge_model = M('Recharge');
+			$recharge_model->startTrans();
+			$_POST['user_id'] = $_SESSION[C('USER_AUTH_KEY')];
+			$_POST['create_time'] = time();
+			if(false !== $recharge_model -> add()){
+				$member_model = M('Member');
+				$flag = $member_model->where("id=".$this->_post('member_id'))->setInc('recharge_points',$this->_post('recharge_money'));
+				if ($flag !== false){
+					$recharge_model->commit();
+					$this->success('充值成功');
+				}else {
+					$this->success('充值失败');
+				}
+			}else {
+				$this->error('充值失败');
+			}		
+		}else {
+			$this->error('充值金额不能为空');
+		}
 	} 
 
 }
