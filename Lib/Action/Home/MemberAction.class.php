@@ -8,7 +8,7 @@ class MemberAction extends CommonAction{
 		$member_model = M('Member');
 		
 		$count = $member_model->where("parent_id=".$_SESSION[C('USER_AUTH_KEY')])->count();
-		import("ORG.Util.Page");
+		import("@.ORG.Util.Page");
 		$p = new Page($count,20);
 		
 		$member_list = $member_model->where("parent_id=".$_SESSION[C('USER_AUTH_KEY')])->limit($p->firstRow.','.$p->listRows)->select();
@@ -103,7 +103,7 @@ class MemberAction extends CommonAction{
 	public function jilu(){
 		$member_model = M('Member');
 		$count = $member_model->where('verify_id='.$_SESSION[C('USER_AUTH_KEY')])->count();
-		import('ORG.Util.Page');
+		import('@.ORG.Util.Page');
 		$p = new Page($count,20);
 		$member_list = $member_model->where('verify_id='.$_SESSION[C('USER_AUTH_KEY')])->limit($p->firstRow.','.$p->listRows)->select();
 		

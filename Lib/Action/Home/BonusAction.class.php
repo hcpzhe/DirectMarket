@@ -15,7 +15,7 @@ class BonusAction extends CommonAction{
 		$count =  $bonus_model->where("member_id=".$_SESSION[C('USER_AUTH_KEY')])->count();
 		
 		//导入分页类
-		import('ORG.Util.Page');
+		import('@.ORG.Util.Page');
 		$p = new Page($count,20);
 		
 		$bonus_list = $bonus_model->where("member_id=".$_SESSION[C('USER_AUTH_KEY')])->limit($p->firstRow.','.$p->listRows)->select();

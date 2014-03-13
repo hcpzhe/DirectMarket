@@ -15,7 +15,7 @@ class DividendsAction extends CommonAction{
 		$dividends_model = M('Dividends');
 		
 		$count = $dividends_model->where($map)->count();
-		import('ORG.Util.Page');
+		import('@.ORG.Util.Page');
 		$p = new Page($count,20);
 		
 		$d_list = $dividends_model->where($map)->order('create_time')->limit($p->firstRow.','.$p->listRows)->select();

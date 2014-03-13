@@ -22,7 +22,7 @@ class RechargeAction extends CommonAction{
 		$recharge_model = M('Recharge');
 		
 		$count = $recharge_model->where($map)->count();
-		import('ORG.Util.Page');
+		import('@.ORG.Util.Page');
 		$p = new Page($count,20);
 		//充值记录列表
 		$recharge_list = $recharge_model->where($map)->order('create_time')->limit($p->firstRow.','.$p->listRows)->select();

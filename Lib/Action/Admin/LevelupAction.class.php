@@ -12,7 +12,7 @@ class LevelupAction extends CommonAction{
 		
 		$count = $levelup_model->count();
 		
-		import('ORG.Util.Page');
+		import('@.ORG.Util.Page');
 		$p = new Page($count,20);
 		
 		//升级列表集

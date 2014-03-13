@@ -15,7 +15,7 @@ class TransferAction extends CommonAction{
 		
 		$count = $transfer_model->where($field.'='.$_SESSION[C('USER_AUTH_KEY')])->count();
 		
-		import('ORG.Util.Page');
+		import('@.ORG.Util.Page');
 		
 		$p = new Page($count,20);
 		

@@ -16,7 +16,7 @@ class DividendsAction extends CommonAction{
 		
 		$count = $dividends_model->where("member_id=".$_SESSION[C('USER_AUTH_KEY')])->count();
 		
-		import('ORG.Util.Page');
+		import('@.ORG.Util.Page');
 		
 		$p = new Page($count,20);
 		
