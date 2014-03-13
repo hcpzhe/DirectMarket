@@ -14,7 +14,7 @@ class IndexAction extends CommonAction {
 		 */
 		$member_model = M('Member');
 		//会员总数
-		$m_total = $member_model -> count();
+		$m_total = $member_model -> where('status>0') -> count();
 		//待激活会员数
 		$m_active = $member_model -> where('status=2') -> count();
 		//待审核报单中心
@@ -29,6 +29,7 @@ class IndexAction extends CommonAction {
 		$this->assign('m_baodan',$m_baodan);
 		$this->assign('c_audit',$c_audit);
 		
+        cookie('_currentUrl_', __SELF__);
 		$this->display();
 		
 	}

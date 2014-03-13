@@ -20,10 +20,43 @@ class MemberAction extends CommonAction {
 	}
 	
 	/**
+	 * ajax检测用户下的area账户是否存在
+	 */
+	public function checkArea() {
+		$id = (int)$_REQUEST['id'];
+		$account = $_REQUEST['account'];
+		if ($id <= 0) $this->error('请先填写正确的推荐人编号');
+		$member_M = D('Member');
+		$member = $member_M->getById($id); //推荐人
+		if ($member['id'] <= 0) $this->error('请先填写正确的推荐人编号');
+		
+		//检测接点人帐号是否存在于推荐人 的area树下
+		if ($account == $member['account']) {
+			//推荐人  接点人 为同一人时
+			$mem_area = $member;
+		}else {
+			$mem_area = $member_M->getByAccount($account); //接点人
+			if ($mem_area['id'] <= 0) $this->error('接点编号不存在');
+			if (false === $member_M->checkParentArea($mem_area['id'],$member['id'])) {
+				$this->error('没有权限放置此接点');
+			}
+		}
+		
+		//接点人下的area空位有哪几个
+    	$condition = array();
+    	$condition['status'] = array('in','1,3,4');
+    	$condition['parent_area'] = $mem_area['id'];
+		$types = $member_M->where($condition)->getField('parent_area_type',true);
+		if (!is_array($types)) $types = array();
+		$return = array('id'=>$mem_area['id'],'types'=>$types);
+		$this->success($return);
+	}
+	
+	/**
 	 * 已审核会员(所有会员)
 	 */
 	public function statusOne() {
-		$_REQUEST['status'] = '1';
+		$_REQUEST['status'] = array('in','1,3,4');
 		$this->index();
 	}
 	
@@ -32,6 +65,22 @@ class MemberAction extends CommonAction {
 	 */
 	public function statusTwo() {
 		$_REQUEST['status'] = '2';
+		$this->index();
+	}
+	
+	/**
+	 * 已审核报单中心
+	 */
+	public function statusThree() {
+		$_REQUEST['status'] = '3';
+		$this->index();
+	}
+	
+	/**
+	 * 未审核报单中心
+	 */
+	public function statusFour() {
+		$_REQUEST['status'] = '4';
 		$this->index();
 	}
 	
@@ -45,6 +94,34 @@ class MemberAction extends CommonAction {
 		if (!empty($_REQUEST['status'])){
 			$map['status'] = $this->_request('status');
 		}
+	}
+	
+	/**
+	 * 报单中心充值页面
+	 */
+	public function baodanChZh() {
+		$id = (int)$_REQUEST['id'];
+		if ($id <= 0) $this->error('非法操作');
+		$member_M = M('Member');
+		$info = $member_M->getById($id);
+		$this->assign('info',$info);
+		$this->display();
+	}
+	
+	/**
+	 * 充值接口
+	 * recharge_points
+	 */
+	public function chongZhi() {
+		$id = (int)$_REQUEST['id'];
+		if ($id <= 0) $this->error('非法操作');
+		$points = round($_REQUEST['points'],2);
+		if ($points <= 0) $this->error('充值金额请大于0');
+		$member_M = M('Member');
+		if (false === $member_M->where('id='.$id)->setInc('recharge_points',$points)) {
+			$this->error('充值失败');
+		}
+		$this->success('充值成功',cookie('_currentUrl_'));
 	}
 	
 	/**
@@ -76,10 +153,13 @@ class MemberAction extends CommonAction {
 	 * 注册会员
 	 */
 	public function add() {
+		/*
 		$member_model = M('Member');
 		$member_info = $member_model->find($_SESSION[C('ADMIN_AUTH_KEY')]);
 		//推荐人编号直接从$member_info中取出
 		$this->assign('member_info',$member_info);
+		*/
+		cookie('_currentUrl_', __GROUP__.'/Index/index');
 		$this->display();
 	}
 	
@@ -93,9 +173,10 @@ class MemberAction extends CommonAction {
 			if (false  !== $member_model->create()){
 				$info = $member_model->add();
 				if ($info !== false){
-					$this->success('注册成功，待审核！');				
-				}			
+					$this->success('注册成功，待审核！',cookie('_currentUrl_'));				
+				}
 			}
+			$this->error($member_model->getError());
 		}else {
 			$this->error('非法提交');
 		}
@@ -114,31 +195,43 @@ class MemberAction extends CommonAction {
 		$level = (int)$this->_post('level');
 		$info = $member_model->where("id=$id")->find();
 		if (!empty($info)){
-			if ($info['level'] >= $level){
-				$this->error('选择的升级级别有误！');
-				exit;
-			}
 			if ($info['level'] == 4){
 				$this->error('已是加盟商，无需升级');
 				exit;
-			}			
+			}
+			if ($level == 0) {
+				$level = $info['level']+1;
+			}else {
+				if ($info['level'] >= $level){
+					$this->error('选择的升级级别有误！');
+					exit;
+				}
+			}
 			//进行数据存储，开启事务
 			$member_model->startTrans();
-			$falg = $member_model->where("id=$id")->setField('level',$level);
+			$data_m = array();
+			$data_m['level'] = $level;
+			/***回填积分*******************************************************/
+			$m_org = $this->touzi[$info['level']];//原始投资金额
+			$m_new = $this->touzi[$level];
+			$huitian = $m_new - $m_org;
+			$data_m['huitian'] = array('exp','huitian+'.$huitian);
+			/*****************************************************************/
+			$falg = $member_model->where("id=$id")->save($data_m);
 			if ($falg !== FALSE){
 				$data = array();
 				$data['member_id'] = $info['id']; 
 				$data['level_bef'] = $info['level']; 
 				$data['level_aft'] = $level;
-				$data['type'] = (int)$this->_post('type');
+				$data['type'] = 1; //升级类型    1-公司升级 2-充值升级 , 目前只做公司升级
 				$data['create_time'] = time();
 				if (false !== $levelup_model->add($data)){
 					$member_model->commit();
-					$this->success('升级成功');
+					$this->success('升级成功',cookie('_currentUrl_'));
 				}else {
 					$member_model->rollback();
 					$this->error('升级失败');
-				}	
+				}
 			}
 		}else {
 			$this->error('用户不存在');
@@ -183,13 +276,14 @@ class MemberAction extends CommonAction {
 	 * 审核会员操作
 	 * 接收主键ID
 	 */
-	public function shenhe($id){
+	public function shenhe(){
+		$id = (int)$_REQUEST['id'];
 		if (!empty($id)){
 			$member_model = M('Member');
 			$member_info = $member_model->find($id);
 			$member_model -> startTrans();
 			$time = time();
-			$data = array('status'=>1,'points'=>$this->level_bonus[$member_info['level']],'verify_id'=>$_SESSION[C('USER_AUTH_KEY')],'verify_time'=>'$time');
+			$data = array('status'=>1,'verify_id'=>0,'verify_time'=>time());
 			$flag = $member_model->where("id=$id")->setField($data);
 			if ($flag !== false){
 				//更行收入记录表
@@ -208,14 +302,9 @@ class MemberAction extends CommonAction {
 					exit();
 				}
 				//扣除报单中心的积分来激活用户
-				//更行会员积分字段
-				//会员得到的积分放入何表何字段
-				$this->points($info['income'], $info['member_id']);
-				
-							
 				
 				//处理积分逻辑，跨模块调用
-				$bonus = A('Bonus');
+				$bonus = A('Admin/Bonus');
 				$bonus->update($id);
 				$member_model->commit();
 				$this->success('激活成功');
