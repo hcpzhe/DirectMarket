@@ -142,7 +142,7 @@ class BonusAction extends CommonAction{
 	 * 接收用户id
 	 */
 	public function update($id){
-		$bonus_model = M('Bouns'); 
+		$bonus_model = M('Bonus'); 
 		//销售积分
 		$this->xiaoshou($bonus_model, $id);
 		
@@ -165,34 +165,39 @@ class BonusAction extends CommonAction{
 		$data['chongfu_bonus'] = $bonus*0.1;
 		$data['kaizhi_bonus'] = $bonus*0.05;
 		
-		//回填积分待计算
-//		$data['huitian_bonus'] = ;
+		//TODO 回填积分待计算
+		//看$data['id']这个会员应回填的积分是否大于0;
+		//若大于0, 计算此会员的收入总计是否达到投资额
+		//若满足上面2个条件, 则回填50%(扣除福利后)
+		//$data['huitian_bonus'] = ;
 		$data['total_bonus'] = $bonus*0.75;
 	}
 	
 	/**
-	 * 服务积分计算
+	 * 服务积分计算（报单积分）
 	 */
 	private function fuwu($bonus_model,$id){
 		$member_model = M('Member');
 		$member_info = $member_model->find($id);
 		$data = array();
-		$data['member_id'] = $_SESSION[C('USER_AUTH_KEY')];
-		$data['fuwu_bonus'] = $this->level_bonus[$member_info['level']]*0.03; //3%
-		
-		//税收及其他数据构造
-		$this->shuishou($data, $data['fuwu_bonus'],$id);
-		if (false === $bonus_model->add($data)){
-			$member_model->rollback();
-			$this->error('激活失败');
-			exit();
+		$data['member_id'] = $member_info['verify_id']; //若激活人员为管理员, 则报单id为0; 此时, 不计算报单积分
+		if ($data['member_id'] > 0) {
+			$data['fuwu_bonus'] = $this->level_bonus[$member_info['level']]*0.03; //3%
+			
+			//税收及其他数据构造
+			$this->shuishou($data, $data['fuwu_bonus'],$id);
+			if (false === $bonus_model->add($data)){
+				$member_model->rollback();
+				$this->error('报单积分错误, 激活失败');
+				exit();
+			}
+			$this->points($data['total_bonus'], $data['member_id']);
 		}
-		$this->points($data['total_bonus'], $data['member_id']);
 	}
 	/**
 	 * 销售积分更新
 	 */
-	private function xiaoshou($bouns_model,$id){
+	private function xiaoshou($bonus_model,$id){
 		$member_model = M('Member');
 		$member_info = $member_model->find($id);
 		$data = array();
@@ -201,9 +206,9 @@ class BonusAction extends CommonAction{
 		
 		//税收及其他数据构造
 		$this->shuishou($data, $data['xiaoshou_bonus'],$id);
-		if (false === $bouns_model->add($data)){
+		if (false === $bonus_model->add($data)){
 			$member_model->rollback();
-			$this->error('激活失败');
+			$this->error('销售积分错误, 激活失败');
 			exit();
 		}
 		$this->points($data['total_bonus'], $data['member_id']);
@@ -279,7 +284,7 @@ class BonusAction extends CommonAction{
 					//更新A和B区域的业绩
 					if (false === $member_model->where("id=".$son_m['parent_area'])->setField($data)){
 						$member_model->rollback();
-						$this->error('激活失败');
+						$this->error('区域业绩错误, 激活失败');
 						exit();
 					}
 					if($new_guanli){
@@ -293,7 +298,7 @@ class BonusAction extends CommonAction{
 						$this->shuishou($data_g, $data_g['guanli_bonus'],$new_member_id);
 						if (false === $bonus_model->add($data_g)){
 							$member_model->rollback();
-							$this->error('激活失败');
+							$this->error('管理积分错误, 激活失败');
 							exit();
 						}else {
 							$this->points($data_g['total_bonus'], $data_g['member_id']);
@@ -307,11 +312,11 @@ class BonusAction extends CommonAction{
 					}
 				}else {
 					$field = ($son_m['parent_area_type'] == 'A')?'money_a':'money_b';
-					//更行区域业绩
+					//更新区域业绩
 					$info  = $member_model->where("id=".$son_m['parent_area'])->setInc($field,$this->level_bonus[$new_m['level']]);
 					if($info === false){
 							$member_model->rollback();
-							$this->error('激活失败');
+							$this->error('更新区域业绩错误, 激活失败');
 							exit();
 					}
 				}
