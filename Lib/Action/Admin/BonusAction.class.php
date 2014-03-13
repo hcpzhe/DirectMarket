@@ -7,7 +7,7 @@ class BonusAction extends CommonAction{
 	private  $guanli = array(1=>1000,5000,10000,15000);
 	private  $guanli_b = array(1=>0.08,0.12,0.15,0.18);
 	
-	private function _filter(&$map){
+	protected function _filter(&$map){
 		if(!empty($_POST['account'])){
 			$map['member_id']=D('Member')->getMemberId($this->_post('account'));	
 		}
@@ -18,11 +18,11 @@ class BonusAction extends CommonAction{
 	 * @param array $map 过滤参数
 	 * 会员奖金记录
 	 */	
-	public function myIndex(&$map){
+	protected function myIndex(&$map){
 		//创建模型对象
 		$bonus_model = M('Bonus');
 		$count = $bonus_model->where($map)->count();
-		import("ORG.Util.Page");
+		import("@.ORG.Util.Page");
 		$p = new Page($count,20);
 		//记录数据集
 		$bonus_list = $bonus_model->where($map)->order('create_time desc')->limit($p->firstRow . ',' . $p->listRows)->select();
@@ -48,7 +48,7 @@ class BonusAction extends CommonAction{
 		$count_sql = "SELECT count(member_id) count FROM zx_bonus GROUP BY member_id";
 		$count = $model->query($count_sql);
 		$count = $count[0]['count'];
-		import("ORG.Util.Page");
+		import("@.ORG.Util.Page");
 		$p = new Page($count,20);
 		$where = '';
 		if(!empty($_POST['account'])){
