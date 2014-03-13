@@ -66,7 +66,7 @@ table .one td {
 			<div class="titleDiv">
 				&nbsp; 当前位置&gt;&gt;会员注册
 			</div>
-			<form id="tj" name="tj" action="__GROUP__/Member/insert" method="post" onsubmit="$(this).RSsubmit();return false;">
+			<form id="zhuce" name="tj" action="__GROUP__/Member/insert" method="post" onsubmit="">
 				<center>
 					<table class="one" cellpadding="0px" cellspacing="0px" width="700px;">
 						<tbody><tr>
@@ -139,9 +139,9 @@ table .one td {
 								推荐编号:
 							</td>
 							<td align="left">
-								<input name="parent_account" id="parent_account" type="text" value="{$member_info['account']}"/>
+								<input name="parent_account" id="parent_account" type="text" value=""/>
 								<span id="parent_account_error" style="color: red">*</span>
-								<input name="parent_id" id="parent_id" type="hidden" value="{$member_info['id']}"/>
+								<input name="parent_id" id="parent_id" type="hidden" value="0"/>
 							</td>
 						</tr>
 						<tr>
@@ -149,7 +149,7 @@ table .one td {
 								选择套餐:
 							</td>
 							<td style="font-size: 12px;" align="left">
-								<select id="lev" name="jcUser.level">
+								<select id="lev" name="level">
 									<option value="1">
 										个人套餐
 									</option>
@@ -171,25 +171,29 @@ table .one td {
 								接点编号:
 							</td>
 							<td align="left">
-								<input name="jcUser.jdnumber" id="jdnumber" type="text">
-								<span id="error9.info" style="color: red">*</span>
+								<input name="parent_area_account" id="parent_area_account" type="text">
+								<span id="parent_area_account_error" style="color: red">*</span>
+								<input name="parent_area" id="parent_area" type="hidden" value="0"/>
 							</td>
 						</tr>
+						<!--
 						<tr>
 							<td style="text-align: right;">
 								报单编号:
 							</td>
 							<td align="left">
-								<input name="jcUser.bdnumber" id="bdnumber" type="text">
+								<input name="verify_account" id="verify_account" type="text">
 								<span id="error10.info" style="color: red">*</span>
+								<input name="verify_id" id="verify_id" type="hidden" value="0"/>
 							</td>
 						</tr>
+						-->
 						<tr>
 							<td style="text-align: right;">
 								所在位置:
 							</td>
 							<td align="left">
-								<select id="location" name="jcUser.location">
+								<select id="location" name="parent_area_type">
 									<option selected="selected" value="请选择节点位置">
 										&nbsp;请选择节点位置&nbsp;
 									</option>
@@ -208,7 +212,7 @@ table .one td {
 								真实姓名:
 							</td>
 							<td align="left">
-								<input name="jcUser.name" id="name" type="text">
+								<input name="nickname" id="name" type="text">
 								<span id="error12.info" style="color: red">*</span>
 							</td>
 						</tr>
@@ -217,7 +221,7 @@ table .one td {
 								联系电话:
 							</td>
 							<td align="left">
-								<input name="jcUser.tel" id="tel" type="text">
+								<input name="tel" id="tel" type="text">
 								<span id="error13.info" style="color: red">*</span>
 							</td>
 						</tr>
@@ -226,7 +230,7 @@ table .one td {
 								身份证号:
 							</td>
 							<td align="left">
-								<input name="jcUser.card" id="card" type="text">
+								<input name="q" id="card" type="text">
 								<span id="error16.info" style="color: red">*</span>
 							</td>
 						</tr>
@@ -235,7 +239,7 @@ table .one td {
 								联系地址:
 							</td>
 							<td align="left">
-								<input name="jcUser.address" id="address" type="text">
+								<input name="address" id="address" type="text">
 								<span id="error17.info" style="color: red">*</span>
 							</td>
 						</tr>
@@ -244,7 +248,7 @@ table .one td {
 								银行卡号:
 							</td>
 							<td align="left">
-								<input name="jcUser.bankcard" id="bankcard" type="text">
+								<input name="bank_card" id="bank_card" type="text">
 								<span id="error15.info" style="color: red">*</span>
 							</td>
 						</tr>
@@ -253,7 +257,7 @@ table .one td {
 								开户银行:
 							</td>
 							<td align="left">
-								<select id="bankname" name="jcUser.bank">
+								<select id="bank_name" name="bank_name">
 									<option selected="selected" value="中国银行">
 										中国银行
 									</option>
@@ -277,7 +281,7 @@ table .one td {
 								开户地址:
 							</td>
 							<td align="left">
-								<input name="jcUser.bankaddress" id="bankaddress" type="text">
+								<input name="bank_address" id="bank_address" type="text">
 							</td>
 						</tr>
 						<tr>
@@ -297,14 +301,14 @@ table .one td {
 	
 <script type="text/javascript">
 
-/*
-var error = 0;
+
+var error = '';
 var error_parent_account = new Array('');
 $(function($) {
 	$("#parent_account").focusout(function(){
 		$thisval = $(this).val();
 		if (error_parent_account.in_array($thisval)) {
-			error = 1;
+			error = '推荐编号不正确';
 			$("#parent_account_error").html("*用户不存在");
 		}else {
 			$.ajax({
@@ -315,16 +319,52 @@ $(function($) {
 				success: function(d){
 					if (d.status == 1) {
 						$("#parent_id").val(d.info);
-						error = 0;
-						$("#parent_account_error").html("*");
+						error = '';
+						$("#parent_account_error").html("*√");
 					}else {
-						error = 1;
+						error = '推荐编号不正确';
 						error_parent_account.push($thisval);
 						$("#parent_account_error").html("*"+d.info);
 					}
 				}
 			});
 		}
+	});
+	
+
+	$("#parent_area_account").focusout(function(){
+		$thisval = $(this).val();
+		$pid = $("#parent_id").val();
+		if ($pid <= 0) {
+			error = '推荐编号不正确';
+			$("#parent_area_account_error").html("*请先填写正确的推荐编号");
+		}else {
+			$.ajax({
+				type: "post",
+				url: "__GROUP__/Member/checkArea",
+				data: {account : $thisval, id : $pid},
+				dataType: 'json',
+				success: function(d){
+					if (d.status == 1) {
+						$("#parent_area").val(d.info.id);
+						error = '';
+						$("#parent_area_account_error").html("*√");
+					}else {
+						error = '接点编号不正确';
+						$("#parent_area_account_error").html("*"+d.info);
+					}
+				}
+			});
+		}
+	});
+	
+	$("#zhuce").submit(function(){
+		if (error == '') {
+			$(this).RSsubmit({success_alert:true});
+		}else {
+			alert(error);
+		}
+		return false;
 	});
 });
 
@@ -336,6 +376,6 @@ Array.prototype.in_array = function(e)
 	}
 	return false;
 }
-*/
+
 </script>
 </body></html>

@@ -5,30 +5,14 @@
 <title>后台管理</title>
 <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
 <link type="text/css" rel="stylesheet" href="__PUBLIC__/css/global.css">
+<script type="text/javascript" src="__PUBLIC__/js/RSsubmit.js"></script>
 <script language="javascript">
-	//下面的代码段如果你页面里有，可以去掉
-	var ie = navigator.appName == "Microsoft Internet Explorer" ? true : false;
-	function $(objID) {
-		return document.getElementById(objID);
-	}
-	
-	function gotopage() {
-		var pageNum = document.getElementById("vvv").value;
-		location = "tixianDetail?pageNum=" + pageNum
-				+ "&number=&bdate=&edate=";
-	}
-	
-	function showtime() {
-		$('#zcbdate').datepicker();
-		$('#zcedate').datepicker();
-	}
-
-	$(function($) {
-	  $(".bat_a_handle").click(function(){
-		 $(this).RSsubmit({success_alert:true,reload:true});
-		 return false;
-	  });
-	});
+$(function($) {
+  $(".bat_a_handle").click(function(){
+	 $(this).RSsubmit({success_alert:true,reload:true});
+	 return false;
+  });
+});
 </script>
 	</head>
 	<body>
@@ -107,7 +91,7 @@
 								{:date('Y-m-d H:i:s',$row['create_time'])}
 							</td>
                             	<td>
-								<a class="bat_a_handle" href="__URL__/setField/field/status/value/1">激活</a>|
+								<a class="bat_a_handle" href="__URL__/shenhe/id/{$row['id']}">激活</a>|
 								<a href="__URL__/foreverdelete/id/{$row['id']}" onclick="if(confirm('您确认要删除吗？')){$(this).RSsubmit()};return false;">删除临时会员</a>
 							</td>
 						</tr>
@@ -117,20 +101,13 @@
 					<table class="re" >
 						<tbody><tr>
 							<td align="left" height="29" width="40%">
-								共0条纪录，当前第1页，每页20条纪录
 							</td>
 							<td align="right" height="22" valign="middle" width="25%">
-								<a href="http://www.zyyx999.com/tixianDetail?pageNum=1">首页</a>
-								
-								
-								<a href="http://www.zyyx999.com/tixianDetail?pageNum=0">末页</a> 跳转到第
-								<select id="vvv" name="pageNum" onchange="gotopage();">
-									
-								</select>
-								页
+								{$page}
 							</td>
 						</tr>
 					</tbody></table>
+					<div style="color:red">注意：此页面激活会员，报单人员为管理员，不会产生报单积分。</div>
 				</div>
 			</div>
 		</div>
