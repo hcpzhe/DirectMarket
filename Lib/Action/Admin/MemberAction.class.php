@@ -331,5 +331,11 @@ class MemberAction extends CommonAction {
 	 * 未激活用户使用foreverdelete直接删除
 	 */
 	
-	
+	/**
+	 * 奖金发放页面
+	 */
+	public function jiangjin() {
+		$_REQUEST['status'] = array('in','1,3,4');
+		$this->index();
+	}
 }
