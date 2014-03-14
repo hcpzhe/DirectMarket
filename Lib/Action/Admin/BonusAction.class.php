@@ -96,7 +96,7 @@ class BonusAction extends CommonAction{
 		
 		//培育补贴(辅导积分)
 		$tongji['fudao_bonus'] = $bonus_model->sum('fudao_bonus');
-		$tongji['xiaoshou_bonus_b'] = round($tongji['fudao_bonus']/$tongji['total_bonus'],4)*100;
+		$tongji['fudao_bonus_b'] = round($tongji['fudao_bonus']/$tongji['total_bonus'],4)*100;
 		
 		//分红奖总计
 		$tongji['butie_bonus'] = $bonus_model->sum('butie_bonus');
@@ -110,12 +110,14 @@ class BonusAction extends CommonAction{
 		
 		//重复消费 (扣除的)
 		$tongji['chongfu_bonus'] = $bonus_model->sum('chongfu_bonus');
+		$tongji['chongfu_bonus_b'] = round($tongji['chongfu_bonus']/$tongji['total_bonus'],4)*100;
 		
 		//回填奖总计
 		$tongji['huitian_bonus'] = $bonus_model->sum('huitian_bonus');
 		
 		//开支积分 (扣除的税收)
 		$tongji['kaizhi_bonus'] = $bonus_model->sum('kaizhi_bonus');
+		$tongji['kaizhi_bonus_b'] = round($tongji['kaizhi_bonus']/$tongji['total_bonus'],4)*100;
 		
 		
 		//=============================以下要计算得到================================
@@ -131,7 +133,7 @@ class BonusAction extends CommonAction{
 		$tongji['total'] = $tongji['jingjiangjin']+$tongji['shuishou'];
 		$tongji['total_b'] = round($tongji['total']/$tongji['total_bonus'],4)*100;
 		
-		$this->assign($tongji);
+		$this->assign('tongji',$tongji);
 	
 		$this->display();
 	}
