@@ -1,0 +1,242 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>后台管理</title>
+<script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/css/global.css">
+<script type="text/javascript" src="__PUBLIC__/js/RSsubmit.js"></script>
+<script language="javascript">
+$(function($) {
+  $(".bat_a_handle").click(function(){
+	 $(this).RSsubmit({success_alert:true,reload:true});
+	 return false;
+  });
+});
+</script>
+</head>
+	<body>
+		<div id="contentDiv">
+			<div class="titleDiv">
+				当前位置&gt;&gt;拨出比例
+			</div>
+			<center>
+				<br>
+				<div style="text-align: center;">
+					<div style="margin: 0 auto; width: 958px;">
+						<div>
+							
+							<table class="registertable4" width="958px;">
+								<tbody>
+                                <tr>
+                                <td colspan="4">收入总计：{$tongji['total_bonus']}元</td>
+                                </tr>
+                                <tr>
+                          <td>
+								报单奖总计：
+							</td>
+									<td>
+										{$tongji['fuwu_bonus']}元
+									</td>
+								
+							<td>
+								拨比：
+							</td>
+                            	
+							<td>
+								{$tongji['fuwu_bonus_b']}%
+							</td>
+								</tr>
+                                     <tr>
+                          <td>
+								推荐奖总计：
+							</td>
+									<td>
+										{$tongji['xiaoshou_bonus']}元
+									</td>
+								
+							<td>
+								拨比：
+							</td>
+                            	
+							<td>
+								{$tongji['xiaoshou_bonus_b']}%
+							</td>
+								</tr>
+                                     <tr>
+                          <td>
+								管理积分总计：
+							</td>
+									<td>
+										{$tongji['guanli_bonus']}元
+									</td>
+								
+							<td>
+								拨比：
+							</td>
+                            	
+							<td>
+								{$tongji['guanli_bonus_b']}%
+							</td>
+								</tr>
+                        <tr>
+                          <td>
+								辅助积分总计：
+							</td>
+									<td>
+										{$tongji['fuzhu_bonus']}元
+									</td>
+								
+							<td>
+								拨比：
+							</td>
+                            	
+							<td>
+								{$tongji['fuzhu_bonus_b']}%
+							</td>
+						</tr>
+                        <tr>
+                          <td>
+								辅导积分总计：
+							</td>
+									<td>
+										{$tongji['fudao_bonus']}元
+									</td>
+								
+							<td>
+								拨比：
+							</td>
+                            	
+							<td>
+								{$tongji['fudao_bonus_b']}%
+							</td>
+						</tr>
+                        <tr>
+                          <td>
+								分红奖总计：
+							</td>
+									<td>
+										{$tongji['butie_bonus']}元
+									</td>
+								
+							<td>
+								拨比：
+							</td>
+                            	
+							<td>
+								{$tongji['butie_bonus_b']}%
+							</td>
+						</tr>
+                        <tr>
+                          <td>
+								福利总计：
+							</td>
+									<td>
+										{$tongji['fuli_bonus']}元
+									</td>
+								
+							<td>
+								拨比：
+							</td>
+                            	
+							<td>
+								{$tongji['fuli_bonus_b']}%
+							</td>
+						</tr>
+                        <tr>
+                          <td>
+								重复消费总计：
+							</td>
+									<td>
+										{$tongji['chongfu_bonus']}元
+									</td>
+								
+							<td>
+								拨比：
+							</td>
+                            	
+							<td>
+								{$tongji['chongfu_bonus_b']}%
+							</td>
+						</tr>
+                        <tr>
+                          <td>
+								开支总计：
+							</td>
+									<td>
+										{$tongji['kaizhi_bonus']}元
+									</td>
+								
+							<td>
+								拨比：
+							</td>
+                            	
+							<td>
+								{$tongji['kaizhi_bonus_b']}%
+							</td>
+						</tr>
+                        <tr>
+                          <td>
+								回填总计：
+							</td>
+									<td>
+										{$tongji['huitian_bonus']}元
+									</td>
+								
+							<td>
+								拨比：
+							</td>
+                            	
+							<td>
+								0%
+							</td>
+						</tr>
+                        <tr>
+                          <td>
+								净奖金拨出：
+							</td>
+									<td>
+										{$tongji['jingjiangjin']}元
+									</td>
+								
+							<td>
+								拨比：
+							</td>
+                            	
+							<td>
+								{$tongji['jingjiangjin_b']}%
+							</td>
+						</tr>
+						</tbody></table>
+						<table class="registertable4" width="958px;">
+                                 <tr>
+                          <td>
+								总支出：
+							</td>
+									<td>
+										{$tongji['total']}元
+									</td>
+								
+							<td>
+								总支出比：
+							</td>
+                            	
+							<td>
+								{$tongji['total_b']}%
+							</td>
+								</tr>
+								
+									
+								
+									
+								
+							</tbody></table>
+							<!-- 分页开始 -->
+							
+						</div>
+					</div>
+				</div>
+			</center>
+		</div>
+
+</body></html>

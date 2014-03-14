@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50524
 File Encoding         : 65001
 
-Date: 2014-03-13 16:40:58
+Date: 2014-03-14 16:31:28
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -21,7 +21,7 @@ SET FOREIGN_KEY_CHECKS=0;
 DROP TABLE IF EXISTS `zx_bonus`;
 CREATE TABLE `zx_bonus` (
   `member_id` int(10) unsigned NOT NULL COMMENT '会员ID',
-  `new_member_id` int(10) unsigned NOT NULL COMMENT '奖金来源(注册的会员ID)',
+  `new_member_id` int(11) NOT NULL COMMENT '奖金来源(注册的会员ID)',
   `create_time` varchar(20) NOT NULL DEFAULT '0' COMMENT '结算时间 unix时间戳',
   `total_bonus` decimal(10,2) DEFAULT '0.00' COMMENT '总计奖金(应得及净奖金)',
   `fuwu_bonus` decimal(10,2) DEFAULT '0.00' COMMENT '服务积分(报单积分)',
@@ -76,8 +76,8 @@ CREATE TABLE `zx_dividends` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `member_id` int(10) unsigned NOT NULL,
   `real_name` varchar(255) DEFAULT NULL COMMENT '真实姓名',
-  `give_bonus` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '发放奖励',
-  `tax_bonus` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '扣税10%',
+  `give_bonus` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '发放奖励==bonus.补贴',
+  `tax_bonus` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '扣税25%==福利10%+重复10%+开支5%',
   `real_bonus` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '实发奖励',
   `create_time` varchar(20) NOT NULL DEFAULT '0' COMMENT '发放时间unix时间戳',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注 公司分红,人工发放ex..',
@@ -260,5 +260,5 @@ CREATE TABLE `zx_user` (
 -- ----------------------------
 -- Records of zx_user
 -- ----------------------------
-INSERT INTO `zx_user` VALUES ('1', 'admin', '9e90c6271eddcf23e2e251f65bda6be3', '超级管理员', '1394694415', '127.0.0.1', '100', null, '0', '1389940039', '1');
+INSERT INTO `zx_user` VALUES ('1', 'admin', '9e90c6271eddcf23e2e251f65bda6be3', '超级管理员', '1394775187', '127.0.0.1', '102', null, '0', '1389940039', '1');
 INSERT INTO `zx_user` VALUES ('2', 'administrator', 'af73a1ef8d29ffc1c50c0bff6055b363', '超级管理员', '1390205683', '127.0.0.1', '85', '', '0', '1389940039', '1');

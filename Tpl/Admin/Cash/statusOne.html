@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>后台管理</title>
+<script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/css/global.css">
+<script type="text/javascript" src="__PUBLIC__/js/RSsubmit.js"></script>
+<script language="javascript">
+$(function($) {
+  $(".bat_a_handle").click(function(){
+	 $(this).RSsubmit({success_alert:true,reload:true});
+	 return false;
+  });
+});
+</script>
+</head>
+	<body>
+		<div id="contentDiv">
+			<div class="titleDiv">
+				当前位置&gt;&gt;已审核提现记录
+			</div>
+			<center>
+				<br>
+				<div style="text-align: center;">
+					<div style="margin: 0 auto; width: 958px;">
+						<div>
+							
+							<table class="registertable1" width="958px;">
+								<tbody><tr>
+							<td>
+								会员编号
+							</td>
+							<td>
+								开户姓名
+							</td>
+								
+                            <td>
+								银行卡号
+							</td>
+							
+							<td>
+								开户银行
+							</td>
+							<td>
+								开户地址
+							</td>
+							<td>
+								提现金额
+							</td>
+                            <td>
+								扣税金额
+							</td>
+							
+							<td>
+								实发金额
+							</td>
+                             <td>
+								审核状态
+							</td>
+							<td>
+								审核时间
+							</td>
+							
+							</tr>
+							<!-- <foreach name="cash_list" item="row"> -->
+							<tr>
+							<td>
+								{$member_acc[$row['member_id']]['account']}
+							</td>
+							<td>
+								{$row['real_name']}
+							</td>
+							<td>
+								{$row['bank_card']}
+							</td>
+							<td>
+								{$row['bank_name']}
+							</td>
+							<td>
+								{$row['bank_address']}
+							</td>
+							<td>
+								{$row['apply_money']}
+							</td>
+                            <td>
+								{$row['tax_money']}
+							</td>
+                            <td>
+								{$row['real_money']}
+							</td>
+                            <td>
+								已审核
+							</td>
+                            <td>
+								{:date('Y-m-d H:i:s',$row['check_time'])}
+							</td>
+							</tr>
+							<!-- </foreach> -->
+							
+							</tbody></table>
+							<!-- 分页开始 -->
+							<table class="" width="100%">
+								<tbody><tr>
+									<td align="left" height="29" width="40%">
+										<div align="left">
+										</div>
+									</td>
+									<td align="right" height="22" valign="middle" width="25%">
+										{$page}
+									</td>
+								</tr>
+							</tbody></table>
+						</div>
+					</div>
+				</div>
+			</center>
+		</div>
+</body></html>

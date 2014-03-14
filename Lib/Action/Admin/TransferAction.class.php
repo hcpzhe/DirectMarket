@@ -4,6 +4,8 @@
  */
 class TransferAction extends CommonAction{
 	
+	private $tftype = array('1'=>'积分','2'=>'充值积分'); //转账类型
+	
 	/**
 	 * 转账记录
 	 * 
@@ -19,8 +21,8 @@ class TransferAction extends CommonAction{
 		
 		$transfer_list = $transfer_model->order('create_time desc')->limit($p->firstRow . ',' . $p->listRows)->select();
 		
-		$from_m = $transfer_list = $transfer_model->order('create_time desc')->limit($p->firstRow . ',' . $p->listRows)->getField('member_id_from',true);
-		$to_m = $transfer_list = $transfer_model->order('create_time desc')->limit($p->firstRow . ',' . $p->listRows)->getField('member_id_to',true);
+		$from_m = $transfer_model->order('create_time desc')->limit($p->firstRow . ',' . $p->listRows)->getField('member_id_from',true);
+		$to_m = $transfer_model->order('create_time desc')->limit($p->firstRow . ',' . $p->listRows)->getField('member_id_to',true);
 		
 		$mid_list = array_unique(array_merge($from_m,$to_m));
 		
@@ -32,6 +34,7 @@ class TransferAction extends CommonAction{
 		//模板赋值
 		
 		$this->assign('transfer_list',$transfer_list);
+		$this->assign('tftype',$this->tftype);
 		$this->assign('page',$page);
 		
 		$this->display();
