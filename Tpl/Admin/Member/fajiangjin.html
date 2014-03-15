@@ -33,7 +33,7 @@ $(function($) {
 	<body>
 		<div id="contentDiv">
 			<div class="titleDiv">
-				当前位置&gt;&gt;报单中心充值
+				当前位置&gt;&gt;奖金发放
 			</div>
 			<div>
 				<br>
@@ -42,7 +42,7 @@ $(function($) {
 				<br>
 				<div>
 					
-					<form id="yanzhengtx" name="yanzhengtx" action="__URL__/chongZhi" method="post" onsubmit="$(this).RSsubmit({success_alert:true});return false;">
+					<form id="yanzhengtx" name="yanzhengtx" action="__URL__/faJJin" method="post" onsubmit="$(this).RSsubmit({success_alert:true});return false;">
 					
 							<table class="registertable2" width="400px;" style="margin:0 auto;">
 								<tbody>
@@ -51,7 +51,7 @@ $(function($) {
 								<tr>
 									<td  >
 										<label>
-											报单充值:
+											用户:
 										</label>
 									</td>
 									<td >
@@ -62,17 +62,17 @@ $(function($) {
 								<tr>
 									<td  >
 										<label>
-											余额:
+											总奖金数:
 										</label>
 									</td>
 									<td >
-										<input name="txmoney3" id="txmoney3" type="text" disabled="disabled" value="{$info['recharge_points']}">
+										<input name="txmoney3" id="txmoney3" type="text" disabled="disabled" value="{$info['points']}">
 									</td>
                                     
 								<tr>
 									<td  >
 										<label>
-											充值金额:
+											发放金额:
 										</label>
 									</td>
 									<td >

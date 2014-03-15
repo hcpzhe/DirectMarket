@@ -6,12 +6,20 @@
  *
  */
 class DividendsAction extends CommonAction{
-	
+
+	protected function _filter(&$map){
+		//index过滤查询字段
+		if (!empty($_REQUEST['account'])){
+			$mem_M = D('Member');
+			$ids = $mem_M->where("`account` like '%".$_REQUEST['account']."%'")->getField('id',true);
+			$map['member_id'] = array('in',$ids);
+		}
+	}
 	/**
 	 * 奖金发放记录
-	 * 有继承父类的index方法调用
+	 * 由继承父类的index方法调用
 	 */
-	public function myIndex(&$map){
+	protected function myIndex(&$map){
 		$dividends_model = M('Dividends');
 		
 		$count = $dividends_model->where($map)->count();

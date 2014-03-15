@@ -15,8 +15,8 @@ class MemberModel extends Model {
         array('repwd_money','require','确认取款密码必须'),
         array('repwd_money','pwd_money','取款确认密码不一致',self::VALUE_VALIDATE,'confirm'),
         array('parent_id','require','推荐人必须',self::EXISTS_VALIDATE,'regex',self::MODEL_INSERT),
-        array('parent_area','chkPA','接点编号不符合',self::EXISTS_VALIDATE,'callback',self::MODEL_INSERT),
-        array('parent_area_type','chkPAT','节点位置已被占用',self::EXISTS_VALIDATE,'callback',self::MODEL_INSERT),
+        array('parent_area','require','接点编号必须',self::EXISTS_VALIDATE,'regex',self::MODEL_INSERT),
+        array('parent_area_type','require','节点位置必须',self::EXISTS_VALIDATE,'regex',self::MODEL_INSERT),
         array('nickname','require','真实姓名必须'),
         array('tel','require','联系电话必须'),
         //array('tel','/((\d{11})|^((\d{7,8})|(\d{4}|\d{3})-(\d{7,8})|(\d{4}|\d{3})-(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1})|(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1}))$)/','联系电话格式不正确'),
@@ -48,6 +48,21 @@ class MemberModel extends Model {
     		return $this->where("account='".$account."'")->getField('id');
     	}
     }
+	
+    /**
+     * 新增数据前, 验证 parent_area 和 parent_area_type
+     */
+    protected function _before_insert($data, $options) {
+    	if (false === $this->chkPA($data)) {
+    		$this->error = '接点编号不符合';
+    		return false;
+    	}elseif (false === $this->chkPAT($data)) {
+    		$this->error = '节点位置已被占用';
+    		return false;
+    	}else {
+    		return true;
+    	}
+    }
     
     /**
      * 检测aid是否存在于pid的area树下
@@ -66,11 +81,17 @@ class MemberModel extends Model {
     		return $this->checkParentArea($parent_area,$pid);
     	}
     }
-
-    protected function chkPA($data) {
+	
+    /**
+     * 接点编号检测合法性
+     */
+    private function chkPA($data) {
     	return $this->checkParentArea($data['parent_area'],$data['parent_id']);
     }
-    protected function chkPAT($data) {
+    /**
+     * 节点位置检测合法性
+     */
+    private function chkPAT($data) {
     	if ($data['parent_area_type'] != 'A' && $data['parent_area_type'] != 'B') {
     		return false;
     	}

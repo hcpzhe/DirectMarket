@@ -6,7 +6,7 @@
 class RechargeAction extends CommonAction{
 
 	
-	private function _filter(&$map){
+	protected function _filter(&$map){
 		if(!empty($_POST['account'])){
 			$map['member_id']=D('Member')->getMemberId($this->_post('account'));	
 		}
@@ -17,10 +17,9 @@ class RechargeAction extends CommonAction{
 	 * 充值记录
 	 * 
 	 */
-	public function myIndex(&$map){
+	protected function myIndex(&$map){
 		//初始化要用到的模型
 		$recharge_model = M('Recharge');
-		
 		$count = $recharge_model->where($map)->count();
 		import('@.ORG.Util.Page');
 		$p = new Page($count,20);
@@ -36,7 +35,7 @@ class RechargeAction extends CommonAction{
 		
 		$this -> assign('recharge_list',$recharge_list);;
 		$this -> assign('page',$page);
-		
+		cookie('_currentUrl_', __SELF__);
 		$this -> display();
 		exit();
 	}
@@ -44,39 +43,53 @@ class RechargeAction extends CommonAction{
 	 * 充值页显示
 	 */
 	public function add(){
-		if (!empty($_POST['account'])){
+		if (!empty($_REQUEST['account'])){
 			$member_model = M('Member');
-			$member_info = $member_model->where("account='".$this->_post('account')."")->find();
+			$member_info = $member_model->getByAccount($_REQUEST['account']);
 			
-			$this->assign('member_info',$member_info);
+			$this->assign('info',$member_info);
 			
 		}
-		$this->display();	
+		cookie('_currentUrl_', __SELF__);
+		$this->display();
 	}
-
+	/**
+	 * 报单中心充值页面
+	 */
+	public function baodanChZh() {
+		$id = (int)$_REQUEST['id'];
+		if ($id <= 0) $this->error('非法操作');
+		$member_M = M('Member');
+		$info = $member_M->getById($id);
+		$this->assign('info',$info);
+		$this->display();
+	}
 	/**
 	 * 充值积分处理
 	 */
-	public function chongzhi(){		
-		if (!empty($_POST['recharge_money'])){
-			$recharge_model = M('Recharge');
-			$recharge_model->startTrans();
-			$_POST['user_id'] = $_SESSION[C('USER_AUTH_KEY')];
-			$_POST['create_time'] = time();
-			if(false !== $recharge_model -> add()){
-				$member_model = M('Member');
-				$flag = $member_model->where("id=".$this->_post('member_id'))->setInc('recharge_points',$this->_post('recharge_money'));
-				if ($flag !== false){
-					$recharge_model->commit();
-					$this->success('充值成功');
-				}else {
-					$this->error('充值失败');
-				}
+	public function chongZhi(){		
+		$id = (int)$_REQUEST['id'];
+		if ($id <= 0) $this->error('非法操作,会员不存在');
+		$points = round($_REQUEST['points'],2);
+		if ($points <= 0) $this->error('充值金额请大于0');
+		
+		$recharge_model = M('Recharge');
+		$recharge_model->startTrans();
+		$newdata = array();
+		$newdata['member_id'] = $id;
+		$newdata['recharge_money'] = $points;
+		$newdata['user_id'] = $_SESSION[C('USER_AUTH_KEY')];
+		$newdata['create_time'] = time();
+		if(false !== $recharge_model -> add($newdata)) {
+			$member_model = M('Member');
+			if (false !== $member_model->where("id=".$id)->setInc('recharge_points',$points)) {
+				$recharge_model->commit();
+				$this->success('充值成功',cookie('_currentUrl_'));
 			}else {
 				$this->error('充值失败');
-			}		
+			}
 		}else {
-			$this->error('充值金额不能为空');
+			$this->error('充值记录保存失败');
 		}
 	} 
 

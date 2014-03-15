@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>后台管理</title>
+<script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/css/global.css">
+<script type="text/javascript" src="__PUBLIC__/js/RSsubmit.js"></script>
+<script language="javascript">
+$(function($) {
+  $(".bat_a_handle").click(function(){
+	 $(this).RSsubmit({success_alert:true,reload:true});
+	 return false;
+  });
+});
+</script>
+<style type="text/css">
+.registertable {
+	margin: 0 auto;
+	border-collapse: collapse;
+	text-align: center;
+}
+
+.registertable td {
+	padding: 0px;
+	border: none;
+	border: 0px #e5eff5 solid;
+	font-size: 12px;
+	height: 32px;
+}
+</style>
+</head>
+	<body>
+		<div id="contentDiv">
+			<div class="titleDiv">
+				当前位置&gt;&gt;报单中心充值
+			</div>
+			<div>
+				<br>
+				<br>
+				<br>
+				<br>
+				<div>
+					
+					<form id="yanzhengtx" name="yanzhengtx" action="__URL__/chongZhi" method="post" onsubmit="$(this).RSsubmit({success_alert:true});return false;">
+					
+							<table class="registertable2" width="400px;" style="margin:0 auto;">
+								<tbody>
+							
+								
+								<tr>
+									<td  >
+										<label>
+											报单中心:
+										</label>
+									</td>
+									<td >
+										<input name="txmoney1" id="txmoney2" type="text" disabled="disabled" value="{$info['account']}">
+									</td>
+                                    
+								</tr>
+								<tr>
+									<td  >
+										<label>
+											余额:
+										</label>
+									</td>
+									<td >
+										<input name="txmoney3" id="txmoney3" type="text" disabled="disabled" value="{$info['recharge_points']}">
+									</td>
+                                    
+								<tr>
+									<td  >
+										<label>
+											充值金额:
+										</label>
+									</td>
+									<td >
+										<input name="points" id="txmoney4" type="text" value="">
+										<input type="hidden" name="id" value="{$info['id']}">
+									</td>
+                                    
+								</tr>
+
+								<tr>
+									<td>
+										<br>
+										<br>
+									</td>
+									<td >
+										<input value="提交" type="submit">
+                                        	<input value="重置" type="submit">
+										
+									</td>
+                                   
+								</tr>
+							</tbody></table>
+				
+					</form>
+
+
+
+
+				</div>
+			</div>
+		</div>
+	
+
+</body></html>

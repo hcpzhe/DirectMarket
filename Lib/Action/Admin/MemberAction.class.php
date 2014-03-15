@@ -89,7 +89,7 @@ class MemberAction extends CommonAction {
 	 * 未审核用户列表
 	 * 已审核用户列表
 	 */
-	public function _filter(&$map){
+	protected function _filter(&$map){
 		//index过滤查询字段
 		if (!empty($_REQUEST['status'])){
 			$map['status'] = $this->_request('status');
@@ -97,9 +97,16 @@ class MemberAction extends CommonAction {
 	}
 	
 	/**
-	 * 报单中心充值页面
+	 * 奖金发放页面
 	 */
-	public function baodanChZh() {
+	public function jiangjin() {
+		$_REQUEST['status'] = array('in','1,3,4');
+		$this->index();
+	}
+	/**
+	 * 给某用户发放奖金页面
+	 */
+	public function fajiangjin(){
 		$id = (int)$_REQUEST['id'];
 		if ($id <= 0) $this->error('非法操作');
 		$member_M = M('Member');
@@ -107,21 +114,41 @@ class MemberAction extends CommonAction {
 		$this->assign('info',$info);
 		$this->display();
 	}
-	
 	/**
-	 * 充值接口
-	 * recharge_points
+	 * 发放奖金接口
 	 */
-	public function chongZhi() {
+	public function faJJin() {
 		$id = (int)$_REQUEST['id'];
 		if ($id <= 0) $this->error('非法操作');
 		$points = round($_REQUEST['points'],2);
 		if ($points <= 0) $this->error('充值金额请大于0');
-		$member_M = M('Member');
-		if (false === $member_M->where('id='.$id)->setInc('recharge_points',$points)) {
-			$this->error('充值失败');
+		
+		$member_M = D('Member');
+		$member_M->startTrans(); //开启事务
+		if (false === $member_M->where('id='.$id)->setInc('points',round($points*0.75,2))) {
+			$this->error('奖金充值失败');
 		}
-		$this->success('充值成功',cookie('_currentUrl_'));
+		//记录到dividends 
+		$divid_M = D('Dividends');
+		$d_data = array();
+		$d_data['remark'] = '人工发放';
+		$d_data['member_id'] = $id;
+		$d_data['give_bonus'] = $points;
+		if (false === $divid_M->newLog($d_data)) {
+			$this->error('奖金发放失败');
+		}
+		//记录到 bonus
+		$bonus_M = D('Bonus');
+		$data_b = array();
+		$data_b['member_id'] = $id;
+		$data_b['butie_bonus'] = $points;
+		$bonus_A = A('Admin/Bonus');
+		$bonus_A->shuishou($data_b,$data_b['butie_bonus'],0);
+		if (false === $bonus_M->add($data_b)){
+			$this->error('奖金记录失败');
+		}
+		$member_M->commit();
+		$this->success('奖金发放成功',cookie('_currentUrl_'));
 	}
 	
 	/**
@@ -173,7 +200,7 @@ class MemberAction extends CommonAction {
 			if (false  !== $member_model->create()){
 				$info = $member_model->add();
 				if ($info !== false){
-					$this->success('注册成功，待审核！',cookie('_currentUrl_'));				
+					$this->success('注册成功，待审核！',cookie('_currentUrl_'));
 				}
 			}
 			$this->error($member_model->getError());
@@ -257,7 +284,7 @@ class MemberAction extends CommonAction {
 	/**
 	 * 会员图谱递归方法
 	 */
-	public function member($member_model,$mid,&$member_list){
+	protected function member($member_model,$mid,&$member_list){
 		array_push($member_list[$mid],$member_model->find($mid));
 		$member_l = $member_model->where("parent_area=$mid")->select();		
 		foreach ($member_l as $row){
@@ -331,11 +358,4 @@ class MemberAction extends CommonAction {
 	 * 未激活用户使用foreverdelete直接删除
 	 */
 	
-	/**
-	 * 奖金发放页面
-	 */
-	public function jiangjin() {
-		$_REQUEST['status'] = array('in','1,3,4');
-		$this->index();
-	}
 }
