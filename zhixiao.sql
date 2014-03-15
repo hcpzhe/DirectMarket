@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50524
 File Encoding         : 65001
 
-Date: 2014-03-14 16:31:28
+Date: 2014-03-15 17:47:28
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -42,6 +42,8 @@ CREATE TABLE `zx_bonus` (
 -- Records of zx_bonus
 -- ----------------------------
 INSERT INTO `zx_bonus` VALUES ('1', '2', '1394698240', '1875.00', '0.00', '2500.00', '0.00', '0.00', '0.00', '0.00', '250.00', '250.00', '125.00', '0.00');
+INSERT INTO `zx_bonus` VALUES ('2', '0', '1394866183', '7.50', '0.00', '0.00', '0.00', '0.00', '0.00', '10.00', '1.00', '1.00', '0.50', '0.00');
+INSERT INTO `zx_bonus` VALUES ('2', '0', '1394866305', '3.75', '0.00', '0.00', '0.00', '0.00', '0.00', '5.00', '0.50', '0.50', '0.25', '0.00');
 
 -- ----------------------------
 -- Table structure for `zx_cash`
@@ -82,11 +84,13 @@ CREATE TABLE `zx_dividends` (
   `create_time` varchar(20) NOT NULL DEFAULT '0' COMMENT '发放时间unix时间戳',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注 公司分红,人工发放ex..',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='分红发放记录';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='分红发放记录';
 
 -- ----------------------------
 -- Records of zx_dividends
 -- ----------------------------
+INSERT INTO `zx_dividends` VALUES ('1', '2', 'tttt', '10.00', '2.50', '7.50', '1394866183', '人工发放');
+INSERT INTO `zx_dividends` VALUES ('2', '2', 'tttt', '5.00', '1.25', '3.75', '1394866305', '人工发放');
 
 -- ----------------------------
 -- Table structure for `zx_income`
@@ -162,8 +166,8 @@ CREATE TABLE `zx_member` (
 -- ----------------------------
 -- Records of zx_member
 -- ----------------------------
-INSERT INTO `zx_member` VALUES ('1', 'test', '564736165e3715871289f3132886a6bd', '564736165e3715871289f3132886a6bd', '564736165e3715871289f3132886a6bd', '0', '1', '1', '5625.00', '325.20', '75000.00', '0.00', '0', null, '0.00', '0.00', '', null, '', null, null, '3', '0', '0', null, null, null);
-INSERT INTO `zx_member` VALUES ('2', 'tttt', '15c9dfa38cfaf2635d54b1f94ffaed6c', '15c9dfa38cfaf2635d54b1f94ffaed6c', '15c9dfa38cfaf2635d54b1f94ffaed6c', '1', '4', '4', '0.00', '0.00', '0.00', '0.00', '1', 'A', '0.00', '0.00', 'tttt', '0', '11111111111', '1111', '1111', '1', '1394680262', '1394698240', null, null, null);
+INSERT INTO `zx_member` VALUES ('1', 'test', '564736165e3715871289f3132886a6bd', '564736165e3715871289f3132886a6bd', '564736165e3715871289f3132886a6bd', '0', '1', '1', '5625.00', '446.20', '75000.00', '0.00', '0', null, '0.00', '0.00', '', null, '', null, null, '3', '0', '0', null, null, null);
+INSERT INTO `zx_member` VALUES ('2', 'tttt', '15c9dfa38cfaf2635d54b1f94ffaed6c', '15c9dfa38cfaf2635d54b1f94ffaed6c', '15c9dfa38cfaf2635d54b1f94ffaed6c', '1', '4', '4', '11.25', '0.00', '0.00', '0.00', '1', 'A', '0.00', '0.00', 'tttt', '0', '11111111111', '1111', '1111', '1', '1394680262', '1394698240', null, null, null);
 
 -- ----------------------------
 -- Table structure for `zx_message`
@@ -193,11 +197,14 @@ CREATE TABLE `zx_recharge` (
   `recharge_money` decimal(10,2) DEFAULT '0.00' COMMENT '充值金额',
   `create_time` varchar(20) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='充值记录, 充值至会员的充值积分中';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='充值记录, 充值至会员的充值积分中';
 
 -- ----------------------------
 -- Records of zx_recharge
 -- ----------------------------
+INSERT INTO `zx_recharge` VALUES ('1', '1', '1', '100.00', '1394870356');
+INSERT INTO `zx_recharge` VALUES ('2', '1', '1', '20.00', '1394870455');
+INSERT INTO `zx_recharge` VALUES ('3', '1', '1', '1.00', '1394870495');
 
 -- ----------------------------
 -- Table structure for `zx_system`
@@ -260,5 +267,5 @@ CREATE TABLE `zx_user` (
 -- ----------------------------
 -- Records of zx_user
 -- ----------------------------
-INSERT INTO `zx_user` VALUES ('1', 'admin', '9e90c6271eddcf23e2e251f65bda6be3', '超级管理员', '1394775187', '127.0.0.1', '102', null, '0', '1389940039', '1');
+INSERT INTO `zx_user` VALUES ('1', 'admin', '9e90c6271eddcf23e2e251f65bda6be3', '超级管理员', '1394861727', '127.0.0.1', '104', null, '0', '1389940039', '1');
 INSERT INTO `zx_user` VALUES ('2', 'administrator', 'af73a1ef8d29ffc1c50c0bff6055b363', '超级管理员', '1390205683', '127.0.0.1', '85', '', '0', '1389940039', '1');
