@@ -28,6 +28,7 @@ class LevelupAction extends CommonAction{
 		$this -> assign('levelup_list',$levelup_list);
 		$this->assign('page',$page);
 		
+		cookie('_currentUrl_', __SELF__);
 		//显示视图
 		$this->display();
 		
