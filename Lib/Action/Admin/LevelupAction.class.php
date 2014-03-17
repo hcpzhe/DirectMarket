@@ -3,6 +3,9 @@
  * 升级记录处理
  */
 class LevelupAction extends CommonAction{
+	
+	private $leltype = array('1'=>'公司升级','2'=>'充值升级');
+	
 	/**
 	 * 升级记录列表
 	 * 
@@ -27,7 +30,8 @@ class LevelupAction extends CommonAction{
 		//视图赋值
 		$this -> assign('levelup_list',$levelup_list);
 		$this->assign('page',$page);
-		
+		$this->assign('level_name',$this->level_name);
+		$this->assign('leltype',$this->leltype);
 		cookie('_currentUrl_', __SELF__);
 		//显示视图
 		$this->display();

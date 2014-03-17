@@ -9,7 +9,7 @@ class CashAction extends CommonAction{
 	 * 提现记录
 	 * 父类继承的index来调用
 	 */
-	public function muIndex(&$map){
+	protected function muIndex(&$map){
 		$cash_model = M('Cash');
 		
 		$count = $cash_model->where($map)->count();

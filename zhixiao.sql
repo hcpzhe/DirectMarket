@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50524
 File Encoding         : 65001
 
-Date: 2014-03-15 17:47:28
+Date: 2014-03-17 09:50:13
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -267,5 +267,5 @@ CREATE TABLE `zx_user` (
 -- ----------------------------
 -- Records of zx_user
 -- ----------------------------
-INSERT INTO `zx_user` VALUES ('1', 'admin', '9e90c6271eddcf23e2e251f65bda6be3', '超级管理员', '1394861727', '127.0.0.1', '104', null, '0', '1389940039', '1');
+INSERT INTO `zx_user` VALUES ('1', 'admin', '9e90c6271eddcf23e2e251f65bda6be3', '超级管理员', '1395020749', '127.0.0.1', '105', null, '0', '1389940039', '1');
 INSERT INTO `zx_user` VALUES ('2', 'administrator', 'af73a1ef8d29ffc1c50c0bff6055b363', '超级管理员', '1390205683', '127.0.0.1', '85', '', '0', '1389940039', '1');

@@ -51,13 +51,13 @@ $(function($) {
 								{$member_acc[$row['member_id']]['account']}
 							</td>
 							<td>
-								{$row['level_bef']}
+								{$level_name[$row['level_bef']]}
 							</td>
 							<td>
-								{$row['level_aft']}
+								{$level_name[$row['level_aft']]}
 							</td>
                             <td>
-								{$row['type']}
+								{$leltype[$row['type']]}
 							</td>
 							<td>
 								{:date('Y-m-d H:i:s',$row['create_time'])}

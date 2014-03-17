@@ -10,6 +10,10 @@ return array(
     'DB_NAME'                   =>  'zhixiao',
     'DB_USER'                   =>  'zhixiao',
     'DB_PWD'                    =>  'zhixiao',
+//    'DB_HOST'                   =>  'localhost',
+//    'DB_NAME'                   =>  'site20140313',
+//    'DB_USER'                   =>  'site20140313',
+//    'DB_PWD'                    =>  'YmMzY2NjNDM1UWM',
     'DB_PORT'                   =>  '3306',
     'DB_PREFIX'                 =>  'zx_',
 /* RBAC 在每个单独分组中设置
