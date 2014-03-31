@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50524
 File Encoding         : 65001
 
-Date: 2014-03-17 09:50:13
+Date: 2014-03-31 15:59:07
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -166,14 +166,33 @@ CREATE TABLE `zx_member` (
 -- ----------------------------
 -- Records of zx_member
 -- ----------------------------
-INSERT INTO `zx_member` VALUES ('1', 'test', '564736165e3715871289f3132886a6bd', '564736165e3715871289f3132886a6bd', '564736165e3715871289f3132886a6bd', '0', '1', '1', '5625.00', '446.20', '75000.00', '0.00', '0', null, '0.00', '0.00', '', null, '', null, null, '3', '0', '0', null, null, null);
-INSERT INTO `zx_member` VALUES ('2', 'tttt', '15c9dfa38cfaf2635d54b1f94ffaed6c', '15c9dfa38cfaf2635d54b1f94ffaed6c', '15c9dfa38cfaf2635d54b1f94ffaed6c', '1', '4', '4', '11.25', '0.00', '0.00', '0.00', '1', 'A', '0.00', '0.00', 'tttt', '0', '11111111111', '1111', '1111', '1', '1394680262', '1394698240', null, null, null);
+INSERT INTO `zx_member` VALUES ('1', 'test', 'ca5c77f495ac94c256cc039c87d8da38', 'ca5c77f495ac94c256cc039c87d8da38', 'ca5c77f495ac94c256cc039c87d8da38', '0', '1', '1', '5625.00', '446.20', '75000.00', '0.00', '0', null, '0.00', '0.00', 'asdasd', null, '11111111111', '111', '宝龙城市广场', '3', '0', '0', null, null, null);
+INSERT INTO `zx_member` VALUES ('2', 'tttt', '15c9dfa38cfaf2635d54b1f94ffaed6c', 'ca5c77f495ac94c256cc039c87d8da38', '15c9dfa38cfaf2635d54b1f94ffaed6c', '1', '4', '4', '11.25', '0.00', '0.00', '0.00', '1', 'A', '0.00', '0.00', 'tttt', '0', '11111111111', '1111', '1111', '1', '1394680262', '1394698240', null, null, null);
 
 -- ----------------------------
 -- Table structure for `zx_message`
 -- ----------------------------
 DROP TABLE IF EXISTS `zx_message`;
 CREATE TABLE `zx_message` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `member_id` int(10) unsigned NOT NULL COMMENT '提交建议的用户ID',
+  `title` varchar(255) NOT NULL COMMENT '建议标题',
+  `content` text COMMENT '信息内容',
+  `remark` varchar(255) DEFAULT NULL COMMENT '其他说明',
+  `create_time` varchar(20) NOT NULL DEFAULT '0' COMMENT '建议提交时间 unix时间戳',
+  `status` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '信息状态 0-删除 1-已处理 2-待处理',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of zx_message
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `zx_message1`
+-- ----------------------------
+DROP TABLE IF EXISTS `zx_message1`;
+CREATE TABLE `zx_message1` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `member_id` int(11) NOT NULL COMMENT '留言人',
   `title` varchar(255) DEFAULT NULL COMMENT '留言标题',
@@ -183,8 +202,49 @@ CREATE TABLE `zx_message` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='留言表';
 
 -- ----------------------------
--- Records of zx_message
+-- Records of zx_message1
 -- ----------------------------
+
+-- ----------------------------
+-- Table structure for `zx_msgreply`
+-- ----------------------------
+DROP TABLE IF EXISTS `zx_msgreply`;
+CREATE TABLE `zx_msgreply` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `msg_id` int(10) unsigned NOT NULL COMMENT '所属建议ID',
+  `user_id` int(10) unsigned NOT NULL COMMENT '回复人ID',
+  `reply_time` varchar(255) NOT NULL DEFAULT '0' COMMENT '回复时间',
+  `reply_content` text COMMENT '回复内容',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0-删除 1-正常',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of zx_msgreply
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `zx_news`
+-- ----------------------------
+DROP TABLE IF EXISTS `zx_news`;
+CREATE TABLE `zx_news` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL COMMENT '新闻标题',
+  `content` text COMMENT '新闻内容',
+  `editor` varchar(255) DEFAULT NULL COMMENT '信息编辑人',
+  `is_recom` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否推荐 0-不推荐 1-推荐',
+  `is_display` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0-不显示 1-显示',
+  `create_time` varchar(20) NOT NULL DEFAULT '0' COMMENT '发布时间 unix时间戳',
+  `update_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间 unix时间戳',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0-删除 1-正常',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of zx_news
+-- ----------------------------
+INSERT INTO `zx_news` VALUES ('1', 'ttttttt', 'tetetetet', null, '0', '1', '1395715465', '1395715465', '1');
+INSERT INTO `zx_news` VALUES ('2', 'asd', 'asdasd啊说说', null, '0', '1', '1395715570', '1395718440', '1');
 
 -- ----------------------------
 -- Table structure for `zx_recharge`
@@ -267,5 +327,5 @@ CREATE TABLE `zx_user` (
 -- ----------------------------
 -- Records of zx_user
 -- ----------------------------
-INSERT INTO `zx_user` VALUES ('1', 'admin', '9e90c6271eddcf23e2e251f65bda6be3', '超级管理员', '1395020749', '127.0.0.1', '105', null, '0', '1389940039', '1');
+INSERT INTO `zx_user` VALUES ('1', 'admin', '9e90c6271eddcf23e2e251f65bda6be3', '超级管理员', '1395903522', '127.0.0.1', '113', null, '0', '1389940039', '1');
 INSERT INTO `zx_user` VALUES ('2', 'administrator', 'af73a1ef8d29ffc1c50c0bff6055b363', '超级管理员', '1390205683', '127.0.0.1', '85', '', '0', '1389940039', '1');
