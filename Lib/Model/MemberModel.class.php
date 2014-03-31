@@ -28,9 +28,9 @@ class MemberModel extends Model {
         );
 
     public $_auto		=	array(
-        array('password','pwdHash',self::MODEL_BOTH,'function'),
-        array('pwdone','pwdHash',self::MODEL_BOTH,'function'),
-        array('pwd_money','pwdHash',self::MODEL_BOTH,'function'),
+        array('password','pwdHash',self::MODEL_INSERT,'function'),
+        array('pwdone','pwdHash',self::MODEL_INSERT,'function'),
+        array('pwd_money','pwdHash',self::MODEL_INSERT,'function'),
         //array('parent_id','getMemberId',self::MODEL_INSERT,'callback'),
         array('level_org','level',self::MODEL_INSERT,'field'),
        // array('parent_area','getMemberId',self::MODEL_INSERT,'callback'),

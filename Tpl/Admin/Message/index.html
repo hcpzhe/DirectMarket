@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/css/base.css">
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/css/global.css">
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/main.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/RSsubmit.js"></script>
+<title>
+
+</title></head>
+<body>
+<script type="text/javascript">
+function batdelte(inputname) {
+	if(confirm('您确认要删除吗？')){
+		var ids = dot = '';
+		$("input[name='"+inputname+"'][checked=true]}").each(function(){
+			ids += dot + this.value;
+			dot = ',';
+		});
+		$(this).RSsubmit({
+			data : {id:ids},
+			url : "__GROUP__/Message/delete/"
+		});
+	}
+	return false;
+}
+</script>
+    <form name="form1" method="post" action="__ACTION__" id="form1">
+    <div class="main-content">
+        <div style="margin: 0 auto; width: 988px;">
+            <h3 class="common-tit">
+                <span>当前位置：</span>留言薄管理</h3>
+            <div class="paging3">
+                检索： 回复状态：
+                <select name="status">
+				<option selected="selected" value="-1">请选择回复状态</option>
+				<option value="1">已回复</option>
+				<option value="2">未回复</option>
+				</select>
+                留言标题：<input name="txtsearch" id="txtsearch" class="txt-w134" type="text">
+                <input name="Button1" value="检索" id="Button1" class="btn7" type="submit">
+            </div>
+            <div class="row-tb">
+                <table id="newslist" border="0" cellpadding="0" cellspacing="0" width="100%">
+                    <tbody>
+                    <tr>
+                        <th scope="col">
+                            <input name="checkbox" id="checkbox" title="全选" onclick="blcheck(this)" type="checkbox">
+                        </th>
+                        <th scope="col">
+                            留言标题
+                        </th>
+                        <th scope="col">
+                            提交用户
+                        </th>
+                     
+                        <th scope="col">
+                            提交时间
+                        </th>
+                        <th style="width: 60px;">
+                            回复状态
+                        </th>
+                        <th scope="col" style="width: 80px;">
+                            操作
+                        </th>
+                    </tr>
+                    <!-- <foreach name="list" item="row"> -->
+                     <tr style="text-align: center;">
+                         <td>
+                             <input name="batDelChkbox" value="{$row['id']}" type="checkbox">
+                         </td>
+                         <td>
+                     {$row['title']}
+                         </td>
+                         <td>
+                     {$row['account']}
+                         </td>
+                      
+                         <td>
+                     {:date('Y-m-d H:i:s',$row['create_time'])}
+                         </td>
+                         <td>
+                     {$row['status']==1?'已回复':'未回复'}
+                         </td>
+                         <td>
+                             <a href="__GROUP__/Message/delete/id/{$row['id']}" onclick="if(confirm('您确认要删除吗？')){$(this).RSsubmit()};return false;">删除</a>|
+                             <a href="__GROUP__/Message/read/id/{$row['id']}">回复</a>
+                         </td>
+                     </tr>
+                    <!-- </foreach> -->
+                </tbody></table>
+            </div>
+            <div class="paging3">
+                <input name="btdel" value="批量删除" id="btdel" class="btn7" type="button" onclick="batdelte('batDelChkbox');"></div>
+            <div class="paging3">
+                {$page}
+                <div class="cl">
+                </div>
+            </div>
+        </div>
+    </div>
+    </form>
+
+
+</body></html>

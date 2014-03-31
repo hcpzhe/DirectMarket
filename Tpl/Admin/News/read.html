@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/css/base.css">
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/css/global.css">
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/main.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/RSsubmit.js"></script>
+    
+	<link rel="stylesheet" href="__PUBLIC__/kindeditor-4.1.10/themes/default/default.css" />
+	<script charset="utf-8" src="__PUBLIC__/kindeditor-4.1.10/kindeditor-min.js"></script>
+	<script charset="utf-8" src="__PUBLIC__/kindeditor-4.1.10/lang/zh_CN.js"></script>
+    <style type="text/css">
+        .style1
+        {
+            height: 38px;
+        }
+    </style>
+<title>
+
+</title></head>
+<body>
+<script type="text/javascript">
+KindEditor.ready(function(K) {
+	var myeditor = K.create('textarea[name="content"]', {
+		allowFileManager : true,
+		autoHeightMode : true,
+		afterCreate : function() {
+			this.loadPlugin('autoheight');
+		},
+		afterUpload : function(url) {
+			var firstimageoption = '<option value="' + url + '">' + url + '</option>';
+			var selectoption = '<option value="' + url + '" selected="selected">' + url + '</option>';
+			$("#firstimage").append(firstimageoption);
+			$("#images").append(selectoption);
+		}
+	});
+	K('#form1').bind('submit', function() {
+		myeditor.sync();
+		$(this).RSsubmit({success_alert:true,reload:true});
+		return false;
+	});
+});
+</script>
+    <form name="form1" method="post" action="__URL__/update" id="form1" onsubmit="return false;">
+	<input type="hidden" name="id" value="{$vo['id']}" />
+    <div class="main-content">
+        <div style="width: 960px; margin: 0 auto;">
+            <h3 class="common-tit">
+                <span>当前位置：</span>公告中心 &gt; <em>编辑公告</em></h3>
+            <div class="col-tb">
+                <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                    <tbody>
+                    <tr>
+                        <th scope="row">
+                            <span class="red">*</span>信息标题：
+                        </th>
+                        <td>
+                            <input name="title" value="{$vo['title']}" maxlength="30" id="txttitle" class="txt-w326" type="text">
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <th scope="row">
+                            信息属性：
+                        </th>
+                        <td>
+                            <input id="CkShow" name="is_display" checked="checked" type="checkbox" <if condition="$vo['is_display'] eq 1"> checked="checked" </if> ><label for="CkShow">显示</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">
+                            <span class="red">*</span>信息内容：
+                        </th>
+                        <td>
+                            <textarea name="content" rows="2" cols="20" id="txtnews_Content" style="height: 300px; width: 600px;">
+                            	{$vo['content']}
+                            </textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">
+                        </th>
+                        <td>
+                            <input name="btnSave" value="保存" id="btnSave" class="btn7" type="submit">
+                        </td>
+                    </tr>
+                </tbody></table>
+            </div>
+        </div>
+    </div>
+    
+
+
+</form>
+
+
+</body></html>

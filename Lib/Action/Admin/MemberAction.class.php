@@ -177,6 +177,40 @@ class MemberAction extends CommonAction {
 	}
 	
 	/**
+	 * 修改密码接口
+	 */
+	public function chgPwd() {
+		$member_M = M('Member');
+		if (!empty($member_M)) {
+			$pk = $member_M->getPk();
+			$id = $_REQUEST [$pk];
+			if (isset($id)) {
+				if (!empty($_REQUEST['old_password'])) {
+					$pwd_str = 'password';
+					$pwd = pwdHash($_REQUEST['old_password']);
+				}elseif (!empty($_REQUEST['old_pwdone'])) {
+					$pwd_str = 'pwdone';
+					$pwd = pwdHash($_REQUEST['old_pwdone']);
+				}elseif (!empty($_REQUEST['old_pwd_money'])) {
+					$pwd_str = 'pwd_money';
+					$pwd = pwdHash($_REQUEST['old_pwd_money']);
+				}else {
+					$this->error('密码不能为空');
+				}
+				$condition = array($pk => array('eq', $id));
+				$list = $member_M->where($condition)->setField($pwd_str,$pwd);
+				if ($list !== false) {
+					$this->success('密码修改成功！',cookie('_currentUrl_'));
+				} else {
+					$this->error('密码修改失败，请重试！');
+				}
+			} else {
+				$this->error('非法操作');
+			}
+		}
+	}
+	
+	/**
 	 * 注册会员
 	 */
 	public function add() {
@@ -270,11 +304,13 @@ class MemberAction extends CommonAction {
 	 * 会员图谱
 	 * 
 	 */
-	public function atlas($account=''){
+	public function atlas(){
+		$account = $_REQUEST['account'];
+		$member_list = array();
 		if (!empty($account)){
-			$member_model = M('Member');
+			$member_model = D('Member');
 			$mid = $member_model->getMemberId($account);
-			$member_list = array();
+			$member_list = $member_model->find($mid);
 			$this->member($member_model,$mid,$member_list);
 		}
 		$this->assign('member_list',$member_list);
@@ -284,17 +320,16 @@ class MemberAction extends CommonAction {
 	/**
 	 * 会员图谱递归方法
 	 */
-	protected function member($member_model,$mid,&$member_list){
-		array_push($member_list[$mid],$member_model->find($mid));
+	protected function member($member_model,$mid,&$member_list) {
 		$member_l = $member_model->where("parent_area=$mid")->select();		
 		foreach ($member_l as $row){
 			if ($row['parent_area_type'] == 'A'){
-				array_push($member_list[$mid]['A'][$row['id']],$row);
-				$this->member($member_model, $row['id'], $member_list[$mid]['A'][$row['id']]);
+				$member_list['A'] = $row;
+				$this->member($member_model, $row['id'], $member_list['A']);
 			
 			}else {
-				array_push($member_list[$mid]['B'][$row['id']],$row);
-				$this->member($member_model, $row['id'], $member_list[$mid]['B'][$row['id']]);		
+				$member_list['B'] = $row;
+				$this->member($member_model, $row['id'], $member_list['B']);		
 			}
 		}
 	}
@@ -348,7 +383,18 @@ class MemberAction extends CommonAction {
 	 * 编辑查看页面read 使用CommonAciton/read
 	 * 必须传主键ID
 	 */
-	
+	function read() {
+        $name = $this->getActionName();
+        $model = M($name);
+        $id = (int)$_REQUEST [$model->getPk()];
+        $vo = $model->getById($id);
+        $parent = $model->getById($vo['parent_id']);
+        $vo['parent_account'] = $parent['account'];//推荐人帐号
+        //dump($vo);
+        $this->assign('vo', $vo);
+        $this->display();
+    }
+    
 	/**
 	 * 更新修改接口 使用CommonAciton/update
 	 * 必须传递主键ID

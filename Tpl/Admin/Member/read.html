@@ -1,0 +1,212 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>后台管理</title>
+<script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/css/global.css">
+<script type="text/javascript" src="__PUBLIC__/js/RSsubmit.js"></script>
+<script language="javascript">
+$(function($) {
+  $(".bat_a_handle").click(function(){
+	 $(this).RSsubmit({success_alert:true,reload:true});
+	 return false;
+  });
+});
+</script>
+</head>
+	<body>
+		
+		<div>
+			<div id="contentDiv">
+				<div class="titleDiv">
+					当前位置&gt;&gt;会员详细
+				</div>
+				<center>
+					
+					<form name="xiangxiziliao" action="__URL__/update" method="post" onsubmit="$(this).RSsubmit({success_alert:true});return false;">
+						<table class="registertable3" width="600">
+							<tbody><tr>
+								<td colspan="4" class="titletd">
+									<center>
+										<span style="font-size:16px;"><b>会员资料详细信息</b>
+										</span>
+									</center>
+								</td>
+                                
+                               
+							</tr>
+                            <tr>
+								<td colspan="4" class="titletd">
+									<center>
+										<span style=" font-size: 14px;"><b>会员编号：{$vo['account']}</b>
+										</span>
+										<input name="id" value="{$vo['id']}" type="hidden" />
+									</center>
+								</td>
+                                
+                               
+							</tr>
+							<tr>
+								<td style="width: 30%; height: 30px; text-align: center;">
+									推荐编号:
+								</td>
+								<td style="padding-left: 10px; height: 30px;">
+									<input name="parent_account" value="{$vo['parent_account']}" disabled="disabled" type="text">
+								</td>
+                                <td style="width: 30%; height: 30px; text-align: center;">
+									奖金金额:
+								</td>
+								<td style="padding-left: 10px; height: 30px;">
+									<input name="points_temp" value="{$vo['points']}" disabled="disabled" type="text">
+								</td>
+
+
+							</tr>
+							<tr>
+								<td style="width: 30%; text-align: center;">
+									真实姓名:
+								</td>
+								<td style="padding-left: 10px; height: 30px;">
+									<input name="nickname" value="{$vo['nickname']}" type="text">
+								</td>
+                                
+								<td style="width: 30%; text-align: center;">
+									手机号码:
+								</td>
+								<td style="padding-left: 10px; height: 30px;">
+									<input name="tel" value="{$vo['tel']}" type="text">
+								</td>
+							</tr>
+							<tr>
+								<td style="width: 30%; text-align: center;">
+									身份证号:
+								</td>
+								<td style="padding-left: 10px; height: 30px;">
+									<input name="q" value="{$vo['q']}" type="text">
+								</td>
+                                <td style="width: 30%; text-align: center;">
+									联系地址:
+								</td>
+								<td style="padding-left: 10px; height: 30px;">
+									<input name="address" value="{$vo['address']}" type="text">
+								</td>
+							</tr>
+
+							<tr>
+								
+								<td style=" height: 30px;" align="center" colspan="4">
+									<center><input value="修改资料" type="submit"></center>
+								</td>
+							</tr>
+
+						</tbody></table>
+					</form>
+
+
+
+
+					<form name="denglumima" action="__URL__/chgPwd" method="post" onsubmit="$(this).RSsubmit({success_alert:true});return false;">
+						<table class="registertable3" width="300">
+							<tbody><tr>
+								<td colspan="2" class="titletd">
+									<center>
+										<span style="color: red; font-size: 16px;"><b>修改登录密码：</b>
+										</span>
+										<input name="id" value="{$vo['id']}" type="hidden" />
+									</center>
+								</td>
+							</tr>
+							<tr>
+								<td style="width: 30%; text-align: center;">
+									登录密码:
+								</td>
+								<td style="padding-left: 10px; height: 30px;">
+									<input name="old_password" type="password">
+								</td>
+							</tr>
+							
+							
+							<tr>
+								
+								<td style=" height: 30px;" align="center" colspan="2">
+									<center><input value="修改密码" type="submit"></center>
+								</td>
+							</tr>
+						</tbody></table>
+					</form>
+
+
+
+
+					<form name="yijimima" action="__URL__/chgPwd" method="post" onsubmit="$(this).RSsubmit({success_alert:true});return false;">
+						<table class="registertable3" width="300px">
+							<tbody><tr>
+								<td colspan="2" class="titletd">
+									<center>
+										<span style="color: red; font-size: 16px;"><b>修改一级密码：</b>
+										</span>
+										<input name="id" value="{$vo['id']}" type="hidden" />
+									</center>
+								</td>
+							</tr>
+							<tr>
+								<td style="width: 30%; text-align: center;">
+									一级密码:
+								</td>
+								<td style="padding-left: 10px; height: 30px;">
+									<input name="old_pwdone" type="password">
+								</td>
+							</tr>
+							
+							<tr>
+								
+								<td style=" height: 30px;" align="center" colspan="2">
+									<center><input value="修改密码" type="submit"></center>
+								</td>
+							</tr>
+
+						</tbody></table>
+					</form>
+					
+					
+
+					<form name="qukuanmima" action="__URL__/chgPwd" method="post" onsubmit="$(this).RSsubmit({success_alert:true});return false;">
+						<table class="registertable3" width="300px">
+							<tbody><tr>
+								<td colspan="2" class="titletd">
+									<center>
+										<span style="color: red; font-size: 16px;"><b>修改取款密码：</b>
+										</span>
+										<input name="id" value="{$vo['id']}" type="hidden" />
+									</center>
+								</td>
+							</tr>
+							<tr>
+								<td style="width: 30%; text-align: center;">
+									取款密码:
+								</td>
+								<td style="padding-left: 10px; height: 30px;">
+									<input name="old_pwd_money" type="password">
+								</td>
+							</tr>
+							
+							<tr>
+								
+								<td style=" height: 30px;" align="center" colspan="2">
+									<center><input value="修改密码" type="submit"></center>
+								</td>
+							</tr>
+
+						</tbody></table>
+					</form>
+
+
+
+
+				</center>
+			</div>
+		</div>
+	
+
+</body></html>
