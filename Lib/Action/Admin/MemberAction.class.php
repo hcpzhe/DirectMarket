@@ -3,10 +3,6 @@
 class MemberAction extends CommonAction {
 	
 	/**
-	 * 会员锁定     未知功能, 待确认
-	 */
-	
-	/**
 	 * ajax检测用户是否存在
 	 */
 	public function checkAccount() {
@@ -95,62 +91,7 @@ class MemberAction extends CommonAction {
 			$map['status'] = $this->_request('status');
 		}
 	}
-	
-	/**
-	 * 奖金发放页面
-	 */
-	public function jiangjin() {
-		$_REQUEST['status'] = array('in','1,3,4');
-		$this->index();
-	}
-	/**
-	 * 给某用户发放奖金页面
-	 */
-	public function fajiangjin(){
-		$id = (int)$_REQUEST['id'];
-		if ($id <= 0) $this->error('非法操作');
-		$member_M = M('Member');
-		$info = $member_M->getById($id);
-		$this->assign('info',$info);
-		$this->display();
-	}
-	/**
-	 * 发放奖金接口
-	 */
-	public function faJJin() {
-		$id = (int)$_REQUEST['id'];
-		if ($id <= 0) $this->error('非法操作');
-		$points = round($_REQUEST['points'],2);
-		if ($points <= 0) $this->error('充值金额请大于0');
-		
-		$member_M = D('Member');
-		$member_M->startTrans(); //开启事务
-		if (false === $member_M->where('id='.$id)->setInc('points',round($points*0.75,2))) {
-			$this->error('奖金充值失败');
-		}
-		//记录到dividends 
-		$divid_M = D('Dividends');
-		$d_data = array();
-		$d_data['remark'] = '人工发放';
-		$d_data['member_id'] = $id;
-		$d_data['give_bonus'] = $points;
-		if (false === $divid_M->newLog($d_data)) {
-			$this->error('奖金发放失败');
-		}
-		//记录到 bonus
-		$bonus_M = D('Bonus');
-		$data_b = array();
-		$data_b['member_id'] = $id;
-		$data_b['butie_bonus'] = $points;
-		$bonus_A = A('Admin/Bonus');
-		$bonus_A->shuishou($data_b,$data_b['butie_bonus'],0);
-		if (false === $bonus_M->add($data_b)){
-			$this->error('奖金记录失败');
-		}
-		$member_M->commit();
-		$this->success('奖金发放成功',cookie('_currentUrl_'));
-	}
-	
+
 	/**
 	 * 重置用户密码
 	 * 传递用户主键信息
@@ -188,9 +129,6 @@ class MemberAction extends CommonAction {
 				if (!empty($_REQUEST['old_password'])) {
 					$pwd_str = 'password';
 					$pwd = pwdHash($_REQUEST['old_password']);
-				}elseif (!empty($_REQUEST['old_pwdone'])) {
-					$pwd_str = 'pwdone';
-					$pwd = pwdHash($_REQUEST['old_pwdone']);
 				}elseif (!empty($_REQUEST['old_pwd_money'])) {
 					$pwd_str = 'pwd_money';
 					$pwd = pwdHash($_REQUEST['old_pwd_money']);
@@ -244,75 +182,19 @@ class MemberAction extends CommonAction {
 	}
 	
 	/**
-	 * 会员升级
-	 */
-	public function upgrade() {
-		//套餐的升级, 升1级
-		//记录到levelup表中
-		$member_model = M('Member');
-		$levelup_model = M('Levelup');
-		
-		$id = (int)$this->_post('id');
-		$level = (int)$this->_post('level');
-		$info = $member_model->where("id=$id")->find();
-		if (!empty($info)){
-			if ($info['level'] == 4){
-				$this->error('已是加盟商，无需升级');
-				exit;
-			}
-			if ($level == 0) {
-				$level = $info['level']+1;
-			}else {
-				if ($info['level'] >= $level){
-					$this->error('选择的升级级别有误！');
-					exit;
-				}
-			}
-			//进行数据存储，开启事务
-			$member_model->startTrans();
-			$data_m = array();
-			$data_m['level'] = $level;
-			/***回填积分*******************************************************/
-			$m_org = $this->touzi[$info['level']];//原始投资金额
-			$m_new = $this->touzi[$level];
-			$huitian = $m_new - $m_org;
-			$data_m['huitian'] = array('exp','huitian+'.$huitian);
-			/*****************************************************************/
-			$falg = $member_model->where("id=$id")->save($data_m);
-			if ($falg !== FALSE){
-				$data = array();
-				$data['member_id'] = $info['id']; 
-				$data['level_bef'] = $info['level']; 
-				$data['level_aft'] = $level;
-				$data['type'] = 1; //升级类型    1-公司升级 2-充值升级 , 目前只做公司升级
-				$data['create_time'] = time();
-				if (false !== $levelup_model->add($data)){
-					$member_model->commit();
-					$this->success('升级成功',cookie('_currentUrl_'));
-				}else {
-					$member_model->rollback();
-					$this->error('升级失败');
-				}
-			}
-		}else {
-			$this->error('用户不存在');
-		}
-	}
-	
-	
-	/**
 	 * 会员图谱
 	 * 
 	 */
 	public function atlas(){
 		$account = $_REQUEST['account'];
 		$member_list = array();
+		$member_model = D('Member');
 		if (!empty($account)){
-			$member_model = D('Member');
-			$mid = $member_model->getMemberId($account);
-			$member_list = $member_model->find($mid);
-			$this->member($member_model,$mid,$member_list);
+			$member_list = $member_model->getByAccount($account);
+		}else {
+			$member_list = $member_model->getByParentArea('0');
 		}
+		$this->member($member_model,$mid,$member_list);
 		$this->assign('member_list',$member_list);
 		$this->display();
 	}
@@ -348,23 +230,6 @@ class MemberAction extends CommonAction {
 			$data = array('status'=>1,'verify_id'=>0,'verify_time'=>time());
 			$flag = $member_model->where("id=$id")->setField($data);
 			if ($flag !== false){
-				//更行收入记录表
-				$income_model = M('Income');
-				$info = array('member_id'=>$member_info['id'],
-							  'create_time'=>time(),
-							  'level_bfe'=>0,
-							  'level_aft'=>$member_info['level'],
-							  'income'=>$this->level_bonus[$member_info['level']],
-							  'remark'=>'会员激活'
-							);
-				$flag = $income_model->add($info);
-				if ($flag === false){
-					$member_model->rollback();
-					$this->error('激活失败');
-					exit();
-				}
-				//扣除报单中心的积分来激活用户
-				
 				//处理积分逻辑，跨模块调用
 				$bonus = A('Admin/Bonus');
 				$bonus->update($id);
@@ -388,7 +253,7 @@ class MemberAction extends CommonAction {
         $model = M($name);
         $id = (int)$_REQUEST [$model->getPk()];
         $vo = $model->getById($id);
-        $parent = $model->getById($vo['parent_id']);
+        $parent = $model->getById($vo['parent_area']);
         $vo['parent_account'] = $parent['account'];//推荐人帐号
         //dump($vo);
         $this->assign('vo', $vo);
