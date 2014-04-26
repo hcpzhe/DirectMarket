@@ -71,12 +71,20 @@ class MemberAction extends CommonAction {
 		$_REQUEST['status'] = '3';
 		$this->index();
 	}
-	
+
 	/**
 	 * 未审核报单中心
 	 */
 	public function statusFour() {
 		$_REQUEST['status'] = '4';
+		$this->index();
+	}
+
+	/**
+	 * 未审核会员--- 功能会员, 但未付款
+	 */
+	public function statusFive() {
+		$_REQUEST['status'] = '5';
 		$this->index();
 	}
 	
@@ -221,6 +229,7 @@ class MemberAction extends CommonAction {
 	 * 接收主键ID
 	 */
 	public function shenhe(){
+		//TODO status从5 - 2 时, 要扣除余额
 		$id = (int)$_REQUEST['id'];
 		if (!empty($id)){
 			$member_model = M('Member');
