@@ -4,13 +4,13 @@ Navicat MySQL Data Transfer
 Source Server         : 127.0.0.1
 Source Server Version : 50524
 Source Host           : 127.0.0.1:3306
-Source Database       : zhixiao
+Source Database       : tianlian
 
 Target Server Type    : MYSQL
 Target Server Version : 50524
 File Encoding         : 65001
 
-Date: 2014-04-22 15:12:41
+Date: 2014-04-26 17:27:59
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -136,25 +136,17 @@ CREATE TABLE `zx_member` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `account` varchar(255) NOT NULL COMMENT '帐号',
   `password` char(32) NOT NULL COMMENT '登录密码',
-  `pwdone` char(32) NOT NULL COMMENT '一级密码',
   `pwd_money` char(32) NOT NULL COMMENT '取款密码',
-  `parent_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '推荐人',
-  `level_org` tinyint(1) NOT NULL DEFAULT '1' COMMENT '初始套餐 1-个人 2-家庭 3-养殖 4-加盟',
-  `level` tinyint(1) NOT NULL DEFAULT '1' COMMENT '套餐 1-个人 2-家庭 3-养殖 4-加盟',
-  `points` decimal(10,2) DEFAULT '0.00' COMMENT '积分',
-  `recharge_points` decimal(10,2) DEFAULT '0.00' COMMENT '充值积分',
-  `money_a` decimal(10,2) DEFAULT '0.00' COMMENT 'A区业绩',
-  `money_b` decimal(10,2) DEFAULT '0.00' COMMENT 'B区业绩',
-  `parent_area` int(10) unsigned DEFAULT '0' COMMENT '节点父ID',
+  `balance` decimal(10,2) DEFAULT '0.00' COMMENT '余额',
+  `parent_area` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '推荐人',
   `parent_area_type` varchar(1) DEFAULT NULL COMMENT 'A 或 B',
-  `fuzhu_total` decimal(10,2) DEFAULT '0.00' COMMENT '累计辅助积分, 投资额的1.5倍结束',
-  `huitian` decimal(10,2) DEFAULT '0.00' COMMENT '此会员应回填的积分',
   `nickname` varchar(100) NOT NULL COMMENT '真实姓名',
-  `verify_id` int(10) unsigned DEFAULT NULL COMMENT '报单编号--给此会员激活的报单人员的ID',
+  `sex` tinyint(1) DEFAULT '1' COMMENT '1-男 2-女',
+  `verify_id` int(10) unsigned DEFAULT '0' COMMENT '报单编号--给此会员激活的报单人员的ID',
   `tel` varchar(15) NOT NULL COMMENT '联系电话',
   `q` char(18) DEFAULT NULL COMMENT '身份证号',
   `address` varchar(100) DEFAULT NULL COMMENT '联系地址',
-  `status` tinyint(1) NOT NULL DEFAULT '2' COMMENT '0-删除 1-正常 2-未激活 3-已审报单中心 4-未审报单',
+  `status` tinyint(1) NOT NULL DEFAULT '2' COMMENT '0-删除 1-正常 2-未激活 3-已审报单中心 4-未审报单 5-正常但未付款',
   `create_time` varchar(20) DEFAULT '0' COMMENT '注册时间',
   `verify_time` varchar(20) DEFAULT '0' COMMENT '激活时间',
   `bank_card` varchar(255) DEFAULT NULL COMMENT '银行卡号',
@@ -166,8 +158,8 @@ CREATE TABLE `zx_member` (
 -- ----------------------------
 -- Records of zx_member
 -- ----------------------------
-INSERT INTO `zx_member` VALUES ('1', 'test', 'ca5c77f495ac94c256cc039c87d8da38', 'ca5c77f495ac94c256cc039c87d8da38', 'ca5c77f495ac94c256cc039c87d8da38', '0', '1', '1', '5625.00', '446.20', '75000.00', '0.00', '0', null, '0.00', '0.00', 'asdasd', null, '11111111111', '111', '宝龙城市广场', '3', '0', '0', null, null, null);
-INSERT INTO `zx_member` VALUES ('2', 'tttt', '15c9dfa38cfaf2635d54b1f94ffaed6c', 'ca5c77f495ac94c256cc039c87d8da38', '15c9dfa38cfaf2635d54b1f94ffaed6c', '1', '4', '4', '11.25', '0.00', '0.00', '0.00', '1', 'A', '0.00', '0.00', 'tttt', '0', '11111111111', '1111', '1111', '1', '1394680262', '1394698240', null, null, null);
+INSERT INTO `zx_member` VALUES ('1', 'test', 'ca5c77f495ac94c256cc039c87d8da38', 'ca5c77f495ac94c256cc039c87d8da38', '5625.00', '0', null, 'asdasd', '1', '0', '11111111111', '111', '宝龙城市广场', '3', '0', '0', null, null, null);
+INSERT INTO `zx_member` VALUES ('2', 'tttt', '15c9dfa38cfaf2635d54b1f94ffaed6c', '15c9dfa38cfaf2635d54b1f94ffaed6c', '11.25', '1', 'A', 'tttt', '1', '0', '11111111111', '1111', '1111', '1', '1394680262', '1394698240', null, null, null);
 
 -- ----------------------------
 -- Table structure for `zx_message`
