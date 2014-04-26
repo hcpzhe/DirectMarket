@@ -24,7 +24,7 @@ class MemberModel extends Model {
         array('q','require','身份证号必须'),
         //array('q','/^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{4}$/','身份证号不正确'),
         array('address','require','联系地址必须'),
-        array('status',array(0,1,2,3,4),'用户状态不正确',self::VALUE_VALIDATE,'in'),
+        array('status',array(0,1,2,3,4),'用户状态不正确',self::VALUE_VALIDATE,'in'),//0-删除 1-正常 2-未激活 3-已审报单中心 4-未审报单 5-已激活但未付款
         );
 
     public $_auto		=	array(
