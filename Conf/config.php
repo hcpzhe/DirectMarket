@@ -7,9 +7,9 @@ return array(
     
     'DB_TYPE'                   =>  'mysql',
     'DB_HOST'                   =>  '192.168.1.9',
-    'DB_NAME'                   =>  'zhixiao',
-    'DB_USER'                   =>  'zhixiao',
-    'DB_PWD'                    =>  'zhixiao',
+    'DB_NAME'                   =>  'tianlian',
+    'DB_USER'                   =>  'wqseo',
+    'DB_PWD'                    =>  'wqseo',
 //    'DB_HOST'                   =>  'localhost',
 //    'DB_NAME'                   =>  'site20140313',
 //    'DB_USER'                   =>  'site20140313',
