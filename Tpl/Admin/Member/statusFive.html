@@ -91,7 +91,8 @@ $(function($) {
 								{:date('Y-m-d H:i:s',$row['create_time'])}
 							</td>
                             	<td>
-								<a class="bat_a_handle" href="__URL__/shenhe/id/{$row['id']}">设为正常会员</a>|
+								<a target="main" href="__URL__/atlas/account/{$row['account']}">图谱</a> | 
+								<a class="bat_a_handle" href="__URL__/shenhe/id/{$row['id']}">设为正常会员</a> | 
 								<a href="__URL__/delete/id/{$row['id']}" onclick="if(confirm('您确认要删除吗？')){$(this).RSsubmit()};return false;">删除临时会员</a>
 							</td>
 						</tr>

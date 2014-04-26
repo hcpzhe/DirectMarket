@@ -58,7 +58,7 @@ $(function($) {
 									奖金金额:
 								</td>
 								<td style="padding-left: 10px; height: 30px;">
-									<input name="points_temp" value="{$vo['points']}" disabled="disabled" type="text">
+									<input name="points_temp" value="{$vo['balance']}" disabled="disabled" type="text">
 								</td>
 
 
@@ -136,40 +136,6 @@ $(function($) {
 						</tbody></table>
 					</form>
 
-
-
-
-					<form name="yijimima" action="__URL__/chgPwd" method="post" onsubmit="$(this).RSsubmit({success_alert:true});return false;">
-						<table class="registertable3" width="300px">
-							<tbody><tr>
-								<td colspan="2" class="titletd">
-									<center>
-										<span style="color: red; font-size: 16px;"><b>修改一级密码：</b>
-										</span>
-										<input name="id" value="{$vo['id']}" type="hidden" />
-									</center>
-								</td>
-							</tr>
-							<tr>
-								<td style="width: 30%; text-align: center;">
-									一级密码:
-								</td>
-								<td style="padding-left: 10px; height: 30px;">
-									<input name="old_pwdone" type="password">
-								</td>
-							</tr>
-							
-							<tr>
-								
-								<td style=" height: 30px;" align="center" colspan="2">
-									<center><input value="修改密码" type="submit"></center>
-								</td>
-							</tr>
-
-						</tbody></table>
-					</form>
-					
-					
 
 					<form name="qukuanmima" action="__URL__/chgPwd" method="post" onsubmit="$(this).RSsubmit({success_alert:true});return false;">
 						<table class="registertable3" width="300px">
