@@ -63,12 +63,12 @@ class CashAction extends CommonAction{
 		$mem_M = M('Member');
 		$mem_info = $mem_M->getById($cash_info['member_id']);
 		if (empty($mem_info)) $this->error('提现账户不存在');
-		if ($mem_info['points'] < $cash_info['apply_money']) {
-			$this->error('提现金额超出账户积分余额');
+		if ($mem_info['balance'] < $cash_info['apply_money']) {
+			$this->error('提现金额超出账户余额');
 		}
 		$mem_M->startTrans();//开启事务
 		$mem_new = array();
-		$mem_new['points'] = $mem_info['points'] - $cash_info['apply_money'];
+		$mem_new['balance'] = $mem_info['balance'] - $cash_info['apply_money'];
 		if (false === $mem_M->where('`id`='.$mem_info['id'])->save($mem_new)) {
 			$this->error('用户账户更新失败');
 		}
