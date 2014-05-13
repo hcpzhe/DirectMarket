@@ -315,10 +315,10 @@ class CommonAction extends Action {
 	 */
 	public function points($points,$id){
 		$member_model = M('Member');
-		$flag = $member_model->where("id=$id")->setInc('points',$points);
+		$flag = $member_model->where("id=$id")->setInc('balance',$points);
 		if ($flag === false){
 			$member_model->rollback();
-			$this->error('会员积分更新失败');
+			$this->error('会员余额更新失败');
 			exit();
 		
 		}
