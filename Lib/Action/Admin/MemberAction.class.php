@@ -202,7 +202,7 @@ class MemberAction extends CommonAction {
 		}else {
 			$member_list = $member_model->getByParentArea('0');
 		}
-		$this->member($member_model,$mid,$member_list);
+		$this->member($member_model,$member_list['id'],$member_list);
 		$this->assign('member_list',$member_list);
 		$this->display();
 	}
@@ -210,16 +210,19 @@ class MemberAction extends CommonAction {
 	/**
 	 * 会员图谱递归方法
 	 */
-	protected function member($member_model,$mid,&$member_list) {
+	protected function member($member_model,$mid,&$member_list,$level=0) {
+		//只显示3级图谱
+		if ($level >=3) return;
+		$level++; 
 		$member_l = $member_model->where("parent_area=$mid")->select();		
 		foreach ($member_l as $row){
 			if ($row['parent_area_type'] == 'A'){
 				$member_list['A'] = $row;
-				$this->member($member_model, $row['id'], $member_list['A']);
+				$this->member($member_model, $row['id'], $member_list['A'], $level);
 			
 			}else {
 				$member_list['B'] = $row;
-				$this->member($member_model, $row['id'], $member_list['B']);		
+				$this->member($member_model, $row['id'], $member_list['B'], $level);		
 			}
 		}
 	}
