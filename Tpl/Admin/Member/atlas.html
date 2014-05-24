@@ -19,15 +19,8 @@ $(function($) {
 <body>
 
 	<div class="head">
-		<h3>温馨提示：点击每个会员编号可以查看其下的分布情况，不同颜色代表不同就级别</h3>
-	</div>
-	<div class="jibie">
-		<ul>
-			<li>个人套餐：<img src="__PUBLIC__/images/1.jpg" /></li>
-			<li>家庭套餐：<img src="__PUBLIC__/images/2.jpg" /></li>
-			<li>养殖学员：<img src="__PUBLIC__/images/3.jpg" /></li>
-			<li>加盟套餐：<img src="__PUBLIC__/images/4.jpg" /></li>
-		</ul>
+		<h4> ◆点击节点上方的 编号 可以看到该编号会员的下属. </h4>
+		<h4> ◆其中<font color="blue">蓝色</font>为正常会员； <font color="#FF00FF">紫色</font>的为待审核会员；  <font color="#999999">会色</font>背景的为空位</h4>
 	</div>
 	<form action="__ACTION__" method="post" onsubmit="">
 	<div class="sosuo clear">
@@ -36,22 +29,15 @@ $(function($) {
 	</form>
 	<!-- <if condition="!empty($member_list)"> -->
 	<div class="huiyuan1 center">
-		<table>
+		<table width="150">
 		<tr>
-		<td colspan="3" style=" background-color:#39F; color:#CC3;">{$member_list['account']}</td>
+		<td style=" background-color:#39F; color:#CC3;">{$member_list['account']}</td>
 		</tr>
 		<tr>
-		<td colspan="3"><img src="__PUBLIC__/images/{$member_list['level']}.jpg" /></td>
+		<td>推荐体系人数：0</td>
 		</tr>
 		<tr>
-		<td>A</td>
-		<td></td>
-		<td>B</td>
-		</tr>
-		<tr>
-		<td>{$member_list['money_a']}</td>
-		<td>业绩</td>
-		<td>{$member_list['money_b']}</td>
+		<td>直推：0</td>
 		</tr>
 		</table>
 	</div>
