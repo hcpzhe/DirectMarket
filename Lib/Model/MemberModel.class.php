@@ -139,4 +139,29 @@ class MemberModel extends Model {
 		
 		return $return;
 	}
+	
+	/**
+	 * 返回$id用户推荐体系的人数
+	 * @param int $id 要判断的用户ID
+	 */
+	public function areaNums($id,$nums=0) {
+		$return = $nums; $condition = array();
+		$condition['parent_area'] = $id;
+		
+		$condition['parent_area_type'] = 'A';
+		$son_A = $this->findAble($condition);
+		if ($son_A !== false && !empty($son_A)) {
+			$return++;
+			$return = $this->areaNums($son_A['id'],$return);
+		}
+		
+		$condition['parent_area_type'] = 'B';
+		$son_B = $this->findAble($condition);
+		if ($son_B !== false && !empty($son_B)) {
+			$return++;
+			$return = $this->areaNums($son_B['id'],$return);
+		}
+		
+		return $return;
+	}
 }

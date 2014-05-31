@@ -29,144 +29,113 @@ $(function($) {
 	</form>
 	<!-- <if condition="!empty($member_list)"> -->
 	<div class="huiyuan1 center">
-		<table width="150">
-		<tr>
-		<td style=" background-color:#39F; color:#CC3;">{$member_list['account']}</td>
-		</tr>
-		<tr>
-		<td>推荐体系人数：0</td>
-		</tr>
-		<tr>
-		<td>直推：0</td>
-		</tr>
-		</table>
+		{:atlasstr($member_list)}
 	</div>
 	<div class="huiyuan2 center">
 		<div class="fl">
-			<table>
-			<tr>
-			<td colspan="3" style=" background-color:#39F; color:#CC3;">{$member_list['A']['account']|default="未注册"}</td>
-			</tr>
-			<tr>
-			<td colspan="3"><img src="__PUBLIC__/images/{$member_list['A']['level']|default='1'}.jpg" /></td>
-			</tr>
-			<tr>
-			<td>A</td>
-			<td></td>
-			<td>B</td>
-			</tr>
-			<tr>
-			<td>{$member_list['A']['money_a']|default="0"}</td>
-			<td>业绩</td>
-			<td>{$member_list['A']['money_b']|default="0"}</td>
-			</tr>
-			</table>
+			{:atlasstr($member_list['A'])}
 		</div>
-		<div class="fl" style=" margin-left:200px;">
-			<table>
-			<tr>
-			<td colspan="3" style=" background-color:#39F; color:#CC3;">{$member_list['B']['account']|default="未注册"}</td>
-			</tr>
-			<tr>
-			<td colspan="3"><img src="__PUBLIC__/images/{$member_list['B']['level']|default='1'}.jpg" /></td>
-			</tr>
-			<tr>
-			<td>A</td>
-			<td></td>
-			<td>B</td>
-			</tr>
-			<tr>
-			<td>{$member_list['B']['money_a']|default="0"}</td>
-			<td>业绩</td>
-			<td>{$member_list['B']['money_b']|default="0"}</td>
-			</tr>
-			</table>
+		<div class="fl" style="margin-left:200px;">
+			{:atlasstr($member_list['B'])}
 		</div>
 	</div>
-
-<div class="huiyuan3 clear center">
-<div class="fl">
-<table>
-<tr>
-<td colspan="3" style=" background-color:#39F; color:#CC3;">{$member_list['A']['A']['account']|default="未注册"}</td>
-</tr>
-<tr>
-<td colspan="3"><img src="__PUBLIC__/images/{$member_list['A']['A']['level']|default='1'}.jpg" /></td>
-</tr>
-<tr>
-<td>A</td>
-<td></td>
-<td>B</td>
-</tr>
-<tr>
-<td>{$member_list['A']['A']['money_a']|default="0"}</td>
-<td>业绩</td>
-<td>{$member_list['A']['A']['money_b']|default="0"}</td>
-</tr>
-</table>
-</div>
-<div class="fl">
-<table>
-<tr>
-<td colspan="3" style=" background-color:#39F; color:#CC3;">{$member_list['A']['B']['account']|default="未注册"}</td>
-</tr>
-<tr>
-<td colspan="3"><img src="__PUBLIC__/images/{$member_list['A']['B']['level']|default='1'}.jpg" /></td>
-</tr>
-<tr>
-<td>A</td>
-<td></td>
-<td>B</td>
-</tr>
-<tr>
-<td>{$member_list['A']['B']['money_a']|default="0"}</td>
-<td>业绩</td>
-<td>{$member_list['A']['B']['money_b']|default="0"}</td>
-</tr>
-</table>
-</div>
-
-<div class="fl">
-<table>
-<tr>
-<td colspan="3" style=" background-color:#39F; color:#CC3;">{$member_list['B']['A']['account']|default="未注册"}</td>
-</tr>
-<tr>
-<td colspan="3"><img src="__PUBLIC__/images/{$member_list['B']['A']['level']|default='1'}.jpg" /></td>
-</tr>
-<tr>
-<td>A</td>
-<td></td>
-<td>B</td>
-</tr>
-<tr>
-<td>{$member_list['B']['A']['money_a']|default="0"}</td>
-<td>业绩</td>
-<td>{$member_list['B']['A']['money_b']|default="0"}</td>
-</tr>
-</table>
-</div>
-<div class="fl">
-<table>
-<tr>
-<td colspan="3" style=" background-color:#39F; color:#CC3;">{$member_list['B']['B']['account']|default="未注册"}</td>
-</tr>
-<tr>
-<td colspan="3"><img src="__PUBLIC__/images/{$member_list['B']['B']['level']|default='1'}.jpg" /></td>
-</tr>
-<tr>
-<td>A</td>
-<td></td>
-<td>B</td>
-</tr>
-<tr>
-<td>{$member_list['B']['B']['money_a']|default="0"}</td>
-<td>业绩</td>
-<td>{$member_list['B']['B']['money_b']|default="0"}</td>
-</tr>
-</table>
-</div>
-</div>
+	<div class="huiyuan3 clear center">
+		<div class="fl">
+			{:atlasstr($member_list['A']['A'])}
+		</div>
+		<div class="fl">
+			{:atlasstr($member_list['A']['B'])}
+		</div>
+		<div class="fl">
+			{:atlasstr($member_list['B']['A'])}
+		</div>
+		<div class="fl">
+			{:atlasstr($member_list['B']['B'])}
+		</div>
+	</div>
 <!-- </if> -->
 </body>
 </html>
+<!--
+<php>
+function showatlas($list,$level=0) {
+	if ($level >=3) return;
+	$level++;
+	
+	if (empty($list)) {
+		$str = '
+		<div class="huiyuan'.$level.' center">
+		
+			<table width="150" style="background-color:#C9C9C9;">
+			<tr>
+			<td style=" background-color:#C9C9C9; color:#999999;"><a href="#">未注册</a></td>
+			</tr>
+			<tr>
+			<td></td>
+			</tr>
+			<tr>
+			<td></td>
+			</tr>
+			</table>
+		</div>';
+	}else {
+		$str = '
+		<div class="huiyuan'.$level.' center">
+			<table width="150">
+			<tr>
+			<td style=" background-color:#39F; color:#CC3;">'.$list['account'].'</td>
+			</tr>
+			<tr>
+			<td>推荐体系人数：'.$list['area_nums'].'</td>
+			</tr>
+			<tr>
+			<td>直推：'.$list['son_nums'].'</td>
+			</tr>
+			</table>
+		</div>';
+	}
+	
+	$str_a = showatlas($list[A],$level);
+	$str_b = showatlas($list[B],$level);
+	
+	$str .= $str_a.$str_b;
+	return $str;
+}
+
+function atlasstr($list) {
+	if (empty($list)) {
+		$str = '
+		<div class="huiyuan'.$level.' center">
+		
+			<table width="150" style="background-color:#C9C9C9;">
+			<tr>
+			<td style=" background-color:#C9C9C9; color:#999999;"><a href="#">未注册</a></td>
+			</tr>
+			<tr>
+			<td></td>
+			</tr>
+			<tr>
+			<td></td>
+			</tr>
+			</table>
+		</div>';
+	}else {
+		$str = '
+		<div class="huiyuan'.$level.' center">
+			<table width="150">
+			<tr>
+			<td style=" background-color:#39F; color:#CC3;">'.$list['account'].'</td>
+			</tr>
+			<tr>
+			<td>推荐体系人数：'.$list['area_nums'].'</td>
+			</tr>
+			<tr>
+			<td>直推：'.$list['son_nums'].'</td>
+			</tr>
+			</table>
+		</div>';
+	}
+	echo $str;
+}
+</php>
+-->

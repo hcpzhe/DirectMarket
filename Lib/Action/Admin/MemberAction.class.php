@@ -160,12 +160,19 @@ class MemberAction extends CommonAction {
 	 * 注册会员
 	 */
 	public function add() {
-		/*
-		$member_model = M('Member');
-		$member_info = $member_model->find($_SESSION[C('ADMIN_AUTH_KEY')]);
-		//推荐人编号直接从$member_info中取出
-		$this->assign('member_info',$member_info);
-		*/
+		$pid = (int)$_REQUEST['pid']; //新会员的推荐人
+		$ptype = $_REQUEST['ptype'] === 'A' ? 'A' : 'B';
+		$member_M = D('Member');
+		$pinfo = $member_M->findAble($pid);
+		if (empty($pinfo)) $this->error('推荐人不存在, 请重新选择',cookie('_currentUrl_'));
+		
+		/*判断area_type是否被占用*********************************************************/
+		$cond = array();
+		$cond['parent_area'] = $pinfo['id'];
+		$cond['parent_area_type'] = $ptype;
+		$typebool = $member_M->findAble($cond);
+		if (!empty($typebool)) $this->error('推荐位已被占用, 请重新选择',cookie('_currentUrl_'));
+		/**************************************************************/
 		cookie('_currentUrl_', __GROUP__.'/Index/index');
 		$this->display();
 	}
@@ -202,8 +209,12 @@ class MemberAction extends CommonAction {
 		}else {
 			$member_list = $member_model->getByParentArea('0');
 		}
+		$member_list['son_nums'] = $member_model->sonNums($member_list['id']); //直推人数
+		$member_list['area_nums'] = $member_model->areaNums($member_list['id']); //推荐体系人数
+		
 		$this->member($member_model,$member_list['id'],$member_list);
 		$this->assign('member_list',$member_list);
+		cookie('_currentUrl_', __SELF__);
 		$this->display();
 	}
 	
@@ -216,6 +227,9 @@ class MemberAction extends CommonAction {
 		$level++; 
 		$member_l = $member_model->where("parent_area=$mid")->select();		
 		foreach ($member_l as $row){
+			$row['son_nums'] = $member_model->sonNums($row['id']); //直推人数
+			$row['area_nums'] = $member_model->areaNums($row['id']); //推荐体系人数
+			
 			if ($row['parent_area_type'] == 'A'){
 				$member_list['A'] = $row;
 				$this->member($member_model, $row['id'], $member_list['A'], $level);
