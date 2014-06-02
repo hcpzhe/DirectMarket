@@ -33,24 +33,24 @@ $(function($) {
 	</div>
 	<div class="huiyuan2 center">
 		<div class="fl">
-			{:atlasstr($member_list['A'])}
+			{:atlasstr($member_list['A'],$member_list['id'],'A')}
 		</div>
 		<div class="fl" style="margin-left:200px;">
-			{:atlasstr($member_list['B'])}
+			{:atlasstr($member_list['B'],$member_list['id'],'B')}
 		</div>
 	</div>
 	<div class="huiyuan3 clear center">
 		<div class="fl">
-			{:atlasstr($member_list['A']['A'])}
+			{:atlasstr($member_list['A']['A'],$member_list['A']['id'],'A')}
 		</div>
 		<div class="fl">
-			{:atlasstr($member_list['A']['B'])}
+			{:atlasstr($member_list['A']['B'],$member_list['A']['id'],'B')}
 		</div>
 		<div class="fl">
-			{:atlasstr($member_list['B']['A'])}
+			{:atlasstr($member_list['B']['A'],$member_list['B']['id'],'A')}
 		</div>
 		<div class="fl">
-			{:atlasstr($member_list['B']['B'])}
+			{:atlasstr($member_list['B']['B'],$member_list['B']['id'],'B')}
 		</div>
 	</div>
 <!-- </if> -->
@@ -102,14 +102,14 @@ function showatlas($list,$level=0) {
 	return $str;
 }
 
-function atlasstr($list) {
+function atlasstr($list,$pid=0,$ptype='A') {
 	if (empty($list)) {
 		$str = '
 		<div class="huiyuan'.$level.' center">
 		
 			<table width="150" style="background-color:#C9C9C9;">
 			<tr>
-			<td style=" background-color:#C9C9C9; color:#999999;"><a href="#">未注册</a></td>
+			<td style=" background-color:#C9C9C9; color:#999999;"><a href="__URL__/add/pid/'.$pid.'/ptype/'.$ptype.'">未注册</a></td>
 			</tr>
 			<tr>
 			<td></td>
