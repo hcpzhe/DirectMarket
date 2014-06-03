@@ -173,6 +173,9 @@ class MemberAction extends CommonAction {
 		$typebool = $member_M->findAble($cond);
 		if (!empty($typebool)) $this->error('推荐位已被占用, 请重新选择',cookie('_currentUrl_'));
 		/**************************************************************/
+		
+		$this->assign('pinfo',$pinfo);
+		$this->assign('ptype',$ptype);
 		cookie('_currentUrl_', __GROUP__.'/Index/index');
 		$this->display();
 	}
@@ -248,12 +251,14 @@ class MemberAction extends CommonAction {
 	public function shenhe(){
 		//TODO status从5 - 2 时, 要扣除余额
 		$id = (int)$_REQUEST['id'];
+		$status = (int)$_REQUEST['status'];
+		$status = $status <=0 ? 1 : $status;
 		if (!empty($id)){
 			$member_model = M('Member');
 			$member_info = $member_model->find($id);
 			$member_model -> startTrans();
 			$time = time();
-			$data = array('status'=>1,'verify_id'=>0,'verify_time'=>time());
+			$data = array('status'=>$status,'verify_id'=>0,'verify_time'=>time());
 			$flag = $member_model->where("id=$id")->setField($data);
 			if ($flag !== false){
 				//处理积分逻辑，跨模块调用
