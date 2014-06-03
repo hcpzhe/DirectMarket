@@ -28,10 +28,7 @@ $(function($) {
 								会员编号
 							</td>
 							<td>
-								推荐编号
-							</td>
-							<td>
-								接点编号
+								推荐人
 							</td>
 							<td>
 								报单编号
@@ -44,9 +41,6 @@ $(function($) {
 							</td>
 							<td>
 								会员状态
-							</td>
-							<td>
-								会员套餐
 							</td>
 							<td >
 								当前余额
@@ -64,9 +58,6 @@ $(function($) {
 								{$row['account']}
 							</td>
 							<td>
-								{$row['parent_id']}
-							</td>
-							<td>
 								{$row['parent_area']}
 							</td>
 							<td>
@@ -82,10 +73,7 @@ $(function($) {
 								{$row['status']}
 							</td>
 							<td>
-								{$row['level']}
-							</td>
-							<td>
-								{$row['points']}
+								{$row['balance']}
 							</td>
 							<td>
 								{:date('Y-m-d H:i:s',$row['create_time'])}
