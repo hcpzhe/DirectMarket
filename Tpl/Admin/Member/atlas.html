@@ -120,11 +120,12 @@ function atlasstr($list,$pid=0,$ptype='A') {
 			</table>
 		</div>';
 	}else {
+		$color = $list['status'] == 5 ? '#F0F' : '#39F';
 		$str = '
 		<div class="huiyuan'.$level.' center">
-			<table width="150">
+			<table width="150" style="background-color:'.$color.';">
 			<tr>
-			<td style=" background-color:#39F; color:#CC3;">'.$list['account'].'</td>
+			<td style=" background-color:'.$color.'; color:#CC3;">'.$list['account'].'</td>
 			</tr>
 			<tr>
 			<td>推荐体系人数：'.$list['area_nums'].'</td>
