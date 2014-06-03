@@ -69,7 +69,13 @@ table .one td {
 			<form id="zhuce" name="tj" action="__GROUP__/Member/insert" method="post" onsubmit="">
 				<center>
 					<table class="one" cellpadding="0px" cellspacing="0px" width="700px;">
-						<tbody><tr>
+						<tbody>
+						<tr>
+							<td colspan="2" style="text-align: center; padding-left: 80px;">
+								<input type="button" value="后退" onclick="window.history.go(-1)"> 
+							</td>
+						</tr>
+						<tr>
 							<td style="text-align: right;" width="50%">
 								会员编号:
 							</td>
@@ -98,25 +104,6 @@ table .one td {
 						</tr>
 						<tr>
 							<td style="text-align: right;">
-								一级密码:
-							</td>
-							<td align="left">
-								<input name="pwdone" id="onepwd" type="password">
-								<span id="error4.info" style="color: red">*</span>
-							</td>
-						</tr>
-						<tr>
-							<td style="text-align: right;">
-								再次输入:
-							</td>
-							<td align="left">
-								<input name="repwdone" id="qronepwd" type="password">
-								<span id="error5.info" style="color: red">*</span>
-							</td>
-						</tr>
-
-						<tr>
-							<td style="text-align: right;">
 								取款密码:
 							</td>
 							<td align="left">
@@ -136,75 +123,22 @@ table .one td {
 						</tr>
 						<tr>
 							<td style="text-align: right;">
-								推荐编号:
+								推荐人:
 							</td>
 							<td align="left">
-								<input name="parent_account" id="parent_account" type="text" value=""/>
-								<span id="parent_account_error" style="color: red">*</span>
-								<input name="parent_id" id="parent_id" type="hidden" value="0"/>
-							</td>
-						</tr>
-						<tr>
-							<td style="text-align: right;">
-								选择套餐:
-							</td>
-							<td style="font-size: 12px;" align="left">
-								<select id="lev" name="level">
-									<option value="1">
-										个人套餐
-									</option>
-									<option value="2">
-										家庭套餐
-									</option>
-									<option value="3">
-										养殖学员
-									</option>
-									<option value="4" selected="selected">
-										加盟套餐
-									</option>
-								</select>
-								<span>*</span>
-							</td>
-						</tr>
-						<tr>
-							<td style="text-align: right;">
-								接点编号:
-							</td>
-							<td align="left">
-								<input name="parent_area_account" id="parent_area_account" type="text">
+								<input name="parent_area_account" disabled="disabled" type="text" value="{$pinfo['account']}">
 								<span id="parent_area_account_error" style="color: red">*</span>
-								<input name="parent_area" id="parent_area" type="hidden" value="0"/>
+								<input name="parent_area" id="parent_area" type="hidden" value="{$pinfo['id']}" />
 							</td>
 						</tr>
-						<!--
-						<tr>
-							<td style="text-align: right;">
-								报单编号:
-							</td>
-							<td align="left">
-								<input name="verify_account" id="verify_account" type="text">
-								<span id="error10.info" style="color: red">*</span>
-								<input name="verify_id" id="verify_id" type="hidden" value="0"/>
-							</td>
-						</tr>
-						-->
 						<tr>
 							<td style="text-align: right;">
 								所在位置:
 							</td>
 							<td align="left">
-								<select id="location" name="parent_area_type">
-									<option selected="selected" value="请选择节点位置">
-										&nbsp;请选择节点位置&nbsp;
-									</option>
-									<option value="A">
-										&nbsp;A&nbsp;
-									</option>
-									<option value="B">
-										&nbsp;B&nbsp;
-									</option>
-								</select>
+								<input name="parent_area_type_show" disabled="disabled" type="text" value="{$ptype}">
 								<span id="error11.info" style="color: red">*</span>
+								<input name="parent_area_type" type="hidden" value="{$ptype}">
 							</td>
 						</tr>
 						<tr>
@@ -214,6 +148,22 @@ table .one td {
 							<td align="left">
 								<input name="nickname" id="name" type="text">
 								<span id="error12.info" style="color: red">*</span>
+							</td>
+						</tr>
+						<tr>
+							<td style="text-align: right;">
+								性别:
+							</td>
+							<td align="left">
+								<select name="sex">
+									<option selected="selected" value="1">
+										&nbsp;男&nbsp;
+									</option>
+									<option value="2">
+										&nbsp;女&nbsp;
+									</option>
+								</select>
+								<span style="color: red">*</span>
 							</td>
 						</tr>
 						<tr>
@@ -300,82 +250,12 @@ table .one td {
 		</div>
 	
 <script type="text/javascript">
-
-
-var error = '';
-var error_parent_account = new Array('');
 $(function($) {
-	$("#parent_account").focusout(function(){
-		$thisval = $(this).val();
-		if (error_parent_account.in_array($thisval)) {
-			error = '推荐编号不正确';
-			$("#parent_account_error").html("*用户不存在");
-		}else {
-			$.ajax({
-				type: "post",
-				url: "__GROUP__/Member/checkAccount",
-				data: {account : $(this).val()},
-				dataType: 'json',
-				success: function(d){
-					if (d.status == 1) {
-						$("#parent_id").val(d.info);
-						error = '';
-						$("#parent_account_error").html("*√");
-					}else {
-						error = '推荐编号不正确';
-						error_parent_account.push($thisval);
-						$("#parent_account_error").html("*"+d.info);
-					}
-				}
-			});
-		}
-	});
-	
-
-	$("#parent_area_account").focusout(function(){
-		$thisval = $(this).val();
-		$pid = $("#parent_id").val();
-		if ($pid <= 0) {
-			error = '推荐编号不正确';
-			$("#parent_area_account_error").html("*请先填写正确的推荐编号");
-		}else {
-			$.ajax({
-				type: "post",
-				url: "__GROUP__/Member/checkArea",
-				data: {account : $thisval, id : $pid},
-				dataType: 'json',
-				success: function(d){
-					if (d.status == 1) {
-						$("#parent_area").val(d.info.id);
-						error = '';
-						$("#parent_area_account_error").html("*√");
-					}else {
-						error = '接点编号不正确';
-						$("#parent_area_account_error").html("*"+d.info);
-					}
-				}
-			});
-		}
-	});
-	
 	$("#zhuce").submit(function(){
-		if (error == '') {
-			$(this).RSsubmit({success_alert:true});
-		}else {
-			alert(error);
-		}
+		$(this).RSsubmit({success_alert:true});
 		return false;
 	});
 });
-
-Array.prototype.in_array = function(e)
-{
-	for(i=0;i<this.length;i++){
-		if(this[i] == e)
-		return true;
-	}
-	return false;
-}
 
 </script>
 </body></html>
