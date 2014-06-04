@@ -44,7 +44,7 @@ class PublicAction extends Action {
         if(false === $authInfo) {
             $this->error('帐号不存！');
         }elseif ($authInfo['status'] == '2'){
-            $this->error('帐号已禁用！');
+            $this->error('帐号未激活！');
         }elseif ($authInfo['status'] < 0){
             $this->error('帐号已被删除！');
         }else {

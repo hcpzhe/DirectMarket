@@ -176,7 +176,7 @@ class MemberAction extends CommonAction {
 		
 		$this->assign('pinfo',$pinfo);
 		$this->assign('ptype',$ptype);
-		cookie('_currentUrl_', __GROUP__.'/Index/index');
+		cookie('_currentUrl_', __GROUP__.'/Index/info');
 		$this->display();
 	}
 	
@@ -260,7 +260,7 @@ class MemberAction extends CommonAction {
 			$time = time();
 			$data = array('status'=>$status,'verify_id'=>0,'verify_time'=>time());
 			$flag = $member_model->where("id=$id")->setField($data);
-			if ($flag !== false){
+			if ($flag !== false && ($status == 1 || $status == 5)) {
 				//处理积分逻辑，跨模块调用
 				$bonus = A('Admin/Bonus');
 				$bonus->update($id);

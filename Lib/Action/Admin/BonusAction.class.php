@@ -4,6 +4,8 @@
  * type 1-推广奖 2-结算奖 3-领导奖
  */
 class BonusAction extends CommonAction{
+	protected $bonus_type = array('1'=>'推广奖','2'=>'结算奖','3'=>'领导奖');//1-推广奖 2-结算奖 3-领导奖
+	
 	protected function _filter(&$map){
 		if(!empty($_POST['account'])){
 			$map['member_id']=D('Member')->getMemberId($this->_post('account'));
@@ -33,6 +35,7 @@ class BonusAction extends CommonAction{
 		//模板赋值
 		$this->assign('bonus_list',$bonus_list);
 		$this->assign('page',$page);
+		$this->assign('bonus_type',$this->bonus_type);
 		//显示模板
 		$this->display('index');
 		exit;
@@ -41,6 +44,7 @@ class BonusAction extends CommonAction{
 	 * 奖金累计记录
 	 */
 	public function leiji(){
+	/*
 		$model = new Model();
 		$count_sql = "SELECT count(member_id) count FROM zx_bonus GROUP BY member_id";
 		$count = $model->query($count_sql);
@@ -62,7 +66,7 @@ class BonusAction extends CommonAction{
 		$this->assign('bonus_list',$bonus_list);
 		$this->assign('page',$page);
 		$this->display();
-	
+	*/
 	}
 
 	/**
@@ -91,7 +95,7 @@ class BonusAction extends CommonAction{
 		$member_model->startTrans();
 		
 		$member_info = $member_model->find($id);
-		
+		$p_info = $member_model->find($member_info['parent_area']); //推荐人
 		$data = array();
 		$data['member_id'] = $member_info['parent_area'];
 		$data['new_member_id'] = $member_info['id'];
@@ -99,7 +103,7 @@ class BonusAction extends CommonAction{
 		$data['bonus'] = 5000;//TODO 灵活点?,以后再说吧
 		$data['total_bonus'] = $data['bonus'];
 		$data['create_time'] = time();
-		$data['balance'] = $member_info['balance'] + $data['total_bonus'];
+		$data['balance'] = $p_info['balance'] + $data['total_bonus'];
 		
 		$bonus_model = M('Bonus');
 		if (false === $bonus_model->add($data)){

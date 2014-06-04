@@ -37,92 +37,44 @@ $(function($) {
 							<table class="registertable1" width="988px;">
 								<tbody><tr>
                                 <td>
-										会员编号
-									</td>
-									<td>
-										奖金来源
-									</td>
-									<td>
-								服务积分
-							</td>
-                            <td>
-								销售积分
-							</td>
-							<td>
-								管理积分
-							</td>
-                                  <td>
-										辅导积分
-									</td>
-									<td>
-										辅助积分
-									</td>
-									<td>
-								补贴积分
-							</td>
-							<td>
-								福利积分
-							</td>
-                            <td>
-										重复消费
-									</td>
-									<td>
-								开支积分
-							</td>
-							<td>
-								回填积分
-							</td>
+									会员编号
+								</td>
+								<td>
+									奖金来源
+								</td>
+								<td>
+									奖金类型
+								</td>
                             	<td>
-								合计
-							</td>
-							<td>
-								时间
-							</td>
+								结算奖金
+								</td>
+                            	<td>
+								当时余额
+								</td>
+								<td>
+									结算时间
+								</td>
 							</tr>
 							<!-- <foreach name="bonus_list" item="row"> -->
-									<tr>
-										<td>
-										{$member_acc[$row['member_id']]['account']}
-									</td>
-									<td>
-										{$member_acc[$row['new_member_id']]['account']}
-									</td>
-									<td>
-								{$row['fuwu_bonus']}
-							</td>
+							<tr>
+								<td>
+									{$member_acc[$row['member_id']]['account']}
+								</td>
+								<td>
+									{$member_acc[$row['new_member_id']]['account']}
+								</td>
                             	<td>
-								{$row['xiaoshou_bonus']}
-							</td>
-							<td>
-								{$row['guanli_bonus']}
-							</td>
-                                  <td>
-										{$row['fudao_bonus']}
-									</td>
-									<td>
-										{$row['fuzhu_bonus']}
-									</td>
-									<td>
-								{$row['butie_bonus']}
-							</td>
-							<td>
-								{$row['fuli_bonus']}
-							</td>
-                            <td>
-										{$row['chongfu_bonus']}
-									</td>
-									<td>
-								{$row['kaizhi_bonus']}
-							</td>
-							<td>
-								{$row['huitian_bonus']}
-							</td>
+									{$bonus_type[$row['type']]}
+								</td>
                             	<td>
-								{$row['total_bonus']}
-							</td>
-							<td>
-								{:date('Y-m-d H:i:s',$row['create_time'])}
-							</td>
+									{$row['total_bonus']}
+								</td>
+                            	<td>
+									{$row['balance']}
+								</td>
+								<td>
+									{:date('Y-m-d H:i:s',$row['create_time'])}
+								</td>
 							</tr>
 							<!-- </foreach> -->
 									

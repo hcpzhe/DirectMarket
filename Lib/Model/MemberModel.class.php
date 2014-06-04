@@ -79,7 +79,7 @@ class MemberModel extends Model {
 	 */
 	private function chkPA($data) {
 		$condition = array();
-		$condition['status'] = array('in','1,3,4');
+		$condition['status'] = array('in','1,3,4,5');
 		$condition['id'] = $data['parent_area'];
 		$num = $this->where($condition)->count();
 		if ($num > 0) return true;
@@ -93,7 +93,7 @@ class MemberModel extends Model {
 			return false;
 		}
 		$condition = array();
-		$condition['status'] = array('in','1,3,4');
+		$condition['status'] = array('in','1,3,4,5');
 		$condition['parent_area'] = $data['parent_area'];
 		$condition['parent_area_type'] = $data['parent_area_type'];
 		$num = $this->where($condition)->count();

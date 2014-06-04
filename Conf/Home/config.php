@@ -7,7 +7,7 @@ return array(
 	'USER_AUTH_MODEL'		=>'Member',	// 默认验证数据表模型
 	'AUTH_PWD_ENCODER'		=>'md5',	// 用户认证密码加密方式
 
-	'USER_AUTH_GATEWAY'		=>'Home/Public/login',	// 默认认证网关
+	'USER_AUTH_GATEWAY'		=>'/Home/Public/login',	// 默认认证网关
 
 	'NOT_AUTH_MODULE'		=>'Public',		// 默认无需认证模块
 	'REQUIRE_AUTH_MODULE'	=>'',		// 默认需要认证模块
