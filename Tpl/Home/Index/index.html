@@ -7,22 +7,61 @@
 <link href="__PUBLIC__/css/home.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
 <script type="text/javascript" src="__PUBLIC__/js/RSsubmit.js"></script>
+<script type="text/javascript">
+function SetCwinHeight() {
+    var iframeid = document.getElementById("main"); //iframe id
+    if (document.getElementById) {
+        if (iframeid && !window.opera) {
+            if (iframeid.contentDocument && iframeid.contentDocument.body.offsetHeight) {
+                iframeid.height = iframeid.contentDocument.body.offsetHeight;
+            } else if (iframeid.Document && iframeid.Document.body.scrollHeight) {
+                iframeid.height = iframeid.Document.body.scrollHeight;
+            }
+        }
+    }
+}
+function reinitIframe() {
+    var iframe = document.getElementById("main");
+    try {
+        var bHeight = iframe.contentWindow.document.body.scrollHeight;
+        var dHeight = iframe.contentWindow.document.documentElement.scrollHeight;
+        var height = Math.max(bHeight, dHeight);
+        if (iframe.height != height) {
+            iframe.height = height;
+        }
+    } catch (ex) { }
+}
+window.setInterval("reinitIframe()", 100);
+
+$(function($) {
+	$("#dq-a").show();
+	
+	$(".nav a").click(function(){
+		$(".nav a").removeClass("cur");
+		$(this).addClass("cur");
+		var str = $(this).attr('data-qucik');
+		$(".l_c2_mn div").hide();
+		$("#dq-"+str).show();
+	});
+});
+
+</script>
 </head>
 
-<body>
+<body style="background-color:#c8c8c8">
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tbody><tr>
     <td class="top_banner">&nbsp;</td>
   </tr>
   <tr>
     <td align="center" valign="top" class="top_nav"><ul class="nav">
-      <li><a href="__GROUP__/" class="cur" target="main">首页</a></li>
-      <li><a href="__GROUP__/" target="main">个人资料</a></li>
-	  <li><a href="__GROUP__/" target="main">市场图谱</a></li>
-	  <li><a href="__GROUP__/" target="main">公司介绍</a></li>
-	  <li><a href="__GROUP__/" target="main">财务中心</a></li>
-	  <li><a href="__GROUP__/" target="main">提现管理</a></li>
-	  <li><a href="__GROUP__/" target="main">在线留言</a></li>
+      <li><a href="__GROUP__/News/index" class="cur" target="main" data-qucik="a">首页</a></li>
+      <li><a href="__GROUP__/" target="main" data-qucik="b">个人资料</a></li>
+	  <li><a href="__GROUP__/" target="main" data-qucik="c">市场图谱</a></li>
+	  <li><a href="__GROUP__/" target="main" data-qucik="d">公司介绍</a></li>
+	  <li><a href="__GROUP__/" target="main" data-qucik="e">财务中心</a></li>
+	  <li><a href="__GROUP__/" target="main" data-qucik="e">提现管理</a></li>
+	  <li><a href="__GROUP__/" target="main" data-qucik="a">在线留言</a></li>
 	  
 	  <li><a href="__GROUP__/Public/logout" onclick="if(confirm('您确认要退出吗？')){$(this).RSsubmit();}return false;">退出系统</a></li>
     </ul></td>
@@ -39,19 +78,19 @@
     <td align="center"><table width="167" border="0" cellspacing="0" cellpadding="0">
 	
       <tbody><tr>
-        <td class="l_c1_item">用 &nbsp;户&nbsp;名：ysc888999</td>
+        <td class="l_c1_item">用 &nbsp;户&nbsp;名：{$info['account']}</td>
       </tr>
       <tr>
-        <td class="l_c1_item">报单中心：否</td>
+        <td class="l_c1_item">报单中心：{$info['is_baodan']}</td>
       </tr>
       <tr>
-        <td class="l_c1_item">奖金余额：0</td>
+        <td class="l_c1_item">奖金余额：{$info['balance']}</td>
       </tr>
       <tr>
-        <td class="l_c1_item">上次登录：2014-6-4 11:18:28</td>
+        <td class="l_c1_item">上次登录：{:date('Y-m-d H:i:s',$_SESSION['lastLoginTime'])}</td>
       </tr>
       <tr>
-        <td class="l_c1_item">登录次数：16</td>
+        <td class="l_c1_item">登录次数：{$info['login_count']}</td>
       </tr>
 	  
     </tbody></table></td>
@@ -66,16 +105,30 @@
   </tr>
   <tr>
     <td align="center" class="l_c2_mn">
-
-	<a href="http://www.mxhdstg.com/user/person.asp">个人资料</a> 
-	<a href="http://www.mxhdstg.com/user/prize.asp">奖金明细</a> 
-	<a href="http://www.mxhdstg.com/user/cash.asp">提现管理</a> 
-	<a href="http://www.mxhdstg.com/user/words.asp">交流中心</a>
-	
-	<a href="http://www.mxhdstg.com/user/appd.asp">申请纵向发展</a>  
-	
-	<a href="http://www.mxhdstg.com/user/appbd.asp">申请报单中心</a> 
-	
+	<div id="dq-a">
+		<a href="__GROUP__/" target="main">申请纵向发展</a>
+		<a href="__GROUP__/" target="main">申请报单中心</a> 
+	</div>
+	<div id="dq-b">
+		<a href="__GROUP__/" target="main">个人资料</a>
+		<a href="__GROUP__/" target="main">修改密码</a> 
+	</div>
+	<div id="dq-c">
+		<a href="__GROUP__/" target="main">市场图谱</a>
+		<a href="__GROUP__/" target="main">推荐人</a> 
+	</div>
+	<div id="dq-d">
+		<a href="__GROUP__/" target="main">公司介绍</a>
+		<a href="__GROUP__/" target="main">红豆杉</a> 
+		<a href="__GROUP__/" target="main">兴业基地</a> 
+		<a href="__GROUP__/" target="main">奖金制度</a> 
+	</div>
+	<div id="dq-e">
+		<a href="__GROUP__/" target="main">奖金明细</a>
+		<a href="__GROUP__/" target="main">提现管理</a> 
+		<a href="__GROUP__/" target="main">汇款充值</a> 
+		<a href="__GROUP__/" target="main">转账管理</a> 
+	</div>
 	</td>
   </tr>
   <tr>
@@ -83,21 +136,12 @@
   </tr>
 </tbody></table>
 </td>
-    <td height="600" valign="top" class="mn">
+    <td valign="top" class="mn">
+	<iframe id="main" onload="Javascript:SetCwinHeight()" name="main" src="__GROUP__/News/index" style="border: none;" border="0"  scrolling="no" width="100%">
 	
-    <table width="100%" border="0" cellspacing="0" cellpadding="0">
-      <tbody><tr>
-        <td colspan="3" class="r_c1_title">系统公告</td>
-      </tr>
-	  
-      <tr>
-        <td height="24" colspan="3" align="center">当前[0/0]页 每页[20] 首页 上一页  下一页 尾页 <input type="text" size="3" style="border:1px solid #ccc" onkeydown="if (event.keyCode==13){location.href = &#39;?p={$PageNum}&#39;.replace(&#39;{$PageNum}&#39;,this.value);}"></td>
-      </tr>
-	  
-    </tbody></table></td>
+	</iframe>
+    </table>
+    </td>
   </tr>
 </tbody></table>
-<script type="text/javascript">
-
-</script>
 </body></html>

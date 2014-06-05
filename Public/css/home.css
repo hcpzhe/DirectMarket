@@ -1,6 +1,6 @@
 body{ margin:0; padding:0; FONT-FAMILY: '微软雅黑',Microsoft YaHei,Verdana, Arial,'宋体', Tahoma,Simsun, Arial Unicode MS, Mingliu,  Helvetica;}
 body,a,span,td,a{ font-size:12px; }
-body{ background:#c8c8c8; }
+/*body{ background:#c8c8c8; }*/
 UL {TEXT-ALIGN: left; PADDING: 0px; LIST-STYLE-TYPE: none; MARGIN: 0px; }
 LI {TEXT-ALIGN: left; PADDING: 0px; LIST-STYLE-TYPE: none; MARGIN: 0px; }
 a{ color:#666666; text-decoration:none; }
@@ -29,9 +29,11 @@ ul.nav li a.cur{ background:url(homeimages/nav_bg_hover.gif) no-repeat; }
 
 .l_c2_title{ background:url(homeimages/clmn_03.gif) no-repeat; height:29px; line-height:29px; text-align:left; padding-left:10px; color:#910000; font-weight:bold; font-size:13px; }
 .l_c2_mn{ background:url(homeimages/clmn_05.gif) repeat-y; }
+.l_c2_mn div {display:none;}
 .l_c2_mn a{  margin:8px 0;display:block; width:140px; height:24px; background:url(homeimages/red_bg.jpg) no-repeat; line-height:24px; color:#FFFFFF; font-size:13px; }
 .l_c2_mn a:hover{ text-decoration:underline; }
 .l_c2_btm{ background:url(homeimages/clmn_07.gif) no-repeat; height:3px; }
 
 .r_c1_title{ background:url(homeimages/t_bg.jpg) repeat-x; height:26px; line-height:26px; text-align:left; padding-left:10px; color:#910000; font-weight:bold; font-size:13px; }
 .r_c1_item{ height:24px; line-height:24px; text-align:left; }
+

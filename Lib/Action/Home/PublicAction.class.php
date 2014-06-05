@@ -64,7 +64,7 @@ class PublicAction extends Action {
             }
             
             //保存登录信息
-            $User	=	M('User');
+            $User	=	M('Member');
             $ip		=	get_client_ip();
             $time	=	time();
             $data = array();

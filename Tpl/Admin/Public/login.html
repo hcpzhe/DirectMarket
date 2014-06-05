@@ -2,65 +2,58 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>代理商管理平台</title>
-	<link href="__PUBLIC__/css/admin_login.css" rel="stylesheet" type="text/css">
+	<title>直销系统</title>
+    <link type="text/css" rel="stylesheet" href="__PUBLIC__/css/base.css">
+    <link type="text/css" rel="stylesheet" href="__PUBLIC__/css/global.css">
     <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
     <script type="text/javascript" src="__PUBLIC__/js/RSsubmit.js"></script>
-	<style type="text/css">
-	body{ background:#008000 url(__PUBLIC__/images/login_bg.jpg) center top no-repeat; }
-	.txt{ color:#A0FF42; }
-	.btn_submit{ background:url(__PUBLIC__/images/login_btn.jpg) no-repeat; width:97px; height:31px;  border:none; }
-	.input_a{ width:140px; height:18px; line-height:18px;  }
-	.input_b{ width:50px; height:18px; line-height:18px;  }
-	</style>
+    <style type="text/css">
+      #txtusertype td{ padding:0 10px;}
+      #txtusertype td label{ margin-left:10px;}
+    </style>
 </head>
+<body class="bg-blue">
+<form name="form1" method="post" action="__URL__/checkLogin" id="form1" onsubmit="$(this).RSsubmit();return false;">
+    <div class="login" style="width: 1003px;margin: 0 auto;">
+        <div class="log-box userlog">
+            <div class="box">
+                <div class="tb fl">
+                    <table border="0" cellpadding="0" cellspacing="0" width="460">
+                        <tbody><tr>
+                            <th scope="row">
+                                <span>用户名：</span>
+                            </th>
+                            <td>
+                                <input name="account" id="txtusername" class="txt1" type="text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                <span>密 码：</span>
+                            </th>
+                            <td>
+                                <input name="password" id="txtpassword" class="txt1" type="password">
+                            </td>
+                        </tr>
+                      
+                    </tbody></table>
+                </div>
+                <div class="fr" style="padding-top:30px;">
+                    <p>
+                        <input name="btlogin" value="登录" id="btlogin" class="btn1" type="submit"></p>
+                </div>
+                <div class="cl">
+                </div>
+            </div>
+            <div class="footer1 tc">
+                <p>{$_PF['copyright']}</p>
+              
+            </div>
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
 
-<body>
-<table width="1000" border="0" align="center" cellpadding="0" cellspacing="0">
-  <tbody><tr>
-    <td height="270">&nbsp;</td>
-  </tr>
-</tbody></table>
-<table width="1000" border="0" align="center" cellpadding="0" cellspacing="0">
-  <tbody><tr>
-    <td width="508" height="300">&nbsp;</td>
-    <td width="270" valign="top">
-	<form name="form1" method="post" action="__URL__/checkLogin" id="form1" onsubmit="$(this).RSsubmit();return false;">
-    <table width="100%" border="0" cellspacing="0" cellpadding="0">	
-
-      <tbody><tr>
-        <td height="50" align="right" class="txt">&nbsp;</td>
-        <td align="left">&nbsp;</td>
-      </tr>
-      
-      <tr>
-        <td width="29%" height="40" align="right" class="txt">用户名：</td>
-        <td width="71%" align="left"><input name="account" type="text" size="20" class="input_a"></td>
-      </tr>
-      <tr>
-        <td height="40" align="right" class="txt">密&nbsp;&nbsp;&nbsp;码：</td>
-        <td align="left"><input name="password" type="password" size="20" class="input_a"></td>
-      </tr>
-      <tr>
-        <td height="60" align="right">&nbsp;</td>
-        <td align="left"><input type="submit" name="Submit" value=" " class="btn_submit"></td>
-      </tr>
-      
-      <tr>
-        <td height="40" colspan="2" align="left">&nbsp;</td>
-        </tr>
-	  
-    </tbody></table>
-    </form>
-    </td>
-    <td width="222">&nbsp;</td>
-  </tr>
-</tbody></table>
-<table width="1000" border="0" align="center" cellpadding="0" cellspacing="0">
-  <tbody><tr>
-    <td height="130" valign="top">&nbsp;</td>
-  </tr>
-</tbody></table>
-
+</script>
 
 </body></html>
