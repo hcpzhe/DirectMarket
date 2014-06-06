@@ -3,14 +3,14 @@ Navicat MySQL Data Transfer
 
 Source Server         : 127.0.0.1
 Source Server Version : 50524
-Source Host           : 127.0.0.1:3306
+Source Host           : localhost:3306
 Source Database       : tianlian
 
 Target Server Type    : MYSQL
 Target Server Version : 50524
 File Encoding         : 65001
 
-Date: 2014-04-26 17:27:59
+Date: 2014-06-06 18:06:44
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -20,6 +20,30 @@ SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 DROP TABLE IF EXISTS `zx_bonus`;
 CREATE TABLE `zx_bonus` (
+  `member_id` int(10) unsigned NOT NULL COMMENT '会员ID',
+  `new_member_id` int(10) unsigned NOT NULL COMMENT '奖金来源(注册的会员ID)',
+  `type` tinyint(1) NOT NULL COMMENT '1-推广奖 2-结算奖 3-领导奖',
+  `bonus` decimal(10,2) DEFAULT '0.00' COMMENT '奖金',
+  `total_bonus` decimal(10,2) DEFAULT '0.00' COMMENT '结算奖金(应得及净奖金)',
+  `create_time` varchar(20) NOT NULL DEFAULT '0' COMMENT '结算时间 unix时间戳',
+  `balance` decimal(10,2) DEFAULT '0.00' COMMENT '当时余额',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  KEY `member_id` (`member_id`),
+  KEY `new_member_id` (`new_member_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='奖金记录表';
+
+-- ----------------------------
+-- Records of zx_bonus
+-- ----------------------------
+INSERT INTO `zx_bonus` VALUES ('3', '4', '1', '5000.00', '5000.00', '1401849699', '5000.00', null);
+INSERT INTO `zx_bonus` VALUES ('2', '3', '1', '5000.00', '5000.00', '1401849784', '20011.25', null);
+INSERT INTO `zx_bonus` VALUES ('4', '5', '1', '5000.00', '5000.00', '1401849989', '5000.00', null);
+
+-- ----------------------------
+-- Table structure for `zx_bonus_bak`
+-- ----------------------------
+DROP TABLE IF EXISTS `zx_bonus_bak`;
+CREATE TABLE `zx_bonus_bak` (
   `member_id` int(10) unsigned NOT NULL COMMENT '会员ID',
   `new_member_id` int(11) NOT NULL COMMENT '奖金来源(注册的会员ID)',
   `create_time` varchar(20) NOT NULL DEFAULT '0' COMMENT '结算时间 unix时间戳',
@@ -39,11 +63,11 @@ CREATE TABLE `zx_bonus` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='奖金记录表';
 
 -- ----------------------------
--- Records of zx_bonus
+-- Records of zx_bonus_bak
 -- ----------------------------
-INSERT INTO `zx_bonus` VALUES ('1', '2', '1394698240', '1875.00', '0.00', '2500.00', '0.00', '0.00', '0.00', '0.00', '250.00', '250.00', '125.00', '0.00');
-INSERT INTO `zx_bonus` VALUES ('2', '0', '1394866183', '7.50', '0.00', '0.00', '0.00', '0.00', '0.00', '10.00', '1.00', '1.00', '0.50', '0.00');
-INSERT INTO `zx_bonus` VALUES ('2', '0', '1394866305', '3.75', '0.00', '0.00', '0.00', '0.00', '0.00', '5.00', '0.50', '0.50', '0.25', '0.00');
+INSERT INTO `zx_bonus_bak` VALUES ('1', '2', '1394698240', '1875.00', '0.00', '2500.00', '0.00', '0.00', '0.00', '0.00', '250.00', '250.00', '125.00', '0.00');
+INSERT INTO `zx_bonus_bak` VALUES ('2', '0', '1394866183', '7.50', '0.00', '0.00', '0.00', '0.00', '0.00', '10.00', '1.00', '1.00', '0.50', '0.00');
+INSERT INTO `zx_bonus_bak` VALUES ('2', '0', '1394866305', '3.75', '0.00', '0.00', '0.00', '0.00', '0.00', '5.00', '0.50', '0.50', '0.25', '0.00');
 
 -- ----------------------------
 -- Table structure for `zx_cash`
@@ -152,14 +176,20 @@ CREATE TABLE `zx_member` (
   `bank_card` varchar(255) DEFAULT NULL COMMENT '银行卡号',
   `bank_name` varchar(255) DEFAULT NULL COMMENT '开户银行',
   `bank_address` varchar(255) DEFAULT NULL COMMENT '开户地址',
+  `last_login_time` varchar(40) DEFAULT NULL,
+  `login_count` int(10) unsigned DEFAULT '0',
+  `last_login_ip` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of zx_member
 -- ----------------------------
-INSERT INTO `zx_member` VALUES ('1', 'test', 'ca5c77f495ac94c256cc039c87d8da38', 'ca5c77f495ac94c256cc039c87d8da38', '5625.00', '0', null, 'asdasd', '1', '0', '11111111111', '111', '宝龙城市广场', '3', '0', '0', null, null, null);
-INSERT INTO `zx_member` VALUES ('2', 'tttt', '15c9dfa38cfaf2635d54b1f94ffaed6c', '15c9dfa38cfaf2635d54b1f94ffaed6c', '11.25', '1', 'A', 'tttt', '1', '0', '11111111111', '1111', '1111', '1', '1394680262', '1394698240', null, null, null);
+INSERT INTO `zx_member` VALUES ('1', 'test', 'ca5c77f495ac94c256cc039c87d8da38', 'ca5c77f495ac94c256cc039c87d8da38', '5625.00', '0', null, 'asdasd', '1', '0', '11111111111', '111', '宝龙城市广场', '3', '0', '0', null, null, null, null, '0', null);
+INSERT INTO `zx_member` VALUES ('2', 'tttt', '15c9dfa38cfaf2635d54b1f94ffaed6c', '15c9dfa38cfaf2635d54b1f94ffaed6c', '20011.25', '1', 'A', 'tttt', '1', '0', '11111111111', '1111', '1111', '1', '1394680262', '1394698240', null, null, null, null, '0', null);
+INSERT INTO `zx_member` VALUES ('3', 'test3', '15c9dfa38cfaf2635d54b1f94ffaed6c', '15c9dfa38cfaf2635d54b1f94ffaed6c', '5000.00', '2', 'B', 'test3', '1', '0', '111111111111', '123123', '1111', '5', '1401766334', '1401849784', '123123', '中国银行', '23213', null, '0', null);
+INSERT INTO `zx_member` VALUES ('4', 'test4', '15c9dfa38cfaf2635d54b1f94ffaed6c', '15c9dfa38cfaf2635d54b1f94ffaed6c', '5000.00', '3', 'A', 'test4', '1', '0', '111111111111', '332', '222', '1', '1401849656', '1401849699', '111111', '中国银行', '1111', '1402040586', '5', '127.0.0.1');
+INSERT INTO `zx_member` VALUES ('5', 'test5', '15c9dfa38cfaf2635d54b1f94ffaed6c', '15c9dfa38cfaf2635d54b1f94ffaed6c', '0.00', '4', 'A', 'texst5', '1', '0', '111111111111', '1111', '111', '2', '1401849979', '1401849989', '11', '中国银行', '1111', null, '0', null);
 
 -- ----------------------------
 -- Table structure for `zx_message`
@@ -319,5 +349,5 @@ CREATE TABLE `zx_user` (
 -- ----------------------------
 -- Records of zx_user
 -- ----------------------------
-INSERT INTO `zx_user` VALUES ('1', 'admin', '9e90c6271eddcf23e2e251f65bda6be3', '超级管理员', '1395903522', '127.0.0.1', '113', null, '0', '1389940039', '1');
+INSERT INTO `zx_user` VALUES ('1', 'admin', '9e90c6271eddcf23e2e251f65bda6be3', '超级管理员', '1402035442', '127.0.0.1', '129', null, '0', '1389940039', '1');
 INSERT INTO `zx_user` VALUES ('2', 'administrator', 'af73a1ef8d29ffc1c50c0bff6055b363', '超级管理员', '1390205683', '127.0.0.1', '85', '', '0', '1389940039', '1');
