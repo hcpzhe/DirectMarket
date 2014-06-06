@@ -27,19 +27,25 @@ class MemberAction extends CommonAction{
 	/**
 	 * 我的资料
 	 */
-	public function my(){
-		if (!empty($_SESSION[C('USER_AUTH_KEY')])){
-			
-			$member_model = M('Member');
-			
-			$member = $member_model->find($_SESSION[C('USER_AUTH_KEY')]);
-			$this->assign('member',$member);
-			$this->display();
-		}else {
-			$this->success('非法操作');
-		}
+	public function info(){
+		$member_model = M('Member');
+		
+		$member = $member_model->find($_SESSION[C('USER_AUTH_KEY')]);
+		$baodan = $member_model->find($member['verify_id']);
+		$this->assign('baodan',$baodan);//报单中心
+		$parent = $member_model->find($member['parent_area']);
+		$this->assign('parent',$parent);//推荐人
+		
+		$this->assign('member',$member);
+		
+		cookie('_currentUrl_', __SELF__);
+		$this->display();
 	}
 	
+	public function update() {
+		$_POST['id'] = $_SESSION[C('USER_AUTH_KEY')];
+		parent::update();
+	}
 	
 	/**
 	 * 注册会员页面显示
@@ -49,6 +55,42 @@ class MemberAction extends CommonAction{
 		$this->display();
 	}
 	
+	public function pwd() {
+		$this->display();
+	}
+
+    // 更换密码
+    public function changePwd() {
+        if ($_POST['i'] === '1') {
+        	//登录密码
+        	$pstr = 'password';
+        	$opwd = pwdHash($_POST['opwd1']);
+        	$npwd = $_POST['pwd1'];
+        	$npwdc = $_POST['pwd1c'];
+        	
+        }elseif ($_POST['i'] === '2') {
+        	//取款密码
+        	$pstr = 'pwd_money';
+        	$opwd = pwdHash($_POST['opwd2']);
+        	$npwd = $_POST['pwd2'];
+        	$npwdc = $_POST['pwd2c'];
+        }else $this->error('非法提交');
+        
+        if ($npwd !== $npwdc) $this->error('两次输入的密码不一致');
+        
+        $map	=	array();
+        $map[$pstr] = $opwd;
+        $map['id'] = $_SESSION[C('USER_AUTH_KEY')];
+        //检查用户
+        $mem_M    =   M("Member");
+        if(!$mem_M->where($map)->field('id')->find()) {
+            $this->error('旧密码不符！');
+        }else {
+        	$map[$pstr] = pwdHash($npwd);
+            if (false === $mem_M->save($map)) $this->error('密码修改错误, 请联系管理员');
+            $this->success('密码修改成功！');
+         }
+    }
 	/**
 	 * 注册会员处理
 	 */
@@ -66,37 +108,47 @@ class MemberAction extends CommonAction{
 			$this->error('非法提交');
 		}
 	}
+	
 	/**
 	 * 会员图谱
-	 * 
 	 */
 	public function atlas(){
-		if (!empty($_SESSION[C('USER_AUTH_KEY')])){
-			$member_model = M('Member');
-			$member_list = array();
-			$this->member($member_model,$_SESSION[C('USER_AUTH_KEY')],$member_list);
-		}
+		$member_list = array();
+		$member_model = D('Member');
+		$member_list = $member_model->find($_SESSION[C('USER_AUTH_KEY')]);
+		
+		$member_list['son_nums'] = $member_model->sonNums($member_list['id']); //直推人数
+		$member_list['area_nums'] = $member_model->areaNums($member_list['id']); //推荐体系人数
+		
+		$this->member($member_model,$member_list['id'],$member_list);
 		$this->assign('member_list',$member_list);
+		cookie('_currentUrl_', __SELF__);
 		$this->display();
 	}
 	
 	/**
 	 * 会员图谱递归方法
 	 */
-	public function member($member_model,$mid,&$member_list){
-		array_push($member_list[$mid],$member_model->find($mid));
+	protected function member($member_model,$mid,&$member_list,$level=0) {
+		//只显示3级图谱
+		if ($level >=3) return;
+		$level++; 
 		$member_l = $member_model->where("parent_area=$mid")->select();		
 		foreach ($member_l as $row){
+			$row['son_nums'] = $member_model->sonNums($row['id']); //直推人数
+			$row['area_nums'] = $member_model->areaNums($row['id']); //推荐体系人数
+			
 			if ($row['parent_area_type'] == 'A'){
-				array_push($member_list[$mid]['A'][$row['id']],$row);
-				$this->member($member_model, $row['id'], $member_list[$mid]['A'][$row['id']]);
+				$member_list['A'] = $row;
+				$this->member($member_model, $row['id'], $member_list['A'], $level);
 			
 			}else {
-				array_push($member_list[$mid]['B'][$row['id']],$row);
-				$this->member($member_model, $row['id'], $member_list[$mid]['B'][$row['id']]);		
+				$member_list['B'] = $row;
+				$this->member($member_model, $row['id'], $member_list['B'], $level);		
 			}
 		}
 	}
+	
 	/**
 	 * 审核记录
 	 */

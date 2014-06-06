@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>系统公告</title>
 <link href="__PUBLIC__/css/home.css" rel="stylesheet" type="text/css">
 </head>
 <body>
@@ -14,7 +14,7 @@
 	<!-- <foreach name="list" item="vo"> -->
 	<tr>
 		<td width="4%" align="center" class="b_b"><img src="__PUBLIC__/images/list_pref1.gif" width="9" height="9"></td>
-		<td width="74%" class="r_c1_item b_b"><a href="__GROUP__">{$vo['title']}</a></td>
+		<td width="74%" class="r_c1_item b_b"><a href="__URL__/show/id/{$vo['id']}">{$vo['title']}</a></td>
 		<td width="22%" class="r_c1_item b_b">{:date('Y-m-d H:i:s',$vo['update_time'])}</td>
 	</tr>
 	<!-- </foreach> -->

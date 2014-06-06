@@ -157,7 +157,7 @@ class CommonAction extends Action {
         $this->assign('vo', $vo);
         $this->display();
     }
-	function update() {
+	protected function update() {
         $name = $this->getActionName();
         $model = D($name);
         if (false === $model->create()) {

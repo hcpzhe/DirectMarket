@@ -42,8 +42,6 @@ class  NewsAction extends CommonAction{
 	 * 未完成
 	 */
 	public function newsList1(){
-		//获取导航和版权信息
-		$this->getNav();
 		
 		$news_M = M('News');       
         $ctg_id = $_REQUEST ['id'];
@@ -66,8 +64,6 @@ class  NewsAction extends CommonAction{
 	 * 接受新闻信息的ID，即主键
 	 */
 	public function show(){
-		//获取导航信息
-		$this->getNav();
 		
 		$condition = array();
 		$condition['id'] = (int)$_REQUEST['id'];
@@ -95,7 +91,7 @@ class  NewsAction extends CommonAction{
         $this->assign('prevNews',$front);
         $this->assign('nextNews',$after);
         
-        $this->display('article_article');
+        $this->display();
 	}
 	
 	//用户中心新闻显示
