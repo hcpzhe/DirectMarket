@@ -6,10 +6,10 @@ return array(
 //    'SHOW_PAGE_TRACE'           =>  1,//显示调试信息
     
     'DB_TYPE'                   =>  'mysql',
-    'DB_HOST'                   =>  '127.0.0.1',
+    'DB_HOST'                   =>  '192.168.1.9',
     'DB_NAME'                   =>  'tianlian',
-    'DB_USER'                   =>  'root',
-    'DB_PWD'                    =>  'jiushibush',
+    'DB_USER'                   =>  'wqseo',
+    'DB_PWD'                    =>  'wqseo',
 //    'DB_HOST'                   =>  'localhost',
 //    'DB_NAME'                   =>  'site20140313',
 //    'DB_USER'                   =>  'site20140313',
