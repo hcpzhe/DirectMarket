@@ -58,10 +58,12 @@ $(function($) {
       <li><a href="__GROUP__/News/index" class="cur" target="main" data-qucik="a">首页</a></li>
       <li><a href="__GROUP__/Member/info" target="main" data-qucik="b">个人资料</a></li>
 	  <li><a href="__GROUP__/Member/atlas" target="main" data-qucik="c">市场图谱</a></li>
-	  <li><a href="__GROUP__/" target="main" data-qucik="d">公司介绍</a></li>
-	  <li><a href="__GROUP__/" target="main" data-qucik="e">财务中心</a></li>
+	  <li><a href="__GROUP__/Single/jieshao" target="main" data-qucik="d">公司介绍</a></li>
+	  <li><a href="__GROUP__/Bonus/show" target="main" data-qucik="e">财务中心</a></li>
+	  <!-- 
 	  <li><a href="__GROUP__/" target="main" data-qucik="e">提现管理</a></li>
 	  <li><a href="__GROUP__/" target="main" data-qucik="a">在线留言</a></li>
+	   -->
 	  
 	  <li><a href="__GROUP__/Public/logout" onclick="if(confirm('您确认要退出吗？')){$(this).RSsubmit();}return false;">退出系统</a></li>
     </ul></td>
@@ -106,28 +108,28 @@ $(function($) {
   <tr>
     <td align="center" class="l_c2_mn">
 	<div id="dq-a">
-		<a href="__GROUP__/News/index" target="main">申请纵向发展</a>
-		<a href="__GROUP__/News/index" target="main">申请报单中心</a> 
+		<!-- <a href="__GROUP__/News/index" target="main">申请纵向发展</a> -->
+		<a href="__GROUP__/Member/shenqingbaodan" target="main" onclick="$(this).RSsubmit();return false;">申请报单中心</a> 
 	</div>
 	<div id="dq-b">
 		<a href="__GROUP__/Member/info" target="main">个人资料</a>
 		<a href="__GROUP__/Member/pwd" target="main">修改密码</a> 
 	</div>
 	<div id="dq-c">
-		<a href="__GROUP__/" target="main">市场图谱</a>
-		<a href="__GROUP__/" target="main">推荐人</a> 
+		<a href="__GROUP__/Member/atlas" target="main">市场图谱</a>
+		<!-- <a href="__GROUP__/" target="main">推荐人</a> --> 
 	</div>
 	<div id="dq-d">
-		<a href="__GROUP__/" target="main">公司介绍</a>
-		<a href="__GROUP__/" target="main">红豆杉</a> 
-		<a href="__GROUP__/" target="main">兴业基地</a> 
-		<a href="__GROUP__/" target="main">奖金制度</a> 
+		<a href="__GROUP__/Single/jieshao" target="main">公司介绍</a>
+		<!-- <a href="__GROUP__/" target="main">红豆杉</a>
+		<a href="__GROUP__/" target="main">兴业基地</a>
+		<a href="__GROUP__/" target="main">奖金制度</a> --> 
 	</div>
 	<div id="dq-e">
-		<a href="__GROUP__/" target="main">奖金明细</a>
-		<a href="__GROUP__/" target="main">提现管理</a> 
+		<a href="__GROUP__/Bonus/show" target="main">奖金明细</a>
+		<!-- <a href="__GROUP__/" target="main">提现管理</a> 
 		<a href="__GROUP__/" target="main">汇款充值</a> 
-		<a href="__GROUP__/" target="main">转账管理</a> 
+		<a href="__GROUP__/" target="main">转账管理</a>  -->
 	</div>
 	</td>
   </tr>

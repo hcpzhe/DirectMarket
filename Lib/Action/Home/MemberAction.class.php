@@ -150,6 +150,32 @@ class MemberAction extends CommonAction{
 	}
 	
 	/**
+	 * 申请报单中心接口 ajax
+	 */
+	public function shenqingbaodan() {
+		$member_M = D('Member');
+		$myinfo = $member_M->find($_SESSION[C('USER_AUTH_KEY')]); //当前会员
+		switch ($myinfo['status']) {
+			case '1':
+				$member_M->where('id='.$myinfo['id'])->setField('status','4');
+				$this->error('申请成功, 请通知管理员审核');
+			break;
+			case '3':
+				$this->error('您已经是报单中心了, 不需要申请');
+			break;
+			case '4':
+				$this->error('您已经申请过报单中心了, 请通知管理员审核');
+			break;
+			case '5':
+				$this->error('您现在是待审核会员, 请先成为正式会员');
+			break;
+			default:
+				$this->error('用户错误, 请通知管理员');
+			break;
+		}
+	}
+	
+	/**
 	 * 审核记录
 	 */
 	public function jilu(){

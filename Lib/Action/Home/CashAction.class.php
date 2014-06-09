@@ -53,14 +53,17 @@ class CashAction extends CommonAction{
         //保存当前数据对象
         $list = $cash_model->add();
         if ($list !== false) { //保存成功
+        	$this->success('提现申请成功!');
+        	/** 在审核成功后扣款
         	$member_model = M('Member');
-        	if (false === $member_model->where('id='.$_SESSION[C('USER_AUTH_KEY')])->setDec('points',$this->_post('apply_money'))){
+        	if (false === $member_model->where('id='.$_SESSION[C('USER_AUTH_KEY')])->setDec('balance',$this->_post('apply_money'))){
 	            $member_model->rollback();
         		$this->success('提现失败!');
         	}else {
         		$member_model->commit();
-	            $this->success('提现成功!');
+	            $this->success('提现申请成功!');
         	}
+        	*/
         } else {
             //失败提示
             $this->error('提现失败!');
